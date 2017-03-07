@@ -1,4 +1,4 @@
 
-public class owner {
+public class Owner {
 
 }

@@ -1,4 +1,4 @@
 
-public class business {
+public class Business {
 
 }

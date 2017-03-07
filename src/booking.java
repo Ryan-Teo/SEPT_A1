@@ -1,4 +1,4 @@
 
-public class booking {
+public class Booking {
 
 }

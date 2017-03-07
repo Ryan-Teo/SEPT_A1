@@ -1,4 +1,4 @@
 
-public abstract class user {
+public abstract class User {
 
 }

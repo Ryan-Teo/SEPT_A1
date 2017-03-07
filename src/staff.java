@@ -1,4 +1,4 @@
 
-public abstract class staff {
+public abstract class Staff {
 
 }

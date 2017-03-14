@@ -1,5 +1,5 @@
 
-public class Customer {
+public class Customer extends User{
 	String name, username, password, address, phone;
 	Customer(String name, String username, String password, String address, String phone){
 		this.name = name;

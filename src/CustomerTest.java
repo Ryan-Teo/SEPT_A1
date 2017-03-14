@@ -4,7 +4,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class CustomerTest {
-	//asdasdasdasdasdasdasdasd
 	Customer customer;
 	
 	@BeforeClass

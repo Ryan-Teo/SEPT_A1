@@ -5,8 +5,38 @@ public class Account {
 	
 	private ArrayList<Customer> customers = new ArrayList<Customer>();
 	
-	public void login(){
+	public Customer login(Scanner scan) throws IOException{
 		//Change return type
+		String username, password;
+		Customer custInst = null;
+		Boolean usernameCheck = false, passCheck = false;
+		try{
+			loadAcct();
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		do{
+			System.out.print("Username : ");
+			username = scan.nextLine();
+			System.out.print("Password : ");
+			password = scan.nextLine();
+			for(int i=0 ; i<customers.size(); i++){
+				if(customers.get(i).getUsername().equals(username)){
+					usernameCheck = true;
+					if(customers.get(i).getPassword().equals(password)){
+						passCheck = true;
+						custInst = customers.get(i);
+						break;
+					}
+				}
+			}
+			if(usernameCheck == false || passCheck == false){
+				System.out.println("-- Incorrect Username/Password --");
+			}
+		}while(usernameCheck == false || passCheck == false);
+		//check user exists & password is correct
+		saveAcct();
+		return custInst;
 	}
 	
 	public void register(Scanner scan) throws IOException{
@@ -26,7 +56,7 @@ public class Account {
 		
 		do{
 			usernameCheck = true;
-			System.out.print("Please enter your desired username : ");
+			System.out.print("Please enter your desired username : "); //limit 6 - 15
 			username = scan.nextLine();
 			for(int i=0 ; i<customers.size(); i++){
 				if(customers.get(i).getUsername().equals(username)){
@@ -40,7 +70,7 @@ public class Account {
 		
 		//loop this -- check if 2 passwords are the same
 		do{
-			System.out.print("Please enter your password : ");
+			System.out.print("Please enter your password : ");		//limit 6-15
 			password1 = scan.nextLine();
 			System.out.print("Please re-enter your password to confirm : ");
 			password2 = scan.nextLine();

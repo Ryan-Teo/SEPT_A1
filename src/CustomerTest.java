@@ -1,12 +1,19 @@
 import static org.junit.Assert.*;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class CustomerTest {
-
+	//asdasdasdasdasdasdasdasd
+	Customer customer;
+	
+	@BeforeClass
+	public void initialise(){
+		Customer customer = new Customer("Bob", "Bobber", "Bobby123", "Bob@bob.com", "999999999");
+	}
 	@Test
 	public void testInitialise() {
-		Customer customer = new Customer("Bob", "Bobber", "Bobby123", "Bob@bob.com", "999999999");
+		
 		assertNotNull("should instantiate customer", customer);
 		assertTrue(customer.getName() instanceof String);
 		assertTrue(customer.getUsername() instanceof String);

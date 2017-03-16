@@ -6,7 +6,6 @@ public class Owner extends User{
 		super(name,username,password,address,phone);
 	}
 	
-	//Assuming business owner may have multiple businesses
 	@Override
 	public void viewSession(String businessName) {
 		// TODO Auto-generated method stub

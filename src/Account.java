@@ -1,5 +1,7 @@
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Account {
 	
@@ -29,6 +31,7 @@ public class Account {
 			System.out.print("Please enter your desired username : ");
 			username = scan.nextLine();
 			for(int i=0 ; i<customers.size(); i++){
+				System.out.println("Customer.get" + customers.get(i).getUsername());
 				if(customers.get(i).getUsername().equals(username)){
 					usernameCheck = false;
 					System.out.println("Username Not Available - Please Try Again");
@@ -36,9 +39,10 @@ public class Account {
 				}
 			}
 			//Check for uniqueness
+			
 		}while(!usernameCheck);
-		
 		//loop this -- check if 2 passwords are the same
+		
 		do{
 			System.out.print("Please enter your password : ");
 			password1 = scan.nextLine();
@@ -52,11 +56,15 @@ public class Account {
 		
 		System.out.print("Please enter your address : ");
 		address = scan.nextLine();
+		String pattern = "\\({0,1}((0|+61)(2|4|3|7|8)){0,1}\\){0,1}(\\ |-){0,1}[0-9]{2}(\\ |-){0,1}[0-9]{2}(\\ |-){0,1}[0-9]{1}(\\ |-){0,1}[0-9]{3}";
+		Pattern phonePattern = Pattern.compile(pattern);
 		
 		do{
 			System.out.print("Please enter a valid Australian phone number : ");
 			phone = scan.nextLine();
-			break;
+			Matcher m = phonePattern.matcher(phone);
+			if (m.find( ))
+				break;
 		}while(1>0);//Change this to regex for aussie phone number -- remove break()					//TO DO
 		
 		customers.add(new Customer(name, username, password1, address, phone));

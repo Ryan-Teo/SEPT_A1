@@ -17,6 +17,32 @@ public abstract class User {
 	
 	//Show all number of bookings made by user
 	public abstract void viewBookingSummary();
+
+	public String getName() {
+		return name;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public Booking[] getBooking() {
+		return booking;
+	}
+	
+	
 	
 	
 }

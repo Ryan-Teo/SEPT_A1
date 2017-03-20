@@ -32,10 +32,13 @@ public class Main {
 			}
 		}while(!userInput.equals("3") && userInst == null);
 		
-		System.out.println("Welcome "+ userInst.getName() +" !");
-		
-		
-		
+		if(userInst instanceof Customer){
+			System.out.println("-Customer Mode-");
+		}
+		else if (userInst instanceof Owner){
+			System.out.println("-Owner Mode-");
+		}
+		System.out.println("Welcome, "+ userInst.getName() +"!");
 		
 		System.exit(0);
 	}

@@ -4,9 +4,12 @@ import java.util.*;
 public class Account {
 	
 	private ArrayList<Customer> customers = new ArrayList<Customer>();
+	private ArrayList<Owner> owners = new ArrayList<Owner>();
+	//merge to one arraylist?
 	
 	public Customer login(Scanner scan) throws IOException{
-		//Change return type
+		//Make usable for owner as well
+		//Change return type include owner
 		String username, password;
 		Customer custInst = null;
 		Boolean usernameCheck = false, passCheck = false;
@@ -52,9 +55,25 @@ public class Account {
 		//Change return type
 		//take user input, create new customer, write customer info to file/db
 		Customer custInst;
-		String name, username, password1, password2, address, phone;
+		String name, username, password1, password2, address, phone, userInput, userType = null;
 		Boolean passcheck, usernameCheck;
-		
+		System.out.println("--Who are you?--");
+		System.out.printf("1 : Customer\n2 : Owner\n3 : I'm not sure where I am!\n");
+		System.out.printf("Please enter your selection : ");
+		userInput = scan.nextLine();
+		switch(userInput){
+			case "1":
+				userType = "cust";
+				break;
+			case "2":
+				userType = "owner";
+				break;
+			case "3":
+				return;
+			default:
+				System.out.println("Invalid Input - Please Try Again");
+				break;
+		}
 		System.out.print("Please enter your name : ");
 		name = scan.nextLine();
 		
@@ -92,7 +111,12 @@ public class Account {
 			phone = scan.nextLine();
 			break;
 		}while(1>0);//Change this to regex for aussie phone number -- remove break()		//TO DO
-		customers.add(new Customer(name, username, password1, address, phone));
+		if(userType.equals("cust")){
+			customers.add(new Customer(name, username, password1, address, phone));
+		}
+		else if (userType.equals("owner")){
+			owners.add(new Owner(name, username, password1, address, phone));
+		}
 		saveAcct();
 		System.out.println("You have successfully registered!");
 		System.out.println();
@@ -104,6 +128,8 @@ public class Account {
 	}
 	
 	private void loadAcct() throws FileNotFoundException{
+		//add functionality for owners
+		//deal with exception here
 		customers.clear();
 		String line, name, username, password, address, phone;
 		Scanner sc = new Scanner(new File("customers.txt"));
@@ -121,6 +147,8 @@ public class Account {
 	}
 	
 	private void saveAcct() throws IOException{
+		//add functionality for owners
+		//deal with exception here
 		String name, username, password, address, phone;
 		PrintWriter pw = new PrintWriter (new BufferedWriter (new FileWriter ("customers.txt")));
 		for (int i=0; i<customers.size(); i++){

@@ -16,7 +16,7 @@ public class Main {
 			userInput = scan.nextLine();
 			switch(userInput){
 				case "1":
-					acct.login();
+					acct.login(scan);
 					break;
 				case "2":
 					acct.register(scan);

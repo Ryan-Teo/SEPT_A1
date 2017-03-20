@@ -6,6 +6,7 @@ public class Main {
 	public static void main(String args[]) throws IOException{ //Handle exceptions
 		Scanner scan = new Scanner(System.in);
 		Account acct = new Account();
+		User userInst = null;
 		String userInput;
 		do{
 			System.out.println("--Welcome to ABC Booking system--");
@@ -16,7 +17,7 @@ public class Main {
 			userInput = scan.nextLine();
 			switch(userInput){
 				case "1":
-					acct.login(scan);
+					userInst = acct.login(scan);
 					break;
 				case "2":
 					acct.register(scan);
@@ -29,7 +30,13 @@ public class Main {
 					break;
 			
 			}
-		}while(!userInput.equals("3"));
+		}while(!userInput.equals("3") && userInst == null);
+		
+		System.out.println("Welcome "+ userInst.getName() +" !");
+		
+		
+		
+		
 		System.exit(0);
 	}
 }

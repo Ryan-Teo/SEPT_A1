@@ -15,27 +15,31 @@ public class Account {
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
-		do{
-			System.out.print("Username : ");
-			username = scan.nextLine();
-			System.out.print("Password : ");
-			password = scan.nextLine();
-			for(int i=0 ; i<customers.size(); i++){
-				if(customers.get(i).getUsername().equals(username)){
-					usernameCheck = true;
-					if(customers.get(i).getPassword().equals(password)){
-						passCheck = true;
-						custInst = customers.get(i);
-						break;
-					}
+		System.out.print("Username : ");
+		username = scan.nextLine();
+		System.out.print("Password : ");
+		password = scan.nextLine();
+		for(int i=0 ; i<customers.size(); i++){
+			if(customers.get(i).getUsername().equals(username)){
+				usernameCheck = true;
+				if(customers.get(i).getPassword().equals(password)){
+					passCheck = true;
+					custInst = customers.get(i);
+					break;
 				}
 			}
-			if(usernameCheck == false || passCheck == false){
-				System.out.println("-- Incorrect Username/Password --");
+		}
+		if(usernameCheck == false || passCheck == false){
+			System.out.println("-- Incorrect Username/Password --");
+			try{
+				Thread.sleep(1500);
+			}catch(Exception e){
+				System.out.println(e.getMessage());
 			}
-		}while(usernameCheck == false || passCheck == false);
+		}
 		//check user exists & password is correct
 		saveAcct();
+		System.out.println();
 		return custInst;
 	}
 	
@@ -87,8 +91,7 @@ public class Account {
 			System.out.print("Please enter a valid Australian phone number : ");
 			phone = scan.nextLine();
 			break;
-		}while(1>0);//Change this to regex for aussie phone number -- remove break()					//TO DO
-		
+		}while(1>0);//Change this to regex for aussie phone number -- remove break()		//TO DO
 		customers.add(new Customer(name, username, password1, address, phone));
 		saveAcct();
 		System.out.println("You have successfully registered!");

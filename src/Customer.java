@@ -2,11 +2,8 @@
 public class Customer extends User{
 	String name, username, password, address, phone;
 	Customer(String name, String username, String password, String address, String phone){
-		this.name = name;
-		this.username = username;
-		this.password = password;
-		this.address = address;
-		this.phone = phone;
+		
+		super(name,username,password,address,phone);
 	}
 	
 	public String getPassword() {
@@ -32,5 +29,21 @@ public class Customer extends User{
 	}
 	public String getUsername() {
 		return username;
+	}
+
+	@Override
+	public void viewSession(String businessName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void viewBookingSummary() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void bookSession(){
+		
 	}
 }

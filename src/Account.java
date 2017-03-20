@@ -1,5 +1,7 @@
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Account {
 	
@@ -15,27 +17,31 @@ public class Account {
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 		}
-		do{
-			System.out.print("Username : ");
-			username = scan.nextLine();
-			System.out.print("Password : ");
-			password = scan.nextLine();
-			for(int i=0 ; i<customers.size(); i++){
-				if(customers.get(i).getUsername().equals(username)){
-					usernameCheck = true;
-					if(customers.get(i).getPassword().equals(password)){
-						passCheck = true;
-						custInst = customers.get(i);
-						break;
-					}
+		System.out.print("Username : ");
+		username = scan.nextLine();
+		System.out.print("Password : ");
+		password = scan.nextLine();
+		for(int i=0 ; i<customers.size(); i++){
+			if(customers.get(i).getUsername().equals(username)){
+				usernameCheck = true;
+				if(customers.get(i).getPassword().equals(password)){
+					passCheck = true;
+					custInst = customers.get(i);
+					break;
 				}
 			}
-			if(usernameCheck == false || passCheck == false){
-				System.out.println("-- Incorrect Username/Password --");
+		}
+		if(usernameCheck == false || passCheck == false){
+			System.out.println("-- Incorrect Username/Password --");
+			try{
+				Thread.sleep(1500);
+			}catch(Exception e){
+				System.out.println(e.getMessage());
 			}
-		}while(usernameCheck == false || passCheck == false);
+		}
 		//check user exists & password is correct
 		saveAcct();
+		System.out.println();
 		return custInst;
 	}
 	
@@ -54,41 +60,63 @@ public class Account {
 		System.out.print("Please enter your name : ");
 		name = scan.nextLine();
 		
+		System.out.print("Please enter your desired username with 6-12 characters: ");
 		do{
 			usernameCheck = true;
-			System.out.print("Please enter your desired username : "); //limit 6 - 15
 			username = scan.nextLine();
-			for(int i=0 ; i<customers.size(); i++){
-				if(customers.get(i).getUsername().equals(username)){
-					usernameCheck = false;
-					System.out.println("Username Not Available - Please Try Again");
-					break;
+			if (username.length() < 5 || username.length() > 13){
+				System.out.println("-- Please enter a username with 6-12 characters. --");
+			}
+			else{
+				for(int i=0 ; i<customers.size(); i++){
+					if(customers.get(i).getUsername().equals(username)){
+						usernameCheck = false;
+						System.out.println("-- Username Not Available - Please Try Again-- ");
+					}
+					else
+						break;
 				}
+				break;
 			}
 			//Check for uniqueness
-		}while(!usernameCheck);
-		
+		}while(usernameCheck);
 		//loop this -- check if 2 passwords are the same
+		
+		System.out.print("Please enter your password with 6-12 characters : ");		//limit 6-15
 		do{
-			System.out.print("Please enter your password : ");		//limit 6-15
 			password1 = scan.nextLine();
-			System.out.print("Please re-enter your password to confirm : ");
-			password2 = scan.nextLine();
-			if(passcheck = !password1.equals(password2)){
-				System.out.println("-- Passwords entered do not match! --");
+			if (password1.length() < 5 || password1.length() > 13)
+				System.out.println("-- Please enter a password with 6-12 characters! --");
+			else{ 
+				System.out.print("Please re-enter your password to confirm : ");
+				password2 = scan.nextLine();
+				if(passcheck = !password1.equals(password2)){
+					System.out.println("-- Passwords entered do not match! --");
+					System.out.println("-- Press Enter and try again. --");
+				}
+				else 
+					break;
 			}
-		}while(passcheck);
+			
+		}while(1>0);
 		//loop this
 		
 		System.out.print("Please enter your address : ");
 		address = scan.nextLine();
+		String pattern = "\\({0,1}((0|\\+61)(2|4|3|7|8)){0,1}\\){0,1}(\\ |-){0,1}[0-9]{2}(\\ |-){0,1}[0-9]{2}(\\ |-){0,1}[0-9]{1}(\\ |-){0,1}[0-9]{3}";
+		Pattern phonePattern = Pattern.compile(pattern);
 		
+		System.out.print("Please enter a valid Australian phone number : ");
 		do{
-			System.out.print("Please enter a valid Australian phone number : ");
+			
 			phone = scan.nextLine();
-			break;
+			Matcher m = phonePattern.matcher(phone);
+			if (m.find( ))
+				break;
+			else 
+				System.out.println("--Invalid Australian phone number. 2--");
 		}while(1>0);//Change this to regex for aussie phone number -- remove break()					//TO DO
-		
+
 		customers.add(new Customer(name, username, password1, address, phone));
 		saveAcct();
 		System.out.println("You have successfully registered!");

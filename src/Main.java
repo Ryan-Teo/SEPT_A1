@@ -34,6 +34,33 @@ public class Main {
 		
 		if(userInst instanceof Customer){
 			System.out.println("-Customer Mode-");
+			Customer custInst = (Customer)userInst;
+			boolean exit = false;
+			do{
+				custInst.customerMenu();
+				userInput = scan.nextLine();
+				switch(userInput){
+					case "1":
+						//add booking
+						break;
+					case "2":
+						//view current bookings
+						break;
+					case "3":
+						//view sessions of a business
+						break;
+					case "0":
+						//customer log out and other log out stuff
+						System.out.println("Logging Out and Exiting");
+						//Suggested code! >>>
+						//	custInst = null;
+						//	userInst = null;
+						exit = true;
+					default:
+						System.out.println("Invalid Input - Please Try Again");
+				
+				}
+			}while(exit == false);
 		}
 		else if (userInst instanceof Owner){
 			System.out.println("-Owner Mode-");

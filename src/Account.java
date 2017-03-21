@@ -122,6 +122,7 @@ public class Account {
 		
 		System.out.print("Please enter your address : ");
 		address = scan.nextLine();
+// The following regex was obtained for educational purposes from: https://ilikekillnerds.com/2014/08/regular-expression-for-validating-australian-phone-numbers-including-landline-and-mobile/
 		String pattern = "\\({0,1}((0|\\+61)(2|4|3|7|8)){0,1}\\){0,1}(\\ |-){0,1}[0-9]{2}(\\ |-){0,1}[0-9]{2}(\\ |-){0,1}[0-9]{1}(\\ |-){0,1}[0-9]{3}";
 		Pattern phonePattern = Pattern.compile(pattern);
 		

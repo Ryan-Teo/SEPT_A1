@@ -9,17 +9,13 @@ public class Account {
 	private ArrayList<Owner> owners = new ArrayList<Owner>();
 	//merge to one arraylist?
 	
-	public Customer login(Scanner scan) throws IOException{
+	public User login(Scanner scan){
 		//Make usable for owner as well
 		//Change return type include owner
 		String username, password;
-		Customer custInst = null;
+		User userInst = null;
 		Boolean usernameCheck = false, passCheck = false;
-		try{
-			loadAcct();
-		} catch(Exception e) {
-			System.out.println(e.getMessage());
-		}
+		loadAcct();
 		System.out.print("Username : ");
 		username = scan.nextLine();
 		System.out.print("Password : ");
@@ -29,7 +25,17 @@ public class Account {
 				usernameCheck = true;
 				if(customers.get(i).getPassword().equals(password)){
 					passCheck = true;
-					custInst = customers.get(i);
+					userInst = customers.get(i);
+					break;
+				}
+			}
+		}
+		for(int i=0 ; i<owners.size(); i++){
+			if(owners.get(i).getUsername().equals(username)){
+				usernameCheck = true;
+				if(owners.get(i).getPassword().equals(password)){
+					passCheck = true;
+					userInst = owners.get(i);
 					break;
 				}
 			}
@@ -45,18 +51,13 @@ public class Account {
 		//check user exists & password is correct
 		saveAcct();
 		System.out.println();
-		return custInst;
+		return userInst;
 	}
 	
-	public void register(Scanner scan) throws IOException{
-		try{
-			loadAcct();
-		} catch(Exception e) {
-			System.out.println(e.getMessage());
-		}
+	public void register(Scanner scan){
+		loadAcct();
 		//Change return type
 		//take user input, create new customer, write customer info to file/db
-		Customer custInst;
 		String name, username, password1, password2, address, phone, userInput, userType = null;
 		Boolean passcheck, usernameCheck;
 		System.out.println("--Who are you?--");
@@ -134,7 +135,7 @@ public class Account {
 				break;
 			else 
 				System.out.println("--Invalid Australian phone number. 2--");
-		}while(1>0);//Change this to regex for aussie phone number -- remove break()					//TO DO
+		}while(1>0);
 
 		if(userType.equals("cust")){
 			customers.add(new Customer(name, username, password1, address, phone));
@@ -152,30 +153,58 @@ public class Account {
 		}
 	}
 	
-	private void loadAcct() throws FileNotFoundException{
-		//add functionality for owners
+	private void loadAcct(){
 		//deal with exception here
 		customers.clear();
+		owners.clear();
 		String line, name, username, password, address, phone;
-		Scanner sc = new Scanner(new File("customers.txt"));
-		while (sc.hasNext()){
-			line = sc.nextLine();
-			StringTokenizer st = new StringTokenizer(line, "|");
-			name = st.nextToken();
-			username = st.nextToken();
-			password = st.nextToken();
-			address = st.nextToken();
-			phone = st.nextToken();
-			customers.add(new Customer(name, username, password, address, phone));
+		Scanner sc;
+		try {
+			sc = new Scanner(new File("customers.txt"));
+			while (sc.hasNext()){
+				line = sc.nextLine();
+				StringTokenizer st = new StringTokenizer(line, "|");
+				name = st.nextToken();
+				username = st.nextToken();
+				password = st.nextToken();
+				address = st.nextToken();
+				phone = st.nextToken();
+				customers.add(new Customer(name, username, password, address, phone));
+			}	
+			sc.close();
+		} catch (FileNotFoundException e) {
+			//no existing customers, file will be created
+		}
+		
+		Scanner scOwner;
+		try {
+			scOwner = new Scanner(new File("owners.txt"));
+			while (scOwner.hasNext()){
+				line = scOwner.nextLine();
+				StringTokenizer st = new StringTokenizer(line, "|");
+				name = st.nextToken();
+				username = st.nextToken();
+				password = st.nextToken();
+				address = st.nextToken();
+				phone = st.nextToken();
+				owners.add(new Owner(name, username, password, address, phone));
+			}
+			scOwner.close();
+		} catch (FileNotFoundException e) {
+			//no existing owners, file will be created
 		}	
-		sc.close();
 	}
 	
-	private void saveAcct() throws IOException{
+	private void saveAcct(){
 		//add functionality for owners
 		//deal with exception here
 		String name, username, password, address, phone;
-		PrintWriter pw = new PrintWriter (new BufferedWriter (new FileWriter ("customers.txt")));
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter (new BufferedWriter (new FileWriter ("customers.txt")));
+		} catch (IOException e) {
+			System.err.println("-customers.txt has been created-");
+		}
 		for (int i=0; i<customers.size(); i++){
 			Customer customer = customers.get(i);			
 			name = customer.getName();
@@ -187,5 +216,22 @@ public class Account {
 		}
 		pw.close();
 		customers.clear();
+		PrintWriter pwOwner = null;
+		try {
+			pwOwner = new PrintWriter (new BufferedWriter (new FileWriter ("owners.txt")));
+		} catch (IOException e) {
+			System.err.println("-owners.txt has been created-");
+		}
+		for (int i=0; i<owners.size(); i++){
+			Owner owner = owners.get(i);			
+			name = owner.getName();
+			username = owner.getUsername();
+			password = owner.getPassword();
+			address = owner.getAddress();
+			phone = owner.getPhone();
+			pwOwner.printf("%s|%s|%s|%s|%s\n", name, username, password, address, phone);			
+		}
+		pwOwner.close();
+		owners.clear();
 	}
 }

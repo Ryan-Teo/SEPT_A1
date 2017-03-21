@@ -15,6 +15,7 @@ public class Main {
 			System.out.println("3 : Quit");
 			System.out.print("Please enter your selection : ");
 			userInput = scan.nextLine();
+			System.out.println();
 			switch(userInput){
 				case "1":
 					userInst = acct.login(scan);

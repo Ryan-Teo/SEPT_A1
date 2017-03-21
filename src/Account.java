@@ -83,7 +83,7 @@ public class Account {
 		do{
 			usernameCheck = true;
 			username = scan.nextLine();
-			if (username.length() < 5 || username.length() > 13){
+			if (username.length() < 6 || username.length() > 13){
 				System.out.println("-- Please enter a username with 6-12 characters. --");
 			}
 			else{
@@ -104,7 +104,7 @@ public class Account {
 		System.out.print("Please enter your password with 6-12 characters : ");		//limit 6-15
 		do{
 			password1 = scan.nextLine();
-			if (password1.length() < 5 || password1.length() > 13)
+			if (password1.length() < 6 || password1.length() > 13)
 				System.out.println("-- Please enter a password with 6-12 characters! --");
 			else{ 
 				System.out.print("Please re-enter your password to confirm : ");
@@ -129,16 +129,6 @@ public class Account {
 		do{
 			
 			phone = scan.nextLine();
-<<<<<<< HEAD
-			break;
-		}while(1>0);//Change this to regex for aussie phone number -- remove break()		//TO DO
-		if(userType.equals("cust")){
-			customers.add(new Customer(name, username, password1, address, phone));
-		}
-		else if (userType.equals("owner")){
-			owners.add(new Owner(name, username, password1, address, phone));
-		}
-=======
 			Matcher m = phonePattern.matcher(phone);
 			if (m.find( ))
 				break;
@@ -146,8 +136,12 @@ public class Account {
 				System.out.println("--Invalid Australian phone number. 2--");
 		}while(1>0);//Change this to regex for aussie phone number -- remove break()					//TO DO
 
-		customers.add(new Customer(name, username, password1, address, phone));
->>>>>>> fbcd76fd64679e38d61c5557543a8432a506b29e
+		if(userType.equals("cust")){
+			customers.add(new Customer(name, username, password1, address, phone));
+		}
+		else if (userType.equals("owner")){
+			owners.add(new Owner(name, username, password1, address, phone));
+		}
 		saveAcct();
 		System.out.println("You have successfully registered!");
 		System.out.println();

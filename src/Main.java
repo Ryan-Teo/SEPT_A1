@@ -56,9 +56,10 @@ public class Main {
 						//	custInst = null;
 						//	userInst = null;
 						exit = true;
+						break;
 					default:
 						System.out.println("Invalid Input - Please Try Again");
-				
+						break;
 				}
 			}while(exit == false);
 		}

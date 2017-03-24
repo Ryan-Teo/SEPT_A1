@@ -16,8 +16,8 @@ public class BusinessTest {
 	public void testInitialise() {
 		assertTrue(business.getName() instanceof String);
 		assertTrue(business.getOwner() instanceof String);
-		assertTrue(business.getEmp() instanceof ArrayList);
-		assertTrue(business.getSession() instanceof ArrayList);
+		assertTrue(business.getEmp() instanceof ArrayList<?>);
+		assertTrue(business.getSession() instanceof ArrayList<?>);
 	}
 	
 	@Test

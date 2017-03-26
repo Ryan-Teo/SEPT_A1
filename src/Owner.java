@@ -1,3 +1,9 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+
 
 public class Owner extends User{
 	String name, username, password, address, phone;
@@ -7,7 +13,7 @@ public class Owner extends User{
 	}
 	
 	@Override
-	public void viewSession(String businessName) {
+	public void viewSession(Business businessName) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -21,8 +27,41 @@ public class Owner extends User{
 		
 	}
 	
-	public void addWorkingTime(String empName,String working_time){
+	@SuppressWarnings("unchecked")
+	public void assignEmployee(Employee empName,String day,String session_startTime, Business business){
 		
+		ArrayList<Booking> sessions;
+		HashMap <Date,ArrayList<Booking>> schedule = business.getSchedule();
+		
+		//Day-Date-Month-Year
+		SimpleDateFormat dayFormat = new SimpleDateFormat ("E dd.mm");
+		//Hour-minute
+		SimpleDateFormat sessionFormat = new SimpleDateFormat ("HH.mm");
+		
+		try {
+			Date working_day = dayFormat.parse(day);
+			Date working_hour = sessionFormat.parse(session_startTime);
+			
+			//Iterate and check if the key exists
+			for(Date key : schedule.keySet()){
+				if(working_day.equals(key)){
+					//return all sessions available on that day/date 
+					sessions = (ArrayList<Booking>) schedule.get(key);
+					
+					/*Iterate all available sessions and add employee 
+					 *to the specified session time
+					 */
+					for(Booking session : sessions){
+						if(working_hour.equals(session.getStartTime())){
+							//Assign an employee to that session
+							session.getEmp().add(empName);
+						}
+					}
+				}
+			}
+		} catch (ParseException e) {
+			System.out.println("Unparseable"); 
+		}
 	}
 	
 }

@@ -1,27 +1,43 @@
-import java.util.HashMap;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class Booking {
-private String time;
+private Date startTime;
+private Date endTime;
 private Customer cust;
-private Employee emp;
+private ArrayList<Employee> emp;
 
-Booking(String time,Customer cust, Employee emp){
-	this.time = time;
-	this.cust = cust;
-	this.emp = emp;
+public Booking(Date startTime, Date endTime){
+	this.startTime = startTime;
+	this.endTime = endTime;
 }
 
-Booking(String name,String time, Employee emp){
-	this.time = time;
-	this.emp = emp;
+public Date getStartTime() {
+	return startTime;
 }
 
-public String getTime() {
-	return time;
+public Date getEndTime() {
+	return endTime;
 }
 
-public void setTime(String time) {
-	this.time = time;
+public void setStartTime(String time) {
+	SimpleDateFormat ft = new SimpleDateFormat("HH");
+	try {
+		this.startTime = ft.parse(time);
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}
+}
+
+public void setEndTime(String time) {
+	SimpleDateFormat ft = new SimpleDateFormat("HH");
+	try {
+		this.endTime = ft.parse(time);
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}
 }
 
 public Customer getCust() {
@@ -32,12 +48,8 @@ public void setCust(Customer cust) {
 	this.cust = cust;
 }
 
-public Employee getEmp() {
+public ArrayList<Employee> getEmp() {
 	return emp;
-}
-
-public void setEmp(Employee emp) {
-	this.emp = emp;
 }
 
 

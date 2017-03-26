@@ -107,5 +107,4 @@ public class Business {
 		
 		return session_time;
 	}
-	
 }

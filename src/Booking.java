@@ -12,7 +12,7 @@ private Date startTime;
 private Date endTime;
 private Customer cust;
 private ArrayList<Employee> emp;
-protected static ArrayList<Booking> bookings;
+protected static ArrayList<Booking> bookings = new ArrayList<Booking>();
 private String bookDate, bookStart, bookEnd, bookCust, bookBus, bookEmp;
 
 //public Booking(Date startTime, Date endTime){
@@ -125,8 +125,6 @@ public static void loadAcct(){
 			bookCust = st.nextToken();
 			bookBus = st.nextToken();
 			bookEmp = st.nextToken();
-			System.out.println("WWASUPPPPPPPPP BITCH");
-			System.out.printf("%s %s %s %s %s %s", bookDate, bookStart, bookEnd, bookCust, bookBus, bookEmp );
 			Booking booktep = new Booking(bookDate, bookStart, bookEnd, bookCust, bookBus, bookEmp);
 			bookings.add(booktep);
 		}	  
@@ -139,7 +137,7 @@ public static void loadAcct(){
 public static ArrayList<Booking> readBookings(String name){
 	ArrayList<Booking> temp = null;
 	for(int i=0 ; i<bookings.size(); i++){
-		if(bookings.get(i).getBookCust().equals(name)){
+		if(bookings.get(i).getBookCust().equals(name)){//BOOKING.GET.GETBOOKCUST RETURNS NULL WHYYYYYYYYYYYYYYY
 				System.out.printf("%15s %20s %15s %20s %20s %20s\n", bookings.get(i).getBookDate(), 
 						bookings.get(i).getBookStart(), bookings.get(i).getBookEnd(), bookings.get(i).getBookCust(),
 						bookings.get(i).getBookBus(), bookings.get(i).getBookEmp() );

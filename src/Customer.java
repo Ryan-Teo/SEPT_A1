@@ -33,7 +33,7 @@ public class Customer extends User{
 		//will then print in the following order:
 		//Date/Time, Business Name, Employee of the business taking the job
 		Booking.loadAcct(); 
-		Booking.readBookings(this.getName());
+		Booking.readBookings(this.getUsername());
 		
 		
 	}

@@ -46,6 +46,7 @@ public class Main {
 						break;
 					case "2":
 						//view current bookings
+						custInst.viewBookingSummary();
 						break;
 					case "3":
 						//view sessions of a business

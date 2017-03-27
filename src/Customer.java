@@ -27,15 +27,14 @@ public class Customer extends User{
 	//method for customer to check all of their current bookings
 	@Override
 	public void viewBookingSummary() {
-		System.out.printf("%15s %20s %15s\n", "Date", "Business", "Employee"); //length of each section may need changing
-		System.out.println("----------------------------------------------");
+		System.out.printf("%15s %20s %15s %20s %20s %20s\n", "Date", "Start", "End", "Customer", "Business", "Employee"); //length of each section may need changing
+		System.out.println("---------------------------------------------------------------------------------------------");
 		//loop that goes through all the session of the customer
 		//will then print in the following order:
 		//Date/Time, Business Name, Employee of the business taking the job
-		for(int i = 0; i < sessions.size(); i++){
-//			System.out.printf("%15s %20s %15s\n",sessions.get(i).getTime(), sessions.get(i).getbName(), sessions.get(i).getEmp());
-		}
-		System.out.println("---END SUMMARY---");
+		Booking.loadAcct(); 
+		Booking.readBookings(this.getName());
+		
 		
 	}
 	

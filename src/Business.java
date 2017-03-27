@@ -91,20 +91,20 @@ public class Business {
 	}
 	
 	//Add session time with specified format("hour:minute")
-	public Booking addSessionTime(String startTime, String endTime){
-		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-		Date start = new Date();
-		Date end = new Date();
-		
-		try {
-			start = timeFormat.parse(startTime);
-			end = timeFormat.parse(endTime);
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		}
-		
-		Booking session_time = new Booking(start,end);
-		
-		return session_time;
-	}
+//	public Booking addSessionTime(String startTime, String endTime){
+//		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+//		Date start = new Date();
+//		Date end = new Date();
+//		
+//		try {
+//			start = timeFormat.parse(startTime);
+//			end = timeFormat.parse(endTime);
+//		} catch (ParseException e1) {
+//			e1.printStackTrace();
+//		}
+//		
+////		Booking session_time = new Booking(start,end);
+//		
+//		return session_time;
+//	}
 }

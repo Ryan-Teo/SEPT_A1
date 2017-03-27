@@ -19,6 +19,18 @@ public class BusinessTest {
 	Date wednesday = new Date();
 	String startTime = "08:30";
 	String endTime = "09:30";
+
+	//list of employees
+	//list of times
+	
+//	@Test
+//	public void testInitialise() {
+//		assertTrue(business.getName() instanceof String);
+//		assertTrue(business.getOwner() instanceof String);
+//		assertTrue(business.getEmp() instanceof ArrayList<?>);
+//		assertTrue(business.getSession() instanceof ArrayList<?>);
+//	}
+//github.com/rmit-s3444615-ryan-teo/SEPT-ass1.git
 	
 	@Test
 	public void testPrintSchedule(){

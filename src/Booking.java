@@ -9,6 +9,7 @@ private Date endTime;
 private Customer cust;
 private ArrayList<Employee> emp;
 
+
 public Booking(Date startTime, Date endTime){
 	this.startTime = startTime;
 	this.endTime = endTime;
@@ -17,6 +18,7 @@ public Booking(Date startTime, Date endTime){
 public Date getStartTime() {
 	return startTime;
 }
+
 
 public Date getEndTime() {
 	return endTime;
@@ -51,6 +53,5 @@ public void setCust(Customer cust) {
 public ArrayList<Employee> getEmp() {
 	return emp;
 }
-
 
 }

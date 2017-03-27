@@ -20,7 +20,7 @@ public class Customer extends User{
 	}
 	
 	@Override
-	public void viewSession(String businessName) {
+	public void viewSession(Business businessName) {
 		
 	}
 
@@ -33,7 +33,7 @@ public class Customer extends User{
 		//will then print in the following order:
 		//Date/Time, Business Name, Employee of the business taking the job
 		for(int i = 0; i < sessions.size(); i++){
-			System.out.printf("%15s %20s %15s\n",sessions.get(i).getTime(), sessions.get(i).getbName(), sessions.get(i).getEmp());
+//			System.out.printf("%15s %20s %15s\n",sessions.get(i).getTime(), sessions.get(i).getbName(), sessions.get(i).getEmp());
 		}
 		System.out.println("---END SUMMARY---");
 		

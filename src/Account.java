@@ -54,6 +54,37 @@ public class Account {
 		return userInst;
 	}
 	
+	public boolean checkLength(String name, int min, int max){
+		if (name.length() < min || name.length() > max)
+			return true;
+		return false;
+	}
+	
+	public boolean checkCustName(String name){
+		for(int i=0 ; i<customers.size(); i++){
+			if(customers.get(i).getUsername().equals(name))
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean checkCustPass(String password){
+		for(int i=0 ; i<customers.size(); i++){
+			if(customers.get(i).getPassword().equals(password))
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean checkPhone(String phone){
+		String pattern = "\\({0,1}((0|\\+61)(2|4|3|7|8)){0,1}\\){0,1}(\\ |-){0,1}[0-9]{2}(\\ |-){0,1}[0-9]{2}(\\ |-){0,1}[0-9]{1}(\\ |-){0,1}[0-9]{3}";
+		Pattern phonePattern = Pattern.compile(pattern);
+		Matcher m = phonePattern.matcher(phone);
+		if (m.find( ))
+			return true;
+		return false;
+	}
+	
 	public void register(Scanner scan){
 		loadAcct();
 		//Change return type
@@ -82,15 +113,13 @@ public class Account {
 		
 		System.out.print("Please enter your desired username with 6-12 characters: ");
 		do{
-			usernameCheck = true;
 			username = scan.nextLine();
-			if (username.length() < 6 || username.length() > 13){
+			if (checkLength(username, 6, 12) == true){
 				System.out.println("-- Please enter a username with 6-12 characters. --");
 			}
 			else{
 				for(int i=0 ; i<customers.size(); i++){
-					if(customers.get(i).getUsername().equals(username)){
-						usernameCheck = false;
+					if(checkCustName(username)==true){
 						System.out.println("-- Username Not Available - Please Try Again-- ");
 					}
 					else
@@ -99,13 +128,13 @@ public class Account {
 				break;
 			}
 			//Check for uniqueness
-		}while(usernameCheck);
+		}while(1>0);
 		//loop this -- check if 2 passwords are the same
 		
 		System.out.print("Please enter your password with 6-12 characters : ");		//limit 6-15
 		do{
 			password1 = scan.nextLine();
-			if (password1.length() < 6 || password1.length() > 13)
+			if (checkLength(password1, 6, 12) == true)
 				System.out.println("-- Please enter a password with 6-12 characters! --");
 			else{ 
 				System.out.print("Please re-enter your password to confirm : ");
@@ -123,16 +152,11 @@ public class Account {
 		
 		System.out.print("Please enter your address : ");
 		address = scan.nextLine();
-// The following regex was obtained for educational purposes from: https://ilikekillnerds.com/2014/08/regular-expression-for-validating-australian-phone-numbers-including-landline-and-mobile/
-		String pattern = "\\({0,1}((0|\\+61)(2|4|3|7|8)){0,1}\\){0,1}(\\ |-){0,1}[0-9]{2}(\\ |-){0,1}[0-9]{2}(\\ |-){0,1}[0-9]{1}(\\ |-){0,1}[0-9]{3}";
-		Pattern phonePattern = Pattern.compile(pattern);
-		
 		System.out.print("Please enter a valid Australian phone number : ");
 		do{
 			
 			phone = scan.nextLine();
-			Matcher m = phonePattern.matcher(phone);
-			if (m.find( ))
+			if (checkPhone(phone)==true)
 				break;
 			else 
 				System.out.println("--Invalid Australian phone number. 2--");
@@ -171,7 +195,7 @@ public class Account {
 				address = st.nextToken();
 				phone = st.nextToken();
 				customers.add(new Customer(name, username, password, address, phone));
-			}	
+			}	  
 			sc.close();
 		} catch (FileNotFoundException e) {
 			//no existing customers, file will be created

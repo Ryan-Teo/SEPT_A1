@@ -1,1 +1,4 @@
-Harry|utomorulz|hahaha|Fgt lane|0435267373
+Harry|harryCust|password|utomorulz@sept.com|0400000000
+Ryan|ryanCust|password|ryan@sept.com|0411111111
+Anton|antonCust|password|anton@sept.com|0422222222
+Julia|juliaCust|password|julia@sept.com|0433333333

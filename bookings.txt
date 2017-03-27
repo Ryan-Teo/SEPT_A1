@@ -1,0 +1,9 @@
+30/04/17|1200|1300|ryanCust|Sal's Hair Salon|Sally
+29/04/17|0800|0900|harryCust|East Medical Centre|Nathan
+29/04/17|1300|1400|antonCust|Manny's Manicures|Gavin
+30/04/17|1400|1500|juliaCust|Don't Shop, Adopt|Iris
+31/04/17|1000|1100|ryanCust|Doctor Approved|Matthew
+30/04/17|1100|1200|harryCust|Netherlands|Sue
+31/04/17|1400|1700|antonCust|Blinding Smiles|Ricky
+01/04/17|0900|1000|juliaCust|Beds R Us|Henry
+01/04/17|1500|1600|harryCust|Personally Fit|Doug

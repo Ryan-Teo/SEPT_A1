@@ -12,7 +12,7 @@ public class Main {
 			System.out.println("--Welcome to ABC Booking system--");
 			System.out.println("1 : Login");
 			System.out.println("2 : Register");
-			System.out.println("3 : Quit");
+			System.out.println("0 : Quit");
 			System.out.print("Please enter your selection : ");
 			userInput = scan.nextLine();
 			System.out.println();
@@ -23,7 +23,7 @@ public class Main {
 				case "2":
 					acct.register(scan);
 					break;
-				case "3":
+				case "0":
 					System.out.println("--Bye Bye--");
 					break;
 				default:
@@ -31,7 +31,7 @@ public class Main {
 					break;
 			
 			}
-		}while(!userInput.equals("3") && userInst == null);
+		}while(!userInput.equals("0") && userInst == null);
 		
 		if(userInst instanceof Customer){
 			System.out.println("-Customer Mode-");
@@ -53,9 +53,7 @@ public class Main {
 					case "0":
 						//customer log out and other log out stuff
 						System.out.println("Logging Out and Exiting");
-						//Suggested code! >>>
-						//	custInst = null;
-						//	userInst = null;
+						userInst = null;
 						exit = true;
 						break;
 					default:

@@ -11,12 +11,11 @@ public class Customer extends User{
 	//method to display the menu, should be looped in the main.
 	public void customerMenu(){
 		System.out.println("Welcome " + this.getName() + "!");
-		System.out.println("Please select an option: ");
-		System.out.println("1. Add Booking"); //refer to bookSession()
-		System.out.println("2. View Bookings");//refer to viewBookingSummary()
-		System.out.println("3. View Sessions of a Business"); //refer to viewSession Method
-		System.out.println("0. Exit");
-		
+		System.out.println("1 : Add Booking"); //refer to bookSession()
+		System.out.println("2 : View Bookings");//refer to viewBookingSummary()
+		System.out.println("3 : View Sessions of a Business"); //refer to viewSession Method
+		System.out.println("0 : Exit");
+		System.out.printf("Please select an option: ");
 	}
 	
 	@Override

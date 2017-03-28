@@ -32,8 +32,7 @@ public class Customer extends User{
 		//loop that goes through all the session of the customer
 		//will then print in the following order:
 		//Date/Time, Business Name, Employee of the business taking the job
-		Booking.loadAcct(); 
-		Booking.readBookings(this.getUsername());
+		Booking.loadAcct(this.getUsername()); 
 		
 		
 	}

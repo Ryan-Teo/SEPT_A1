@@ -110,7 +110,7 @@ public ArrayList<Employee> getEmp() {
 	return emp;
 }
 
-public static void loadAcct(){
+public static void loadAcct(String name){
 	//deal with exception here
 	String bookDate, bookStart, bookEnd, bookCust, bookBus, bookEmp, line;
 	Scanner sc;
@@ -132,10 +132,9 @@ public static void loadAcct(){
 	} catch (FileNotFoundException e) {
 		//no existing customers, file will be created
 	}
-}
-
-public static ArrayList<Booking> readBookings(String name){
 	ArrayList<Booking> temp = null;
+	System.out.printf("%15s %20s %15s %20s %20s %20s\n", "Date", "Start", "End", "Customer", "Business", "Employee"); //length of each section may need changing
+	System.out.println("---------------------------------------------------------------------------------------------");
 	for(int i=0 ; i<bookings.size(); i++){
 		if(bookings.get(i).getBookCust().equals(name)){//BOOKING.GET.GETBOOKCUST RETURNS NULL WHYYYYYYYYYYYYYYY
 				System.out.printf("%15s %20s %15s %20s %20s %20s\n", bookings.get(i).getBookDate(), 
@@ -143,6 +142,10 @@ public static ArrayList<Booking> readBookings(String name){
 						bookings.get(i).getBookBus(), bookings.get(i).getBookEmp() );
 		}
 	}
-	return temp;
+	return;
 }
+
+//public static ArrayList<Booking> readBookings(String name){
+//	
+//}
 }

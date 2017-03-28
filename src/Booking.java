@@ -127,21 +127,22 @@ public static void loadAcct(String name){
 			bookEmp = st.nextToken();
 			Booking booktep = new Booking(bookDate, bookStart, bookEnd, bookCust, bookBus, bookEmp);
 			bookings.add(booktep);
-		}	  
+		}	 
+		ArrayList<Booking> temp = null;
+		System.out.printf("%15s %20s %15s %20s %20s %20s\n", "Date", "Start", "End", "Customer", "Business", "Employee"); //length of each section may need changing
+		System.out.println("---------------------------------------------------------------------------------------------");
+		for(int i=0 ; i<bookings.size(); i++){
+			if(bookings.get(i).getBookCust().equals(name)){//BOOKING.GET.GETBOOKCUST RETURNS NULL WHYYYYYYYYYYYYYYY
+					System.out.printf("%15s %20s %15s %20s %20s %20s\n", bookings.get(i).getBookDate(), 
+							bookings.get(i).getBookStart(), bookings.get(i).getBookEnd(), bookings.get(i).getBookCust(),
+							bookings.get(i).getBookBus(), bookings.get(i).getBookEmp() );
+			}
+		}
 		sc.close();
 	} catch (FileNotFoundException e) {
 		//no existing customers, file will be created
 	}
-	ArrayList<Booking> temp = null;
-	System.out.printf("%15s %20s %15s %20s %20s %20s\n", "Date", "Start", "End", "Customer", "Business", "Employee"); //length of each section may need changing
-	System.out.println("---------------------------------------------------------------------------------------------");
-	for(int i=0 ; i<bookings.size(); i++){
-		if(bookings.get(i).getBookCust().equals(name)){//BOOKING.GET.GETBOOKCUST RETURNS NULL WHYYYYYYYYYYYYYYY
-				System.out.printf("%15s %20s %15s %20s %20s %20s\n", bookings.get(i).getBookDate(), 
-						bookings.get(i).getBookStart(), bookings.get(i).getBookEnd(), bookings.get(i).getBookCust(),
-						bookings.get(i).getBookBus(), bookings.get(i).getBookEmp() );
-		}
-	}
+	
 	return;
 }
 

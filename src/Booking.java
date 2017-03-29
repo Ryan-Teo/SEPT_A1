@@ -10,85 +10,87 @@ import java.io.*;
 public class Booking {
 private Date startTime;
 private Date endTime;
-protected static ArrayList<Booking> bookings = new ArrayList<Booking>();
 private Customer bookCust;
 private Business bookBus;
 private Employee bookEmp;
+protected static ArrayList<Booking> bookings = new ArrayList<Booking>();
 
-public Booking(Date bookStart, Date bookEnd, Business bookBus){
-	bookStart = this.startTime;
-	bookEnd = this.endTime;
-	bookBus = this.bookBus;
-}
-
-public Booking(Date bookStart, Date bookEnd, Employee emp){
-	bookStart = this.startTime;
-	bookEnd = this.endTime;
-	bookEmp = emp;
-}
-
-public Booking(Date bookStart, Date bookEnd){
-	bookStart = this.startTime;
-	bookEnd = this.endTime;
-}
-
-public ArrayList<Booking> getBookings() {
-	return bookings;
-}
-
-public Customer getBookCust() {
-	return bookCust;
-}
-
-public Business getBookBus() {
-	return bookBus;
-}
-
-public Employee getBookEmp() {
-	return bookEmp;
-}
-
-public Date getStartTime() {
-	return startTime;
-}
-
-public Date getEndTime() {
-	return endTime;
-}
-
-public void setStartTime(String time) {
-	SimpleDateFormat ft = new SimpleDateFormat("HH");
-	try {
-		this.startTime = ft.parse(time);
-	} catch (ParseException e) {
-		e.printStackTrace();
+	public Booking(Date bookStart, Date bookEnd, Business bookBus){
+		this.startTime = bookStart;
+		this.endTime = bookEnd;
+		this.bookBus = bookBus;
 	}
-}
-
-public void setEndTime(String time) {
-	SimpleDateFormat ft = new SimpleDateFormat("HH");
-	try {
-		this.endTime = ft.parse(time);
-	} catch (ParseException e) {
-		e.printStackTrace();
+	
+	public Booking(Date bookStart, Date bookEnd, Employee emp){
+		this.startTime = bookStart;
+		this.endTime = bookEnd;
+		this.bookEmp = emp;
 	}
-}
-
-public void saveBookingToFile( HashMap<Date, ArrayList<Booking>> map){
-	try {
-        FileOutputStream outFile = new FileOutputStream("bookings.txt");
-        ObjectOutputStream out = new ObjectOutputStream(outFile);
-        out.writeObject(map);
-        out.close();
-        outFile.close();
-        System.out.printf("Booking has been saved");
-     }catch(IOException i) {
-        i.printStackTrace();
-     }
-}
-
-public static void loadAcct(String name){
-	//deal with exception here
+	
+	public Booking(Date bookStart, Date bookEnd){
+		this.startTime = bookStart;
+		this.endTime = bookEnd;
+	}
+	
+	public ArrayList<Booking> getBookings() {
+		return bookings;
+	}
+	
+	public Customer getBookCust() {
+		return bookCust;
+	}
+	
+	public Business getBookBus() {
+		return bookBus;
+	}
+	
+	public Employee getBookEmp() {
+		return bookEmp;
+	}
+	
+	public Date getStartTime() {
+		return startTime;
+	}
+	
+	public Date getEndTime() {
+		return endTime;
+	}
+	
+	//Set start time on a particular time slot
+	public void setStartTime(String time) {
+		SimpleDateFormat ft = new SimpleDateFormat("HH");
+		try {
+			this.startTime = ft.parse(time);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//Set end time on a particular time slot
+	public void setEndTime(String time) {
+		SimpleDateFormat ft = new SimpleDateFormat("HH");
+		try {
+			this.endTime = ft.parse(time);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void saveBookingToFile( HashMap<Date, ArrayList<Booking>> map){
+		try {
+	        FileOutputStream outFile = new FileOutputStream("bookings.txt");
+	    ObjectOutputStream out = new ObjectOutputStream(outFile);
+	    out.writeObject(map);
+	    out.close();
+	    outFile.close();
+	    System.out.printf("Booking has been saved");
+	     }catch(IOException i) {
+	        i.printStackTrace();
+	     }
+	}
+	
+	public static void loadAcct(String name){
+		//deal with exception here
 	String bookDate, bookStart, bookEnd, bookCust, bookBus, bookEmp, line;
 	Scanner sc;
 	try {
@@ -118,12 +120,9 @@ public static void loadAcct(String name){
 		sc.close();
 	} catch (FileNotFoundException e) {
 		//no existing customers, file will be created
+		}
+		
+		return;
 	}
 	
-	return;
-}
-
-//public static ArrayList<Booking> readBookings(String name){
-//	
-//}
 }

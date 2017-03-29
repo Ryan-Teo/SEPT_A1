@@ -13,28 +13,34 @@ import org.junit.Test;
 
 public class BusinessTest {
 
+	//Dummy schedule and Business
 	HashMap<Date,ArrayList<Booking>> schedule = new HashMap<Date,ArrayList<Booking>>();
-	Business business = new Business("Bob inc.", "Bobb","iloveyou","Franklin Street","03 9924 3812",schedule);
+	Business business = new Business("Bob inc.", "Bobb","iloveyou","Franklin Street","03 9924 3812","   sas");
+	
+	//Dummy Employees
 	Employee emp_1 = new Employee("Chris","chris");
 	Employee emp_2 = new Employee("John Wall", "Wall");
 	Employee emp_3 = new Employee("William Stryker", "Stryker");
+	
+	//Dummy sessions
 	ArrayList<Booking> mondaySessions = new ArrayList<Booking>();
 	ArrayList<Booking> tuesdaySessions = new ArrayList<Booking>();
 	
+	//Date format for Day
 	SimpleDateFormat sdf = new SimpleDateFormat("EE");
-	SimpleDateFormat dayFormat = new SimpleDateFormat("EE");
 	String [] days = {"monday","tuesday","wednesday"};
 	
 	Date monday = new Date();
 	Date tuesday = new Date();
 	Date wednesday = new Date();
+	
 	String startTime = "08:30";
 	String endTime = "09:30";
 
 	@Test
 	public void testPrintSchedule(){
-		Date monday = null;
-		Date tuesday = null;
+		
+		business.setSchedule(schedule);
 		try {
 			
 			monday = sdf.parse(days[0]);
@@ -53,6 +59,7 @@ public class BusinessTest {
 			business.addSession(tuesday, tuesdaySessions);
 			
 			business.printSchedule();
+	
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

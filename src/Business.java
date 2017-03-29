@@ -9,10 +9,9 @@ public class Business extends User{
 	private ArrayList<Employee> emp;	
 	private HashMap<Date, ArrayList<Booking>> schedule;
 	
-	Business(String busName, String ownerName, String address, String phone, String username, String password, HashMap<Date, ArrayList<Booking>> schedule){
+	Business(String busName, String ownerName, String address, String phone, String username, String password){
 		super(ownerName,username,password,address,phone);
 		this.busName = busName;
-		this.schedule = schedule;
 	}
 	
 	public String getBusName(){
@@ -25,6 +24,10 @@ public class Business extends User{
 	
 	public HashMap<Date, ArrayList<Booking>>  getSchedule(){
 		return this.schedule;
+	}
+	
+	public void setSchedule(HashMap<Date, ArrayList<Booking>> schedule){
+		this.schedule = schedule;
 	}
 	
 	public void printSchedule(){
@@ -49,7 +52,9 @@ public class Business extends User{
 		}
 	}
 	
+	//Addding a time slot 
 	public ArrayList<Booking> addSessionTime(String startTime, String endTime,ArrayList<Booking> session){
+
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 		Date start = new Date();
 		Date end = new Date();
@@ -66,7 +71,9 @@ public class Business extends User{
 		return session;
 	}
 	
+	//Adding an available time slot and assigining an employee to that session directly
 	public ArrayList<Booking> addSessionTime(String startTime, String endTime,ArrayList<Booking> session,Employee emp){
+
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 		Date start = new Date();
 		Date end = new Date();
@@ -83,7 +90,8 @@ public class Business extends User{
 		return session;
 	}
 	
-	public void addSession(Date day,ArrayList<Booking>  new_session){
+	//Adding a new session
+	public void addSession(Date day,ArrayList<Booking> new_session){
 		this.schedule.put(day,new_session);
 	}
 	

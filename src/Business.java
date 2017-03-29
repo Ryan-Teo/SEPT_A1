@@ -8,19 +8,11 @@ public class Business extends User{
 	private String name;
 	private String owner;
 	private ArrayList<Employee> emp;	
-	/*Hashtable info
-	 * key : type Time 
-	 * time format : dd.MMMM.yyyy.HH.mm
-	 * H - 24 Hour in a day
-	 * mm - Minutes
-	 * 
-	 * Value : ArrayList <Booking> sessions;
-	*/
 	private HashMap<Date, ArrayList<Booking>> schedule;
 	
-	
-	Business(String name, String username, String password, String address, String phone){
+	Business(String name, String username, String password, String address, String phone,HashMap<Date, ArrayList<Booking>> schedule){
 		super(name,username,password,address,phone);
+		this.schedule = schedule;
 	}
 	
 	public void setName(String name) {
@@ -45,55 +37,68 @@ public class Business extends User{
 	
 	public void printSchedule(){
 		ArrayList<Booking> sessions;
-		for(Object key : schedule.keySet()){
-			// Day in week - date - year
-			System.out.printf("%s %tB %<te  %<tY",key);
+		int i = 1;
+		for(Date key : this.schedule.keySet()){
+			// Day in month - date - day
+			System.out.printf("%1$s %2$tB %2$td, %2$tA", "Date:", key);
 			System.out.println();
-			sessions = (ArrayList<Booking>) schedule.get(key);
+			System.out.println("-----------------------------");
+			System.out.println(String.format("	%-5s 	%-5s","session","Employee"));
+			sessions = this.schedule.get(key);
 			for(Booking session : sessions){
 				// %R => 24 hour time, no seconds
-				System.out.printf("%R-%R",session.getStartTime(),session.getEndTime());
+				System.out.printf("%1$s. |%2$tR - %2$tR|	",i,session.getStartTime(),session.getEndTime());
+				System.out.printf("%-5s", session.getBookEmp().getName());
+				System.out.println();
+				i++;
 			}
-
+			i = 1;
+			System.out.println();
 		}
 	}
 	
-	public void addSession(Date day,Booking new_session){
-		//if no session have been created for one of the days
-		if(this.schedule.containsKey(day) == false){
-			
-			//add the day into the schedule as the key and add 'null' as values
-			this.schedule.put(day,null);
-			
-			//assign the value to variable 'session'
-			ArrayList<Booking> session = schedule.get(day);
-			
-			//add new session to the arrayList 
-			session.add(new_session);
-			
-			//update the schedule
-			this.schedule.put(day,session);
-		}
-		else{
-			//get the group of sessions on that day 
-			ArrayList<Booking> session = schedule.get(day);
-			
-			//append new session on the arrayList
-			session.add(new_session);
-			
-			//Update the schedule
-			this.schedule.put(day,session);
-			
+	public ArrayList<Booking> addSessionTime(String startTime, String endTime,ArrayList<Booking> session){
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+		Date start = new Date();
+		Date end = new Date();
+		
+		try {
+			start = timeFormat.parse(startTime);
+			end = timeFormat.parse(endTime);
+		} catch (ParseException e1) {
+			e1.printStackTrace();
 		}
 		
+		Booking session_time = new Booking(start,end);
+		session.add(session_time);
+		return session;
+	}
+	
+	public ArrayList<Booking> addSessionTime(String startTime, String endTime,ArrayList<Booking> session,Employee emp){
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+		Date start = new Date();
+		Date end = new Date();
 		
+		try {
+			start = timeFormat.parse(startTime);
+			end = timeFormat.parse(endTime);
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+		
+		Booking session_time = new Booking(start,end,emp);
+		session.add(session_time);
+		return session;
+	}
+	
+	public void addSession(Date day,ArrayList<Booking>  new_session){
+		this.schedule.put(day,new_session);
 	}
 	
 	public void businessMenu(){
 		//prints out all of the menu items for a business user
 	}
 
-	@Override
 	public void viewSession(String name) {
 		// TODO Auto-generated method stub
 		
@@ -105,21 +110,5 @@ public class Business extends User{
 		
 	}
 	
-	//Add session time with specified format("hour:minute")
-//	public Booking addSessionTime(String startTime, String endTime){
-//		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-//		Date start = new Date();
-//		Date end = new Date();
-//		
-//		try {
-//			start = timeFormat.parse(startTime);
-//			end = timeFormat.parse(endTime);
-//		} catch (ParseException e1) {
-//			e1.printStackTrace();
-//		}
-//		
-////		Booking session_time = new Booking(start,end);
-//		
-//		return session_time;
-//	}
+
 }

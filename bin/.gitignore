@@ -1,2 +1,16 @@
 /BusinessTest.java
+/.gitignore
+/Account.class
+/AccountTest.class
+/Booking.class
+/BookingTest.class
+/Business.class
+/BusinessTest.class
 /Customer.class
+/CustomerTest.class
+/Employee.class
+/EmployeeTest.class
+/Main.class
+/Owner.class
+/Staff.class
+/User.class

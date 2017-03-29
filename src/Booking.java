@@ -10,58 +10,47 @@ import java.io.*;
 public class Booking {
 private Date startTime;
 private Date endTime;
-private Customer cust;
-private ArrayList<Employee> emp;
 protected static ArrayList<Booking> bookings = new ArrayList<Booking>();
-private String bookDate, bookStart, bookEnd, bookCust, bookBus, bookEmp;
+private Customer bookCust;
+private Business bookBus;
+private Employee bookEmp;
 
-//public Booking(Date startTime, Date endTime){
-//	this.startTime = startTime;
-//	this.endTime = endTime;
-//}
-
-public Booking(String bookDate, String bookStart, String bookEnd, String bookCust, String bookBus, String bookEmp) {
-	bookDate = this.bookDate;
-	bookStart = this.bookStart;
-	bookEnd = this.bookEnd;
-	bookCust = this.bookCust;
+public Booking(Date bookStart, Date bookEnd, Business bookBus){
+	bookStart = this.startTime;
+	bookEnd = this.endTime;
 	bookBus = this.bookBus;
-	bookEmp = this.bookEmp;
-	
+}
+
+public Booking(Date bookStart, Date bookEnd, Employee emp){
+	bookStart = this.startTime;
+	bookEnd = this.endTime;
+	bookEmp = emp;
+}
+
+public Booking(Date bookStart, Date bookEnd){
+	bookStart = this.startTime;
+	bookEnd = this.endTime;
 }
 
 public ArrayList<Booking> getBookings() {
 	return bookings;
 }
 
-public String getBookDate() {
-	return bookDate;
-}
-
-public String getBookStart() {
-	return bookStart;
-}
-
-public String getBookEnd() {
-	return bookEnd;
-}
-
-public String getBookCust() {
+public Customer getBookCust() {
 	return bookCust;
 }
 
-public String getBookBus() {
+public Business getBookBus() {
 	return bookBus;
 }
 
-public String getBookEmp() {
+public Employee getBookEmp() {
 	return bookEmp;
 }
 
 public Date getStartTime() {
 	return startTime;
 }
-
 
 public Date getEndTime() {
 	return endTime;
@@ -96,18 +85,6 @@ public void saveBookingToFile( HashMap<Date, ArrayList<Booking>> map){
      }catch(IOException i) {
         i.printStackTrace();
      }
-}
-
-public Customer getCust() {
-	return cust;
-}
-
-public void setCust(Customer cust) {
-	this.cust = cust;
-}
-
-public ArrayList<Employee> getEmp() {
-	return emp;
 }
 
 public static void loadAcct(String name){

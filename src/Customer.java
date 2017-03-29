@@ -18,9 +18,12 @@ public class Customer extends User{
 		System.out.printf("Please select an option: ");
 	}
 	
-	@Override
-	public void viewSession(String name) {
-		System.out.println("");
+	public void viewSession(String businessName, ArrayList<Business> businesses) {
+		for(Business b :businesses){
+			if(b.getName().equals(businessName)){
+				b.printSchedule();
+			}
+		}
 		
 	}
 

@@ -1,7 +1,11 @@
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 public abstract class User {
 
 	String name, username, password, address, phone;
+	private HashMap<Date, ArrayList<Booking>> schedule;
 	Booking [] booking;
 	
 	User(String name, String username, String password, String address, String phone){
@@ -12,8 +16,6 @@ public abstract class User {
 		this.phone = phone;
 	}
 	
-	//View all available sessions within the business
-	public abstract void viewSession(String name);
 	
 	//Show all number of bookings made by user
 	public abstract void viewBookingSummary();

@@ -7,7 +7,6 @@ public class Account {
 	
 	private ArrayList<Customer> customers = new ArrayList<Customer>();
 	private ArrayList<Business> businesses = new ArrayList<Business>();
-	//merge to one arraylist?
 	
 	public User login(Scanner scan){
 		//Make usable for owner as well
@@ -15,7 +14,6 @@ public class Account {
 		String username, password;
 		User userInst = null;
 		Boolean usernameCheck = false, passCheck = false;
-		loadAcct();
 		System.out.print("Username : ");
 		username = scan.nextLine();
 		System.out.print("Password : ");
@@ -49,8 +47,7 @@ public class Account {
 			}
 		}
 		//check user exists & password is correct
-		saveAcct();
-		System.out.println();
+		System.out.println("########################");
 		return userInst;
 	}
 	
@@ -84,16 +81,12 @@ public class Account {
 			return true;
 		return false;
 	}
-	public ArrayList<Business> getBusiness(){
-		return businesses;
-	}
-	
+
 	public void register(Scanner scan){
-		loadAcct();
-		//Change return type
+		//Change return type?
 		//take user input, create new customer, write customer info to file/db
-		String name, username, password1, password2, address, phone, userInput, userType = null;
-		Boolean passcheck, usernameCheck;
+		String busName, name, username, password1, password2, address, phone, userInput, userType = null;
+		Boolean userCheck = false;
 		System.out.println("--Who are you?--");
 		System.out.printf("1 : Customer\n2 : Owner\n3 : I'm not sure where I am!\n");
 		System.out.printf("Please enter your selection : ");
@@ -103,7 +96,7 @@ public class Account {
 				userType = "cust";
 				break;
 			case "2":
-				userType = "owner";
+				userType = "business";
 				break;
 			case "3":
 				return;
@@ -114,37 +107,35 @@ public class Account {
 		System.out.print("Please enter your name : ");
 		name = scan.nextLine();
 		
-		System.out.print("Please enter your desired username with 6-12 characters: ");
 		do{
+			System.out.print("Please enter your desired username with 6-12 characters: ");
 			username = scan.nextLine();
 			if (checkLength(username, 6, 12) == true){
 				System.out.println("-- Please enter a username with 6-12 characters. --");
 			}
 			else{
-				for(int i=0 ; i<customers.size(); i++){
-					if(checkCustName(username)==true){
-						System.out.println("-- Username Not Available - Please Try Again-- ");
-					}
-					else
-						break;
+				if(userCheck = checkCustName(username)){
+					System.out.println("-- Username Not Available - Please Try Again-- ");
 				}
-				break;
+				else{
+					break;
+				}
 			}
 			//Check for uniqueness
-		}while(1>0);
+		}while(userCheck);
 		//loop this -- check if 2 passwords are the same
 		
-		System.out.print("Please enter your password with 6-12 characters : ");		//limit 6-15
+		
 		do{
+			System.out.print("Please enter your password with 6-12 characters : ");		//limit 6-15
 			password1 = scan.nextLine();
 			if (checkLength(password1, 6, 12) == true)
 				System.out.println("-- Please enter a password with 6-12 characters! --");
 			else{ 
 				System.out.print("Please re-enter your password to confirm : ");
 				password2 = scan.nextLine();
-				if(passcheck = !password1.equals(password2)){
+				if(!password1.equals(password2)){
 					System.out.println("-- Passwords entered do not match! --");
-					System.out.println("-- Press Enter and try again. --");
 				}
 				else 
 					break;
@@ -155,25 +146,25 @@ public class Account {
 		
 		System.out.print("Please enter your address : ");
 		address = scan.nextLine();
-		System.out.print("Please enter a valid Australian phone number : ");
 		do{
-			
+			System.out.print("Please enter a valid Australian phone number : ");
 			phone = scan.nextLine();
 			if (checkPhone(phone)==true)
 				break;
 			else 
-				System.out.println("--Invalid Australian phone number. 2--");
+				System.out.println("--Invalid Australian phone number--");
 		}while(1>0);
 
 		if(userType.equals("cust")){
 			customers.add(new Customer(name, username, password1, address, phone));
 		}
 		else if (userType.equals("business")){
-			businesses.add(new Business(name, username, password1, address, phone));
+			System.out.printf("Please enter business name : ");
+			busName = scan.nextLine();
+			businesses.add(new Business(busName, name, address, phone, username, password1));
 		}
-		saveAcct();
 		System.out.println("You have successfully registered!");
-		System.out.println();
+		System.out.println("#################################");
 		try{
 			Thread.sleep(1500);
 		}catch(Exception e){
@@ -181,52 +172,51 @@ public class Account {
 		}
 	}
 	
-	private void loadAcct(){
+	public void loadAcct(){
 		//deal with exception here
 		customers.clear();
 		businesses.clear();
-		String line, name, username, password, address, phone;
-		Scanner sc;
+		String line, busName, name, username, password, address, phone;
+		Scanner sc = null;
 		try {
 			sc = new Scanner(new File("customers.txt"));
-			while (sc.hasNext()){
-				line = sc.nextLine();
-				StringTokenizer st = new StringTokenizer(line, "|");
-				name = st.nextToken();
-				username = st.nextToken();
-				password = st.nextToken();
-				address = st.nextToken();
-				phone = st.nextToken();
-				customers.add(new Customer(name, username, password, address, phone));
-			}	  
-			sc.close();
 		} catch (FileNotFoundException e) {
 			//no existing customers, file will be created
 		}
-		
-		Scanner scOwner;
+		while (sc.hasNext()){
+			line = sc.nextLine();
+			StringTokenizer st = new StringTokenizer(line, "|");
+			name = st.nextToken();
+			username = st.nextToken();
+			password = st.nextToken();
+			address = st.nextToken();
+			phone = st.nextToken();
+			customers.add(new Customer(name, username, password, address, phone));
+		}	  
+		sc.close();
+		Scanner scBus = null;
 		try {
-			scOwner = new Scanner(new File("owners.txt"));
-			while (scOwner.hasNext()){
-				line = scOwner.nextLine();
-				StringTokenizer st = new StringTokenizer(line, "|");
-				name = st.nextToken();
-				username = st.nextToken();
-				password = st.nextToken();
-				address = st.nextToken();
-				phone = st.nextToken();
-				businesses.add(new Business(name, username, password, address, phone));
-			}
-			scOwner.close();
+			scBus = new Scanner(new File("business.txt"));
 		} catch (FileNotFoundException e) {
 			//no existing owners, file will be created
-		}	
+		}
+		while (scBus.hasNext()){
+			line = scBus.nextLine();
+			StringTokenizer st = new StringTokenizer(line, "|");
+			busName = st.nextToken();
+			name = st.nextToken();
+			address = st.nextToken();
+			phone = st.nextToken();
+			username = st.nextToken();
+			password = st.nextToken();
+			businesses.add(new Business(busName, name, address, phone, username, password));
+		}
+		scBus.close();
 	}
 	
-	private void saveAcct(){
-		//add functionality for owners
+	public void saveAcct(){
 		//deal with exception here
-		String name, username, password, address, phone;
+		String busName, name, username, password, address, phone;
 		PrintWriter pw = null;
 		try {
 			pw = new PrintWriter (new BufferedWriter (new FileWriter ("customers.txt")));
@@ -244,22 +234,32 @@ public class Account {
 		}
 		pw.close();
 		customers.clear();
-		PrintWriter pwOwner = null;
+		PrintWriter pwBus = null;
 		try {
-			pwOwner = new PrintWriter (new BufferedWriter (new FileWriter ("owners.txt")));
+			pwBus = new PrintWriter (new BufferedWriter (new FileWriter ("business.txt")));
 		} catch (IOException e) {
-			System.err.println("-owners.txt has been created-");
+			System.err.println("-business.txt has been created-");
 		}
 		for (int i=0; i<businesses.size(); i++){
-			Business owner = businesses.get(i);			
-			name = owner.getName();
-			username = owner.getUsername();
-			password = owner.getPassword();
-			address = owner.getAddress();
-			phone = owner.getPhone();
-			pwOwner.printf("%s|%s|%s|%s|%s\n", name, username, password, address, phone);			
+			Business business = businesses.get(i);			
+			busName = business.getBusName();
+			name = business.getName();
+			address = business.getAddress();
+			phone = business.getPhone();
+			username = business.getUsername();
+			password = business.getPassword();
+			pwBus.printf("%s|%s|%s|%s|%s|%s\n", busName, name, address, phone, username, password);			
 		}
-		pwOwner.close();
+		pwBus.close();
 		businesses.clear();
 	}
+
+	public ArrayList<Customer> getCustomer(){
+		return customers;
+	}
+
+	public ArrayList<Business> getBusiness(){
+		return businesses;
+	}
+
 }

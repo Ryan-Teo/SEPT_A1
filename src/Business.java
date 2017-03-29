@@ -3,7 +3,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Business {
+public class Business extends User{
 
 	private String name;
 	private String owner;
@@ -19,9 +19,8 @@ public class Business {
 	private HashMap<Date, ArrayList<Booking>> schedule;
 	
 	
-	Business(String name, String owner){
-		this.name = name;
-		this.owner = owner;
+	Business(String name, String username, String password, String address, String phone){
+		super(name,username,password,address,phone);
 	}
 	
 	public void setName(String name) {
@@ -87,6 +86,22 @@ public class Business {
 			
 		}
 		
+		
+	}
+	
+	public void businessMenu(){
+		//prints out all of the menu items for a business user
+	}
+
+	@Override
+	public void viewSession(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void viewBookingSummary() {
+		// TODO Auto-generated method stub
 		
 	}
 	

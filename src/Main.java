@@ -41,15 +41,18 @@ public class Main {
 				custInst.customerMenu();
 				userInput = scan.nextLine();
 				switch(userInput){
-					case "1":
-						//add booking
+					case "1"://add booking
+						
 						break;
-					case "2":
-						//view current bookings
+					case "2"://view current bookings
+						
 						custInst.viewBookingSummary();
 						break;
-					case "3":
-						//view sessions of a business
+					case "3"://view sessions of a business
+						System.out.println("Please select a business to search up: ");
+						String bussName = scan.nextLine();
+						custInst.viewSession(bussName);
+						
 						break;
 					case "0":
 						//customer log out and other log out stuff

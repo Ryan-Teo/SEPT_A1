@@ -19,7 +19,8 @@ public class Customer extends User{
 	}
 	
 	@Override
-	public void viewSession(Business businessName) {
+	public void viewSession(String name) {
+		System.out.println("");
 		
 	}
 

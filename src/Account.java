@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class Account {
 	
 	private ArrayList<Customer> customers = new ArrayList<Customer>();
-	private ArrayList<Owner> owners = new ArrayList<Owner>();
+	private ArrayList<Business> businesses = new ArrayList<Business>();
 	//merge to one arraylist?
 	
 	public User login(Scanner scan){
@@ -30,12 +30,12 @@ public class Account {
 				}
 			}
 		}
-		for(int i=0 ; i<owners.size(); i++){
-			if(owners.get(i).getUsername().equals(username)){
+		for(int i=0 ; i<businesses.size(); i++){
+			if(businesses.get(i).getUsername().equals(username)){
 				usernameCheck = true;
-				if(owners.get(i).getPassword().equals(password)){
+				if(businesses.get(i).getPassword().equals(password)){
 					passCheck = true;
-					userInst = owners.get(i);
+					userInst = businesses.get(i);
 					break;
 				}
 			}
@@ -83,6 +83,9 @@ public class Account {
 		if (m.find( ))
 			return true;
 		return false;
+	}
+	public ArrayList<Business> getBusiness(){
+		return businesses;
 	}
 	
 	public void register(Scanner scan){
@@ -165,8 +168,8 @@ public class Account {
 		if(userType.equals("cust")){
 			customers.add(new Customer(name, username, password1, address, phone));
 		}
-		else if (userType.equals("owner")){
-			owners.add(new Owner(name, username, password1, address, phone));
+		else if (userType.equals("business")){
+			businesses.add(new Business(name, username, password1, address, phone));
 		}
 		saveAcct();
 		System.out.println("You have successfully registered!");
@@ -181,7 +184,7 @@ public class Account {
 	private void loadAcct(){
 		//deal with exception here
 		customers.clear();
-		owners.clear();
+		businesses.clear();
 		String line, name, username, password, address, phone;
 		Scanner sc;
 		try {
@@ -212,7 +215,7 @@ public class Account {
 				password = st.nextToken();
 				address = st.nextToken();
 				phone = st.nextToken();
-				owners.add(new Owner(name, username, password, address, phone));
+				businesses.add(new Business(name, username, password, address, phone));
 			}
 			scOwner.close();
 		} catch (FileNotFoundException e) {
@@ -247,8 +250,8 @@ public class Account {
 		} catch (IOException e) {
 			System.err.println("-owners.txt has been created-");
 		}
-		for (int i=0; i<owners.size(); i++){
-			Owner owner = owners.get(i);			
+		for (int i=0; i<businesses.size(); i++){
+			Business owner = businesses.get(i);			
 			name = owner.getName();
 			username = owner.getUsername();
 			password = owner.getPassword();
@@ -257,6 +260,6 @@ public class Account {
 			pwOwner.printf("%s|%s|%s|%s|%s\n", name, username, password, address, phone);			
 		}
 		pwOwner.close();
-		owners.clear();
+		businesses.clear();
 	}
 }

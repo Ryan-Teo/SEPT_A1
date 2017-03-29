@@ -13,7 +13,7 @@ public abstract class User {
 	}
 	
 	//View all available sessions within the business
-	public abstract void viewSession(Business name);
+	public abstract void viewSession(String name);
 	
 	//Show all number of bookings made by user
 	public abstract void viewBookingSummary();

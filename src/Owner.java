@@ -13,7 +13,7 @@ public class Owner extends User{
 	}
 	
 	@Override
-	public void viewSession(Business businessName) {
+	public void viewSession(String name) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -33,6 +33,9 @@ public class Main {
 			}
 			
 			if(userInst instanceof Customer){
+				/*
+				 * Use acct.getCustomer() & acct.getBusiness() to get arraylists
+				 */
 				System.out.println("-Customer Mode-");
 				Customer custInst = (Customer)userInst;
 				boolean exit = false;

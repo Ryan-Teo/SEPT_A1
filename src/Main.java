@@ -6,6 +6,7 @@ public class Main {
 	public static void main(String args[]) throws IOException{ //Handle exceptions
 		Scanner scan = new Scanner(System.in);
 		Account acct = new Account();
+		acct.loadAcct();
 		User userInst = null;
 		String userInput;
 		do{
@@ -15,7 +16,7 @@ public class Main {
 			System.out.println("0 : Quit");
 			System.out.print("Please enter your selection : ");
 			userInput = scan.nextLine();
-			System.out.println();
+			System.out.println("########################");
 			switch(userInput){
 				case "1":
 					userInst = acct.login(scan);
@@ -29,48 +30,53 @@ public class Main {
 				default:
 					System.out.println("Invalid Input - Please Try Again");
 					break;
+			}
 			
+			if(userInst instanceof Customer){
+				System.out.println("-Customer Mode-");
+				Customer custInst = (Customer)userInst;
+				boolean exit = false;
+				do{
+					custInst.customerMenu();
+					userInput = scan.nextLine();
+					switch(userInput){
+						case "1"://add booking
+							
+							break;
+						case "2"://view current bookings
+							
+							custInst.viewBookingSummary();
+							break;
+						case "3"://view sessions of a business
+							System.out.println("Please select a business to search up: ");
+							String bussName = scan.nextLine();
+							custInst.viewSession(bussName);
+							break;
+						case "4"://logout
+							System.out.println("-- Logging Out --");
+							userInst = null;
+							exit = true;
+							break;
+						case "0":
+							//customer log out and other log out stuff
+							System.out.println("-Logging Out & Exiting-");
+							userInst = null;
+							exit = true;
+							break;
+						default:
+							System.out.println("Invalid Input - Please Try Again");
+							break;
+					}
+					System.out.println("#######################");
+				}while(exit == false);
+			}
+			else if (userInst instanceof Owner){
+				System.out.println("-Owner Mode-");
+				System.out.println("Welcome, "+ userInst.getName() +"!");
 			}
 		}while(!userInput.equals("0") && userInst == null);
-		
-		if(userInst instanceof Customer){
-			System.out.println("-Customer Mode-");
-			Customer custInst = (Customer)userInst;
-			boolean exit = false;
-			do{
-				custInst.customerMenu();
-				userInput = scan.nextLine();
-				switch(userInput){
-					case "1"://add booking
-						
-						break;
-					case "2"://view current bookings
-						
-						custInst.viewBookingSummary();
-						break;
-					case "3"://view sessions of a business
-						System.out.println("Please select a business to search up: ");
-						String bussName = scan.nextLine();
-						custInst.viewSession(bussName);
-						
-						break;
-					case "0":
-						//customer log out and other log out stuff
-						System.out.println("Logging Out and Exiting");
-						userInst = null;
-						exit = true;
-						break;
-					default:
-						System.out.println("Invalid Input - Please Try Again");
-						break;
-				}
-			}while(exit == false);
-		}
-		else if (userInst instanceof Owner){
-			System.out.println("-Owner Mode-");
-		}
-		System.out.println("Welcome, "+ userInst.getName() +"!");
-		
+
+		acct.saveAcct();
 		System.exit(0);
 	}
 }

@@ -5,8 +5,7 @@ import java.util.*;
 
 public class Business extends User{
 
-	private String name;
-	private String owner;
+	private String busName;
 	private ArrayList<Employee> emp;	
 	/*Hashtable info
 	 * key : type Time 
@@ -19,22 +18,15 @@ public class Business extends User{
 	private HashMap<Date, ArrayList<Booking>> schedule;
 	
 	
-	Business(String name, String username, String password, String address, String phone){
-		super(name,username,password,address,phone);
+	Business(String busName, String ownerName, String address, String phone, String username, String password){
+		super(ownerName,username,password,address,phone);
+		this.busName = busName;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public String getBusName(){
+		return busName;
 	}
-
-	public String getOwner() {
-		return owner;
-	}
-
-	public void setOwner(String owner) {
-		this.owner = owner;
-	}
-
+	
 	public ArrayList<Employee> getEmp() {
 		return emp;
 	}

@@ -14,6 +14,7 @@ public class Customer extends User{
 		System.out.println("1 : Add Booking"); //refer to bookSession()
 		System.out.println("2 : View Bookings");//refer to viewBookingSummary()
 		System.out.println("3 : View Sessions of a Business"); //refer to viewSession Method
+		System.out.println("4 : Logout");
 		System.out.println("0 : Exit");
 		System.out.printf("Please select an option: ");
 	}

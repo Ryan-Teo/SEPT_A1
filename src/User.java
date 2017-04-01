@@ -8,6 +8,7 @@ public abstract class User {
 	private HashMap<Date, ArrayList<Booking>> schedule;
 	Booking [] booking;
 	
+	//constructor
 	User(String name, String username, String password, String address, String phone){
 		this.name = name;
 		this.username = username;
@@ -15,7 +16,6 @@ public abstract class User {
 		this.address = address;
 		this.phone = phone;
 	}
-	
 	
 	//Show all number of bookings made by user
 	public abstract void viewBookingSummary();
@@ -43,7 +43,18 @@ public abstract class User {
 	public Booking[] getBooking() {
 		return booking;
 	}
+
+
+
+
+
+	public void setSchedule(HashMap<Date, ArrayList<Booking>> schedule) {
+		this.schedule = schedule;
+	}
 	
+	public HashMap<Date, ArrayList<Booking>> getSchedule(){
+		return this.schedule;
+	}
 	
 	
 	

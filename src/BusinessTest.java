@@ -41,50 +41,50 @@ public class BusinessTest {
 	public void testPrintSchedule(){
 		
 		business.setSchedule(schedule);
-		try {
-			
-			monday = sdf.parse(days[0]);
-			mondaySessions = business.addSessionTime(startTime, endTime, mondaySessions,emp_1);
-			mondaySessions = business.addSessionTime("10:30","12:30", mondaySessions,emp_1);
-			mondaySessions = business.addSessionTime("13:30","14:30", mondaySessions,emp_2);
-			mondaySessions = business.addSessionTime("15:30","16:30", mondaySessions,emp_3);
-			
-			tuesday = sdf.parse(days[1]);
-			tuesdaySessions = business.addSessionTime(startTime, endTime, tuesdaySessions,emp_3);
-			tuesdaySessions = business.addSessionTime("15:30","17:30", tuesdaySessions,emp_2);
-			tuesdaySessions = business.addSessionTime("18:30","19:30", tuesdaySessions,emp_1);
-			tuesdaySessions = business.addSessionTime("20:30","21:30", tuesdaySessions,emp_1);
-			
-			business.addSession(monday, mondaySessions);
-			business.addSession(tuesday, tuesdaySessions);
-			
-			business.printSchedule();
-	
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		mondaySessions = business.addSessionTime(startTime, endTime, mondaySessions,emp_1);
+		mondaySessions = business.addSessionTime("10:30","12:30", mondaySessions,emp_1);
+		mondaySessions = business.addSessionTime("13:30","14:30", mondaySessions,emp_2);
+		mondaySessions = business.addSessionTime("15:30","16:30", mondaySessions,emp_3);
+		
+		tuesdaySessions = business.addSessionTime(startTime, endTime, tuesdaySessions,emp_3);
+		tuesdaySessions = business.addSessionTime("15:30","17:30", tuesdaySessions,emp_2);
+		tuesdaySessions = business.addSessionTime("18:30","19:30", tuesdaySessions,emp_1);
+		tuesdaySessions = business.addSessionTime("20:30","21:30", tuesdaySessions,emp_1);
+		
+		business.addSession("monday", mondaySessions);
+		business.addSession("tuesday", tuesdaySessions);
+		
+		business.printSchedule();
 	}
 	
-//	@Test
-//	public void testInitialise() {
-//		assertTrue(business.getName() instanceof String);
-//		assertTrue(business.getOwner() instanceof String);
-//		assertTrue(business.getEmp() instanceof ArrayList);
-//		assertTrue(business.getSession() instanceof ArrayList);
-//	}
-//	
-//	@Test
-//	public void testName(){
-//		Pattern nameP = Pattern.compile("[a-zA-Z][a-z]*");
-//		Matcher nameM = nameP.matcher(business.getName());
-//		assertTrue(nameM.matches());
-//	}
-//	
-//	@Test
-//	public void testOwner(){
-//		Pattern nameP = Pattern.compile("[a-zA-Z][a-z]*");
-//		Matcher nameM = nameP.matcher(business.getOwner());
-//		assertTrue(nameM.matches());
-//	}
+	@Test
+	public void testInitialise() {
+		//Name of the business
+		assertTrue(business.getBusName() instanceof String);
+		
+		//Name of the Owner
+		assertTrue(business.getOwnerName() instanceof String);
+		
+		//List of Employees
+		assertTrue(business.getEmp() instanceof ArrayList);
+		
+		//Working schedule of the business
+		assertTrue(business.getSchedule() instanceof HashMap);
+	}
+	
+	@Test
+	//Testing Name should be in Type String and not numeric
+	public void testName(){
+		Pattern nameP = Pattern.compile("[a-zA-Z][a-z]*");
+		Matcher nameM = nameP.matcher(business.getOwnerName());
+		assertTrue(nameM.matches());
+	}
+	
+	@Test
+	//Testing Name should be in Type String and not numeric
+	public void testBusinessName(){
+		Pattern nameP = Pattern.compile("[a-zA-Z][a-z]*");
+		Matcher nameM = nameP.matcher(business.getBusName());
+		assertTrue(nameM.matches());
+	}
 }

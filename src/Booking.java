@@ -41,6 +41,7 @@ protected static ArrayList<Booking> bookings = new ArrayList<Booking>();
 	}
 	
 	public Business getBookBus() {
+
 		return bookBus;
 	}
 	
@@ -58,7 +59,7 @@ protected static ArrayList<Booking> bookings = new ArrayList<Booking>();
 	
 	//Set start time on a particular time slot
 	public void setStartTime(String time) {
-		SimpleDateFormat ft = new SimpleDateFormat("HH");
+		SimpleDateFormat ft = new SimpleDateFormat("HH:mm");
 		try {
 			this.startTime = ft.parse(time);
 		} catch (ParseException e) {
@@ -68,7 +69,7 @@ protected static ArrayList<Booking> bookings = new ArrayList<Booking>();
 	
 	//Set end time on a particular time slot
 	public void setEndTime(String time) {
-		SimpleDateFormat ft = new SimpleDateFormat("HH");
+		SimpleDateFormat ft = new SimpleDateFormat("HH:mm");
 		try {
 			this.endTime = ft.parse(time);
 		} catch (ParseException e) {
@@ -87,6 +88,10 @@ protected static ArrayList<Booking> bookings = new ArrayList<Booking>();
 	     }catch(IOException i) {
 	        i.printStackTrace();
 	     }
+	}
+	
+	public void setEmployee(Employee emp){
+		this.bookEmp = emp;
 	}
 	
 	public static void loadAcct(String name){
@@ -125,4 +130,7 @@ protected static ArrayList<Booking> bookings = new ArrayList<Booking>();
 		return;
 	}
 	
+	public void setCust(Customer cust){
+		this.bookCust = cust;
+	}
 }

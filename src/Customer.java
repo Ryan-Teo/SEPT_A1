@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Customer extends User{
-	private ArrayList<Booking> sessions= new ArrayList();
+	private ArrayList<Booking> sessions= new ArrayList<Booking>();
 	
 	Customer(String name, String username, String password, String address, String phone){
 		super(name,username,password,address,phone);
@@ -19,29 +19,32 @@ public class Customer extends User{
 		System.out.printf("Please select an option: ");
 	}
 	
-	public void viewSession(String businessName, ArrayList<Business> businesses) {
-		for(Business b :businesses){
-			if(b.getName().equals(businessName)){
-				b.printSchedule();
-			}
-		}
-		
-	}
+//	public void viewSession(String businessName, ArrayList<Business> businesses) {
+//		for(Business b :businesses){
+//			if(b.getName().equals(businessName)){
+//				b.printSchedule();
+//			}
+//		}
+//	}
 
-	//method for customer to check all of their current bookings
+	/*
+	 * (non-Javadoc)
+	 * @see User#viewBookingSummary()
+	 * Method for customer to check all of their current bookings
+	 */
 	@Override
 	public void viewBookingSummary() {
-		System.out.printf("%15s %20s %15s %20s %20s %20s\n", "Date", "Start", "End", "Customer", "Business", "Employee"); //length of each section may need changing
-		System.out.println("---------------------------------------------------------------------------------------------");
-		//loop that goes through all the session of the customer
-		//will then print in the following order:
-		//Date/Time, Business Name, Employee of the business taking the job
-		Booking.loadAcct(this.getUsername()); 
-		
-		
+//		System.out.printf("%15s %20s %15s %20s %20s %20s\n", "Date", "Start", "End", "Customer", "Business", "Employee"); //length of each section may need changing
+//		System.out.println("---------------------------------------------------------------------------------------------");
+//		//loop that goes through all the session of the customer
+//		//will then print in the following order:
+//		//Date/Time, Business Name, Employee of the business taking the job
+//		Booking.loadAcct(this.getUsername());
 	}
 	
 	public void bookSession(){
 		
 	}
+
+
 }

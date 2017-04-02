@@ -1,8 +1,12 @@
+import java.util.ArrayList;
+
 public abstract class User {
 
 	String name, username, password, address, phone;
 	Booking [] booking;
+	ArrayList<Booking> schedule;
 	
+	//constructor
 	User(String name, String username, String password, String address, String phone){
 		this.name = name;
 		this.username = username;
@@ -34,10 +38,19 @@ public abstract class User {
 		return phone;
 	}
 
+	// ?
 	public Booking[] getBooking() {
 		return booking;
 	}
 	
+	//What are these schedules for?
+	public void setSchedule(ArrayList<Booking> schedule) {
+		this.schedule = schedule;
+	}
+	
+	public ArrayList<Booking> getSchedule(){
+		return this.schedule;
+	}
 	
 	
 	

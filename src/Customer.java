@@ -23,12 +23,12 @@ public class Customer extends User{
 	
 	//View session of a business
 	public void viewSession(String businessName, ArrayList<Business> businesses) {
+
 		for(Business b :businesses){
 			if(b.getName().equals(businessName)){
 				b.printSchedule();
 			}
 		}
-		
 	}
 
 	//method for customer to check all of their current bookings

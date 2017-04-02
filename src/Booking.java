@@ -94,6 +94,9 @@ protected static ArrayList<Booking> bookings = new ArrayList<Booking>();
 		this.bookEmp = emp;
 	}
 	
+	//How do we populate every business and customer schedule
+	//Schedule is fixed 
+	//need a method to update customer and business schedule due to bookings 
 	public static void loadAcct(String name){
 		//deal with exception here
 	String bookDate, bookStart, bookEnd, bookCust, bookBus, bookEmp, line;

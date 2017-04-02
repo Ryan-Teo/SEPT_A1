@@ -21,12 +21,20 @@ public class Customer extends User{
 		System.out.printf("Please select an option: ");
 	}
 
-	public void viewSession(String businessName, ArrayList<Business> businesses) {
+	public void viewSession(String businessName, ArrayList<Business> businesses, ArrayList<Booking> bookings) {
 		for(Business b :businesses){
 			if(b.getName().equals(businessName)){
-				b.printSchedule();
+				b.printSchedule(bookings);
 			}
 		}
+	}
+
+
+	@Override
+	public void viewBookingSummary() {
+		// TODO Auto-generated method stub
+		// PLACEHOLDER FOR TESTING
+		// REMOVE
 	}
 
 	/*
@@ -35,13 +43,19 @@ public class Customer extends User{
 	 * Method for customer to check all of their current bookings
 	 */
 	@Override
-	public void viewBookingSummary() {
-		System.out.printf("%15s %20s %15s %20s %20s %20s\n", "Date", "Start", "End", "Customer", "Business", "Employee"); //length of each section may need changing
-		System.out.println("---------------------------------------------------------------------------------------------");
+	public void viewBookingSummary(ArrayList<Booking> bookings) {
 		//loop that goes through all the session of the customer
 		//will then print in the following order:
 		//Date/Time, Business Name, Employee of the business taking the job
-		Booking.loadAcct(this.getUsername()); 
+		System.out.printf("%15s %20s %15s %20s %20s %20s\n", "Date", "Start", "End", "Customer", "Business", "Employee"); //length of each section may need changing
+		System.out.println("---------------------------------------------------------------------------------------------");
+		for(int i=0 ; i<bookings.size(); i++){
+			if(bookings.get(i).getBookCust().equals(name)){//BOOKING.GET.GETBOOKCUST RETURNS NULL WHYYYYYYYYYYYYYYY
+					System.out.printf("%15s %20s %15s %20s %20s %20s\n", bookings.get(i).getBookDate(), 
+							bookings.get(i).getStartTime(), bookings.get(i).getEndTime(), bookings.get(i).getBookCust(),
+							bookings.get(i).getBookBus(), bookings.get(i).getBookEmp() );
+			}
+		}
 	}
 	
 	//Another method of viewBooking summary
@@ -116,6 +130,5 @@ public class Customer extends User{
 		}
 		
 	}
-
 
 }

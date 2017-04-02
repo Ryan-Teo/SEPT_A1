@@ -7,6 +7,7 @@ public class Business extends User{
 	private String busName;
 	private ArrayList<Employee> emp = new ArrayList<Employee>();
 	private ArrayList<Booking> schedule = new ArrayList<Booking>();
+	private Helper help = new Helper();
 	
 	Business(String busName, String ownerName, String address, String phone, String username, String password){
 		super(ownerName,username,password,address,phone);
@@ -28,8 +29,8 @@ public class Business extends User{
 		return emp;
 	}
 	
-	public ArrayList<Booking> getSchedule(){
-		return schedule;
+	public HashMap<Date, ArrayList<Booking>> getSchedule(){
+		return help.asHashmap(schedule);
 	}
 	
 	public void businessMenu(){
@@ -44,7 +45,7 @@ public class Business extends User{
 	}
 	
 	//view business weekly schedule 
-	public void printSchedule(){
+	public void printSchedule(ArrayList<Booking> bookings){
 		ArrayList<Booking> sessions;
 		int i = 1;
 		for(Date key : this.getSchedule().keySet()){
@@ -66,7 +67,7 @@ public class Business extends User{
 		}
 	}
 	
-		//Addding a time slot on a specified day
+		//Adding a time slot on a specified day
 	public ArrayList<Booking> addSessionTime(String startTime, String endTime,ArrayList<Booking> session){
 		
 		//Setting time format as Hour:minute
@@ -220,6 +221,12 @@ public class Business extends User{
 		}
 	}
 
+	@Override
+	public void viewBookingSummary(ArrayList<Booking> bookings) {
+		// TODO Auto-generated method stub
+		// PLACEHOLDER FOR TESTING
+		// REMOVE
+	}
 	
 	//View all bookings
 	@Override

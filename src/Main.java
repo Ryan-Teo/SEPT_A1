@@ -7,6 +7,7 @@ public class Main {
 		Scanner scan = new Scanner(System.in);
 		FileIO FIO = new FileIO();
 		Account acct = new Account();
+		Helper help = new Helper();
 		ArrayList<Booking> bookings = FIO.loadBook(); //Loading existing bookings
 		ArrayList<Customer> customers = FIO.loadCust();
 		ArrayList<Business> businesses = FIO.loadBus();

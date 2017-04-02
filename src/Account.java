@@ -1,14 +1,10 @@
-import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Account {
 	
-	private ArrayList<Customer> customers = new ArrayList<Customer>();
-	private ArrayList<Business> businesses = new ArrayList<Business>();
-	
-	public User login(Scanner scan){
+	public User login(Scanner scan, ArrayList<Customer> customers, ArrayList<Business> businesses){
 		//Make usable for owner as well
 		//Change return type include owner
 		String username, password;
@@ -57,7 +53,7 @@ public class Account {
 		return false;
 	}
 	
-	public boolean checkCustName(String name){
+	public boolean checkCustName(String name, ArrayList<Customer> customers){
 		for(int i=0 ; i<customers.size(); i++){
 			if(customers.get(i).getUsername().equals(name))
 				return true;
@@ -65,7 +61,16 @@ public class Account {
 		return false;
 	}
 	
-	public boolean checkCustPass(String password){
+	public boolean checkBusName(String name, ArrayList<Business> businesses){
+		for(int i=0 ; i<businesses.size(); i++){
+			if(businesses.get(i).getUsername().equals(name))
+				return true;
+		}
+		return false;
+	}
+	
+	//What is this for? -- NOT USED
+	public boolean checkCustPass(String password, ArrayList<Customer> customers){
 		for(int i=0 ; i<customers.size(); i++){
 			if(customers.get(i).getPassword().equals(password))
 				return true;
@@ -82,11 +87,11 @@ public class Account {
 		return false;
 	}
 
-	public void register(Scanner scan){
+	public void register(Scanner scan, ArrayList<Customer> customers, ArrayList<Business> businesses){
 		//Change return type?
 		//take user input, create new customer, write customer info to file/db
 		String busName, name, username, password1, password2, address, phone, userInput, userType = null;
-		Boolean userCheck = false;
+		Boolean userCheck = true;
 		System.out.println("--Who are you?--");
 		System.out.printf("1 : Customer\n2 : Owner\n3 : I'm not sure where I am!\n");
 		System.out.printf("Please enter your selection : ");
@@ -114,7 +119,7 @@ public class Account {
 				System.out.println("-- Please enter a username with 6-12 characters. --");
 			}
 			else{
-				if(userCheck = checkCustName(username)){
+				if(userCheck = (checkCustName(username, customers) || checkBusName(username, businesses))){
 					System.out.println("-- Username Not Available - Please Try Again-- ");
 				}
 				else{
@@ -122,9 +127,7 @@ public class Account {
 				}
 			}
 			//Check for uniqueness
-		}while(userCheck);
-		//loop this -- check if 2 passwords are the same
-		
+		}while(userCheck);		
 		
 		do{
 			System.out.print("Please enter your password with 6-12 characters : ");		//limit 6-15
@@ -170,96 +173,6 @@ public class Account {
 		}catch(Exception e){
 			System.out.println(e.getMessage());
 		}
-	}
-	
-	public void loadAcct(){
-		//deal with exception here
-		customers.clear();
-		businesses.clear();
-		String line, busName, name, username, password, address, phone;
-		Scanner sc = null;
-		try {
-			sc = new Scanner(new File("customers.txt"));
-		} catch (FileNotFoundException e) {
-			//no existing customers, file will be created
-		}
-		while (sc.hasNext()){
-			line = sc.nextLine();
-			StringTokenizer st = new StringTokenizer(line, "|");
-			name = st.nextToken();
-			username = st.nextToken();
-			password = st.nextToken();
-			address = st.nextToken();
-			phone = st.nextToken();
-			customers.add(new Customer(name, username, password, address, phone));
-		}	  
-		sc.close();
-		Scanner scBus = null;
-		try {
-			scBus = new Scanner(new File("business.txt"));
-		} catch (FileNotFoundException e) {
-			//no existing owners, file will be created
-		}
-		while (scBus.hasNext()){
-			line = scBus.nextLine();
-			StringTokenizer st = new StringTokenizer(line, "|");
-			busName = st.nextToken();
-			name = st.nextToken();
-			address = st.nextToken();
-			phone = st.nextToken();
-			username = st.nextToken();
-			password = st.nextToken();
-			businesses.add(new Business(busName, name, address, phone, username, password));
-		}
-		scBus.close();
-	}
-	
-	public void saveAcct(){
-		//deal with exception here
-		String busName, name, username, password, address, phone;
-		PrintWriter pw = null;
-		try {
-			pw = new PrintWriter (new BufferedWriter (new FileWriter ("customers.txt")));
-		} catch (IOException e) {
-			System.err.println("-customers.txt has been created-");
-		}
-		for (int i=0; i<customers.size(); i++){
-			Customer customer = customers.get(i);			
-			name = customer.getName();
-			username = customer.getUsername();
-			password = customer.getPassword();
-			address = customer.getAddress();
-			phone = customer.getPhone();
-			pw.printf("%s|%s|%s|%s|%s\n", name, username, password, address, phone);			
-		}
-		pw.close();
-		customers.clear();
-		PrintWriter pwBus = null;
-		try {
-			pwBus = new PrintWriter (new BufferedWriter (new FileWriter ("business.txt")));
-		} catch (IOException e) {
-			System.err.println("-business.txt has been created-");
-		}
-		for (int i=0; i<businesses.size(); i++){
-			Business business = businesses.get(i);			
-			busName = business.getBusName();
-			name = business.getName();
-			address = business.getAddress();
-			phone = business.getPhone();
-			username = business.getUsername();
-			password = business.getPassword();
-			pwBus.printf("%s|%s|%s|%s|%s|%s\n", busName, name, address, phone, username, password);			
-		}
-		pwBus.close();
-		businesses.clear();
-	}
-
-	public ArrayList<Customer> getCustomer(){
-		return customers;
-	}
-
-	public ArrayList<Business> getBusiness(){
-		return businesses;
 	}
 
 }

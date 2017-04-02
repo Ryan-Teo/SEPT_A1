@@ -8,45 +8,24 @@ import java.util.StringTokenizer;
 import java.io.*;
 
 public class Booking {
-private Date startTime;
-private Date endTime;
-private Customer bookCust;
-private Business bookBus;
-private Employee bookEmp;
-protected static ArrayList<Booking> bookings = new ArrayList<Booking>();
+	private Date bookDate;
+	private Date startTime;
+	private Date endTime;
+	private Customer bookCust;
+	private Business bookBus;
+	private Employee bookEmp;
 
-	public Booking(Date bookStart, Date bookEnd, Business bookBus){
-		this.startTime = bookStart;
-		this.endTime = bookEnd;
-		this.bookBus = bookBus;
+	public Booking(Date bookDate, Date bookStart, Date bookEnd, Customer bookCust, Business bookBus, Employee bookEmp){
+		bookDate = this.bookDate;
+		bookStart = this.startTime;
+		bookEnd = this.endTime;
+		bookCust = this.bookCust;
+		bookBus = this.bookBus;
+		bookEmp = this.bookEmp;
 	}
 	
-	public Booking(Date bookStart, Date bookEnd, Employee emp){
-		this.startTime = bookStart;
-		this.endTime = bookEnd;
-		this.bookEmp = emp;
-	}
-	
-	public Booking(Date bookStart, Date bookEnd){
-		this.startTime = bookStart;
-		this.endTime = bookEnd;
-	}
-	
-	public ArrayList<Booking> getBookings() {
-		return bookings;
-	}
-	
-	public Customer getBookCust() {
-		return bookCust;
-	}
-	
-	public Business getBookBus() {
-
-		return bookBus;
-	}
-	
-	public Employee getBookEmp() {
-		return bookEmp;
+	public Date getBookDate() {
+		return bookDate;
 	}
 	
 	public Date getStartTime() {
@@ -57,7 +36,27 @@ protected static ArrayList<Booking> bookings = new ArrayList<Booking>();
 		return endTime;
 	}
 	
-	//Set start time on a particular time slot
+	public Customer getBookCust() {
+		return bookCust;
+	}
+	
+	public Business getBookBus() {
+		return bookBus;
+	}
+	
+	public Employee getBookEmp() {
+		return bookEmp;
+	}
+
+	public void setEmployee(Employee emp){
+		this.bookEmp = emp;
+	}
+	
+
+
+//	Why do we need setters? 
+	
+//	Set start time on a particular time slot
 	public void setStartTime(String time) {
 		SimpleDateFormat ft = new SimpleDateFormat("HH:mm");
 		try {
@@ -67,7 +66,7 @@ protected static ArrayList<Booking> bookings = new ArrayList<Booking>();
 		}
 	}
 	
-	//Set end time on a particular time slot
+//	Set end time on a particular time slot
 	public void setEndTime(String time) {
 		SimpleDateFormat ft = new SimpleDateFormat("HH:mm");
 		try {
@@ -76,7 +75,6 @@ protected static ArrayList<Booking> bookings = new ArrayList<Booking>();
 			e.printStackTrace();
 		}
 	}
-	
 	public void saveBookingToFile( HashMap<Date, ArrayList<Booking>> map){
 		try {
 	        FileOutputStream outFile = new FileOutputStream("bookings.txt");
@@ -88,10 +86,6 @@ protected static ArrayList<Booking> bookings = new ArrayList<Booking>();
 	     }catch(IOException i) {
 	        i.printStackTrace();
 	     }
-	}
-	
-	public void setEmployee(Employee emp){
-		this.bookEmp = emp;
 	}
 	
 	//How do we populate every business and customer schedule

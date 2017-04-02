@@ -20,8 +20,7 @@ public class Customer extends User{
 		System.out.println("0 : Exit");
 		System.out.printf("Please select an option: ");
 	}
-	
-	//View session of a business
+
 	public void viewSession(String businessName, ArrayList<Business> businesses) {
 
 		for(Business b :businesses){
@@ -31,7 +30,11 @@ public class Customer extends User{
 		}
 	}
 
-	//method for customer to check all of their current bookings
+	/*
+	 * (non-Javadoc)
+	 * @see User#viewBookingSummary()
+	 * Method for customer to check all of their current bookings
+	 */
 	@Override
 	public void viewBookingSummary() {
 		System.out.printf("%15s %20s %15s %20s %20s %20s\n", "Date", "Start", "End", "Customer", "Business", "Employee"); //length of each section may need changing
@@ -114,4 +117,6 @@ public class Customer extends User{
 		}
 		
 	}
+
+
 }

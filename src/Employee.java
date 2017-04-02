@@ -1,22 +1,25 @@
-import java.util.Date;
-
 public class Employee {
 
-private String username;	
-private String name;
-
-Employee(String userName, String name){
-	this.username = username;
-	this.name = name;
-}
-
-public String getUsername() {
-	return username;
-}
-
-public String getName() {
-	return name;
-}
-
+	private String empID;	
+	private String name;
+	private String employer;
+	
+	Employee(String empID, String name, String employer){
+		this.empID = empID;
+		this.name = name;
+		this.employer = employer;
+	}
+	
+	public String getEmpID() {
+		return empID;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public String getEmployer(){
+		return employer;
+	}
 
 }

@@ -4,28 +4,43 @@ import java.util.*;
 
 public class Business extends User{
 
-	private ArrayList<Employee> emp;
+	private String busName;
+	private ArrayList<Employee> emp = new ArrayList<Employee>();
+	private ArrayList<Booking> schedule = new ArrayList<Booking>();
 	
-	//constructor
-	Business(String ownerName, String busName, String address, String phone, String username, String password){
+	Business(String busName, String ownerName, String address, String phone, String username, String password){
 		super(ownerName,username,password,address,phone);
+		this.busName = busName;
 	}
 	
 	//return business name
 	public String getBusName(){
-
-		return this.username;
+		return this.busName;
 	}
 	
 	//return owner name
 	public String getOwnerName(){
-
 		return this.name;
 	}
 	
 	//return list of employees
 	public ArrayList<Employee> getEmp() {
 		return emp;
+	}
+	
+	public ArrayList<Booking> getSchedule(){
+		return schedule;
+	}
+	
+	public void businessMenu(){
+		System.out.println("Welcome " + this.getName() + "!");
+		System.out.println("1 : Add Employee");
+		System.out.println("2 : Add Working Time/Dates");
+		System.out.println("3 : View Booking Summary");
+		System.out.println("4 : Add Booking");
+		System.out.println("5 : Show Worker Availability");
+		System.out.println("0 : Exit");
+		System.out.printf("Please select an option: ");
 	}
 	
 	//view business weekly schedule 
@@ -51,7 +66,7 @@ public class Business extends User{
 		}
 	}
 	
-	//Addding a time slot on a specified day
+		//Addding a time slot on a specified day
 	public ArrayList<Booking> addSessionTime(String startTime, String endTime,ArrayList<Booking> session){
 		
 		//Setting time format as Hour:minute
@@ -77,7 +92,7 @@ public class Business extends User{
 		return session;
 	}
 	
-	//Adding an available time slot and assigining an employee to that session directly
+	//Adding an available time slot and assigning an employee to that session directly
 	public ArrayList<Booking> addSessionTime(String startTime, String endTime,ArrayList<Booking> session,Employee emp){
 
 		//Setting time format as Hour:minute
@@ -105,7 +120,8 @@ public class Business extends User{
 		//return the updated list of sessions
 		return session;
 	}
-	
+		
+		
 	//Adding a new session
 	public void addSession(String day,ArrayList<Booking> new_session){
 		SimpleDateFormat dayFormat = new SimpleDateFormat("EE");
@@ -115,17 +131,52 @@ public class Business extends User{
 			this.getSchedule().put(date,new_session);
 		} catch (ParseException e) {
 			e.printStackTrace();
-		}
-		
+		}	
 	}
 	
+	@SuppressWarnings("unchecked")
+	public void assignEmployee(Employee empName,String day,String session_startTime, Business business){
+		
+		ArrayList<Booking> sessions;
+		HashMap <Date,ArrayList<Booking>> schedule = business.getSchedule();
+		
+		//Day-Date-Month-Year
+		SimpleDateFormat dayFormat = new SimpleDateFormat ("E dd.mm");
+		//Hour-minute
+		SimpleDateFormat sessionFormat = new SimpleDateFormat ("HH.mm");
+		
+		try {
+			Date working_day = dayFormat.parse(day);
+			Date working_hour = sessionFormat.parse(session_startTime);
+			
+			//Iterate and check if the key exists
+			for(Date key : schedule.keySet()){
+				if(working_day.equals(key)){
+					//return all sessions available on that day/date 
+					sessions = (ArrayList<Booking>) schedule.get(key);
+					
+					/*Iterate all available sessions and add employee 
+					 *to the specified session time
+					 */
+					for(Booking session : sessions){
+						if(working_hour.equals(session.getStartTime())){
+							//Assign an employee to that session
+							session.getEmp().add(empName);
+						}
+					}
+				}
+			}
+		} catch (ParseException e) {
+			System.out.println("Unparseable"); 
+		}
+	}
+
 	//Change starting time of a time slot
 	public void changeSessionStartTime(String day, String startTime){
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 		SimpleDateFormat dayFormat = new SimpleDateFormat("EE");
 		Date date;
 		Date time;
-
 		try{
 			time = timeFormat.parse(startTime);
 			date = dayFormat.parse(day);
@@ -168,11 +219,7 @@ public class Business extends User{
 			e.printStackTrace();
 		}
 	}
-	
-	//Printing business Menu
-	public void businessMenu(){
-		//prints out all of the menu items for a business user
-	}
+
 	
 	//View all bookings
 	@Override
@@ -199,7 +246,7 @@ public class Business extends User{
 		}
 	}
 	
-	//view sessioons by day (not done)
+	//view sessions by day (not done)
 	public void viewScheduleByDay(String date){
 		SimpleDateFormat sdf = new SimpleDateFormat("EE");
 		try {

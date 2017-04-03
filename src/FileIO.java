@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -102,47 +104,27 @@ public class FileIO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public ArrayList<Booking> loadBook(){
+	public HashMap<Business, HashMap<LocalDate, Booking[]>> loadBook(Helper help, ArrayList<Business> businesses){
+		
 		//deal with exception here
-		ArrayList<Booking> bookings = null; //Check for null when called
-//		Scanner sc;
+		HashMap<Business, HashMap<LocalDate, Booking[]>> bookings = new HashMap<Business, HashMap<LocalDate, Booking[]>>(); //Check for null when called
 		try {
 			FileInputStream inFile = new FileInputStream("booking.txt");
 			ObjectInputStream in = new ObjectInputStream(inFile);
-			bookings = (ArrayList<Booking>) in.readObject();
+			bookings = (HashMap<Business, HashMap<LocalDate, Booking[]>>) in.readObject();
 			in.close();
-//			sc = new Scanner(new File("bookings.txt"));
-//			while (sc.hasNext()){
-//				line = sc.nextLine();
-//				StringTokenizer st = new StringTokenizer(line, "|");
-//				bookDate = st.nextToken();
-//				bookStart = st.nextToken();
-//				bookEnd = st.nextToken();
-//				bookCust = st.nextToken();
-//				bookBus = st.nextToken();
-//				bookEmp = st.nextToken();
-//				Booking booktep = new Booking(bookDate, bookStart, bookEnd, bookCust, bookBus, bookEmp);
-//				bookings.add(booktep);
-//			}	 
-//			ArrayList<Booking> temp = null;
-//			System.out.printf("%15s %20s %15s %20s %20s %20s\n", "Date", "Start", "End", "Customer", "Business", "Employee"); //length of each section may need changing
-//			System.out.println("---------------------------------------------------------------------------------------------");
-//			for(int i=0 ; i<bookings.size(); i++){
-//				if(bookings.get(i).getBookCust().equals(name)){//BOOKING.GET.GETBOOKCUST RETURNS NULL WHYYYYYYYYYYYYYYY
-//						System.out.printf("%15s %20s %15s %20s %20s %20s\n", bookings.get(i).getBookDate(), 
-//								bookings.get(i).getStartTime(), bookings.get(i).getEndTime(), bookings.get(i).getBookCust(),
-//								bookings.get(i).getBookBus(), bookings.get(i).getBookEmp() );
-//				}
-//			}
-//			sc.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			System.out.println("-- POPULATING DATA --");
+			for(Business busInst : businesses){
+				bookings.put(busInst, help.initDaySlots(busInst));
+			}
 			//no existing customers, file will be created
 		}
 		return bookings;
 	}
 	
-	public void saveBook(ArrayList<Booking> bookingsList){
+	public void saveBook(HashMap<Business, HashMap<LocalDate, Booking[]>> bookingsList){
 		try {
 	        FileOutputStream outFile = new FileOutputStream("bookings.txt");
 	        ObjectOutputStream out = new ObjectOutputStream(outFile);

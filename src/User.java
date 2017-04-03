@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,8 +19,7 @@ public abstract class User {
 	}
 	
 	//Show all number of bookings made by user
-	public abstract void viewBookingSummary();
-	public abstract void viewBookingSummary(ArrayList<Booking> bookings);
+	public abstract void viewBookingSummary(HashMap<Business, HashMap<LocalDate, Booking[]>> bookings);
 	
 	
 	public String getName() {
@@ -55,6 +55,7 @@ public abstract class User {
 	public HashMap<Date, ArrayList<Booking>> getSchedule(){
 		return this.schedule;
 	}
+
 
 	
 	

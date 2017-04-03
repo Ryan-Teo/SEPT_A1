@@ -1,5 +1,7 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,14 +10,14 @@ import java.util.StringTokenizer;
 import java.io.*;
 
 public class Booking {
-	private Date bookDate;
-	private Date startTime;
-	private Date endTime;
+	private LocalDate bookDate;
+	private LocalTime startTime;
+	private LocalTime endTime;
 	private Customer bookCust;
 	private Business bookBus;
 	private Employee bookEmp;
 
-	public Booking(Date bookDate, Date bookStart, Date bookEnd, Customer bookCust, Business bookBus, Employee bookEmp){
+	public Booking(LocalDate bookDate, LocalTime bookStart, LocalTime bookEnd, Customer bookCust, Business bookBus, Employee bookEmp){
 		bookDate = this.bookDate;
 		bookStart = this.startTime;
 		bookEnd = this.endTime;
@@ -24,15 +26,15 @@ public class Booking {
 		bookEmp = this.bookEmp;
 	}
 	
-	public Date getBookDate() {
+	public LocalDate getBookDate() {
 		return bookDate;
 	}
 	
-	public Date getStartTime() {
+	public LocalTime getStartTime() {
 		return startTime;
 	}
 	
-	public Date getEndTime() {
+	public LocalTime getEndTime() {
 		return endTime;
 	}
 	
@@ -57,25 +59,24 @@ public class Booking {
 	}
 
 //	Why do we need setters? 
-	
 //	Set start time on a particular time slot
-	public void setStartTime(String time) {
-		SimpleDateFormat ft = new SimpleDateFormat("HH:mm");
-		try {
-			this.startTime = ft.parse(time);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
+//	public void setStartTime(String time) {
+//		SimpleDateFormat ft = new SimpleDateFormat("HH:mm");
+//		try {
+//			this.startTime = ft.parse(time);
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
+//	}
 	
 //	Set end time on a particular time slot
-	public void setEndTime(String time) {
-		SimpleDateFormat ft = new SimpleDateFormat("HH:mm");
-		try {
-			this.endTime = ft.parse(time);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
+//	public void setEndTime(String time) {
+//		SimpleDateFormat ft = new SimpleDateFormat("HH:mm");
+//		try {
+//			this.endTime = ft.parse(time);
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 }

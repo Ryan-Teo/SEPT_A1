@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 
 public class Main {
@@ -7,12 +8,14 @@ public class Main {
 		Scanner scan = new Scanner(System.in);
 		FileIO FIO = new FileIO();
 		Account acct = new Account();
-		Helper help = new Helper();
-		ArrayList<Booking> bookings = FIO.loadBook(); //Loading existing bookings
+		Helper help = new Helper();//Remove
 		ArrayList<Customer> customers = FIO.loadCust();
 		ArrayList<Business> businesses = FIO.loadBus();
+		HashMap<Business, HashMap<LocalDate, Booking[]>> bookings = FIO.loadBook(help, businesses); //Loading existing bookings
+
 		User userInst = null;
 		String userInput;
+		
 		do{
 			/*
 			 * MAIN MENU
@@ -55,8 +58,7 @@ public class Main {
 							
 							break;
 						case "2"://view current bookings
-							
-							custInst.viewBookingSummary();
+							custInst.viewBookingSummary(bookings);
 							break;
 						case "3"://view sessions of a business
 							System.out.println("Please select a business to search up: ");
@@ -94,6 +96,29 @@ public class Main {
 			else if (userInst instanceof Business){
 				System.out.println("-Owner Mode-");
 				System.out.println("Welcome, "+ userInst.getName() +"!");
+				
+				boolean exit = false;
+				do{
+				Business busInst = (Business)userInst;
+				userInput = scan.nextLine();
+				busInst.businessMenu();
+				
+				switch(userInput){
+				case "1": //add booking
+					break;
+				case "2": //other stuff..
+					break;
+				case "0": //log off
+					System.out.println("-Logging Out & Exiting-");
+					userInst = null;
+					exit = true;
+					break;
+				case "98979": //secret command to populate the business days
+					busInst.populateDays();
+					break;
+				}
+				
+				}while (exit == false);
 			}
 		
 			

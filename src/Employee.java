@@ -2,9 +2,9 @@ public class Employee {
 
 	private String empID;	
 	private String name;
-	private String employer;
+	private Business employer;
 	
-	Employee(String empID, String name, String employer){
+	Employee(String empID, String name, Business employer){
 		this.empID = empID;
 		this.name = name;
 		this.employer = employer;
@@ -18,7 +18,7 @@ public class Employee {
 		return name;
 	}
 	
-	public String getEmployer(){
+	public Business getEmployer(){
 		return employer;
 	}
 

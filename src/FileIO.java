@@ -131,10 +131,17 @@ public class FileIO {
 	        out.writeObject(bookingsList);
 	        out.close();
 	        outFile.close();
-	        System.out.printf("Booking has been saved"); //REMOVE
 	     }catch(Exception e) {
 	    	 System.out.println(e.getMessage());
 	    	 e.printStackTrace();
 	     }
 	}
+	
+	public static <T> T parseObjectFromString(String s, Class<T> clazz) throws Exception {
+	    return clazz.getConstructor(new Class[] {String.class }).newInstance(s);
+	}
+	
+	
+	
+	
 }

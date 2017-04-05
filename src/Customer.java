@@ -19,7 +19,7 @@ public class Customer extends User{
 		System.out.printf("Please select an option: ");
 	}
 
-	public void viewSession(String businessName, ArrayList<Business> businesses, ArrayList<Booking> bookings) {
+	public void viewSession(String businessName, LinkedHashMap<Business,LinkedHashMap<LocalDate, Booking[]>> hm) {
 		for(Business b :businesses){
 			if(b.getName().equals(businessName)){
 				b.printSchedule();

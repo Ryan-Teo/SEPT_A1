@@ -105,7 +105,6 @@ public class FileIO {
 
 	@SuppressWarnings("unchecked")
 	public LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> loadBook(Helper help, ArrayList<Business> businesses){
-		
 		//deal with exception here
 		LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = new LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>>(); //Check for null when called
 		try {
@@ -131,10 +130,17 @@ public class FileIO {
 	        out.writeObject(bookingsList);
 	        out.close();
 	        outFile.close();
-	        System.out.printf("Booking has been saved"); //REMOVE
 	     }catch(Exception e) {
 	    	 System.out.println(e.getMessage());
 	    	 e.printStackTrace();
 	     }
 	}
+	
+	public static <T> T parseObjectFromString(String s, Class<T> clazz) throws Exception {
+	    return clazz.getConstructor(new Class[] {String.class }).newInstance(s);
+	}
+	
+	
+	
+	
 }

@@ -1,8 +1,10 @@
 import java.time.LocalDate;
 import java.util.*;
 
-public class Business extends User{
+public class Business extends User {
 
+	private static final long serialVersionUID = 1L;
+	
 	private String busName;
 	private ArrayList<Employee> emp = new ArrayList<Employee>();
 	private Helper help = new Helper();

@@ -1,5 +1,8 @@
-public class Employee {
+import java.io.Serializable;
 
+public class Employee implements Serializable {
+
+	private static final long serialVersionUID = 3L;
 	private String empID;	
 	private String name;
 	private Business employer;

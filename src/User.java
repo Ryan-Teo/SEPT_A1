@@ -1,10 +1,12 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
-public abstract class User {
+public abstract class User implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	String name, username, password, address, phone;
 	Booking [] booking;
 	LinkedHashMap<Date, ArrayList<Booking>> schedule;

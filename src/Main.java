@@ -11,7 +11,7 @@ public class Main {
 		Helper help = new Helper();//Remove
 		ArrayList<Customer> customers = FIO.loadCust();
 		ArrayList<Business> businesses = FIO.loadBus();
-		HashMap<Business, HashMap<LocalDate, Booking[]>> bookings = FIO.loadBook(help, businesses); //Loading existing bookings
+		LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = FIO.loadBook(help, businesses); //Loading existing bookings
 
 		User userInst = null;
 		String userInput;

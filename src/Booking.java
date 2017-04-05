@@ -1,5 +1,13 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+import java.io.*;
 
 public class Booking {
 	private LocalDate bookDate;
@@ -12,7 +20,7 @@ public class Booking {
 	public Booking(LocalDate bookDate, LocalTime bookStart, LocalTime bookEnd, Customer bookCust, Business bookBus, Employee bookEmp){
 		this.bookDate = bookDate;
 		this.startTime = bookStart;
-		this.endTime = bookEnd;
+		this.endTime= bookEnd;
 		this.bookCust = bookCust;
 		this.bookBus = bookBus;
 		this.bookEmp = bookEmp;

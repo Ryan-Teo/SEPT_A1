@@ -9,7 +9,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -104,14 +104,14 @@ public class FileIO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public HashMap<Business, HashMap<LocalDate, Booking[]>> loadBook(Helper help, ArrayList<Business> businesses){
+	public LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> loadBook(Helper help, ArrayList<Business> businesses){
 		
 		//deal with exception here
-		HashMap<Business, HashMap<LocalDate, Booking[]>> bookings = new HashMap<Business, HashMap<LocalDate, Booking[]>>(); //Check for null when called
+		LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = new LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>>(); //Check for null when called
 		try {
 			FileInputStream inFile = new FileInputStream("bookings.txt");
 			ObjectInputStream in = new ObjectInputStream(inFile);
-			bookings = (HashMap<Business, HashMap<LocalDate, Booking[]>>) in.readObject();
+			bookings = (LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>>) in.readObject();
 			in.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -124,17 +124,24 @@ public class FileIO {
 		return bookings;
 	}
 	
-	public void saveBook(HashMap<Business, HashMap<LocalDate, Booking[]>> bookingsList){
+	public void saveBook(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookingsList){
 		try {
 	        FileOutputStream outFile = new FileOutputStream("bookings.txt");
 	        ObjectOutputStream out = new ObjectOutputStream(outFile);
 	        out.writeObject(bookingsList);
 	        out.close();
 	        outFile.close();
-	        System.out.printf("Booking has been saved"); //REMOVE
 	     }catch(Exception e) {
 	    	 System.out.println(e.getMessage());
 	    	 e.printStackTrace();
 	     }
 	}
+	
+	public static <T> T parseObjectFromString(String s, Class<T> clazz) throws Exception {
+	    return clazz.getConstructor(new Class[] {String.class }).newInstance(s);
+	}
+	
+	
+	
+	
 }

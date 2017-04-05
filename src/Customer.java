@@ -1,8 +1,5 @@
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 public class Customer extends User{
@@ -53,21 +50,18 @@ public class Customer extends User{
 //		
 		
 		for(Business myBus : bookings.keySet()){	//For each business
-			for(HashMap<LocalDate, Booking[]> myDay : bookings.values()){ //For each business hashmap
-				for(LocalDate myDate : myDay.keySet()){		//For each date
-					System.out.printf("%1$s %2$tB %2$td, %2$tA", "Date:", myDate);
-					System.out.println("----------------------------------");
-					for(Booking[] myBooking : myDay.values()){		//For each date
-						System.out.printf("%1$s %2$tB %2$td, %2$tA", "Date:", myDay);
-						System.out.println("----------------------------------");
-						for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
-							if(!myBooking[i].getBookCust().equals(this)){ //REMOVE "!"
-								System.out.printf("%1$s. %2$tR - %2$tR	","Session time : ",myBooking[i].getStartTime(),myBooking[i].getEndTime());
-								System.out.println("Employee assigned to this session is : " + myBooking[i].getBookEmp().getName());
-							}
-						}
-					}					
+			HashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business hashmap
+			for(LocalDate myDate : myDay.keySet()){		//For each date
+				System.out.printf("%1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
+				System.out.println("----------------------------------");
+				Booking[] myBooking = myDay.get(myDate);
+				for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
+					if(myBooking[i].getBookCust().equals(this)){ //REMOVE "!"
+						System.out.printf("%1$s. %2$tR - %2$tR	","Session time : ",myBooking[i].getStartTime(),myBooking[i].getEndTime());
+						System.out.println("Employee assigned to this session is : " + myBooking[i].getBookEmp().getName());
+					}
 				}
+								
 			}
 		}
 					

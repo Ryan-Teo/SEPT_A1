@@ -55,40 +55,7 @@ public class Main {
 					userInput = scan.nextLine();
 					switch(userInput){
 						case "1"://add booking
-							
-							//change of plans!
-							//list out all of the businesses, and then pair with their index.  Then let the user pick using an index
-							Business busInst = null;
-							
-							System.out.println("-----Displaying Available Businesses-----");
-							System.out.printf("%4s %15s\n", "ID", "Business Name");
-							System.out.println("---------------------------------------------------");
-							for(int i = 0; i < businesses.size(); i++){
-								System.out.printf("$4s %15s\n", i, businesses.get(i).getBusName());
-							}
-							System.out.println("---------------------------------------------------");
-							
-							// NOTE! NEED TO CHANGE THE EE IN THE METHOD TO EEE BECAUSE OF FORMATTING OR TRY WITH E
-							try{
-							System.out.println("Please enter the business ID you would like to book for: ");
-							String business = scan.nextLine();
-							int businessID = Integer.parseInt(business);
-
-							custInst.viewSession(businesses.get(businessID).getBusName(), bookings);
-							
-							System.out.println("Please enter the day you would like to book for (eg. Monday/Tuesday/Wednesday...): ");
-							String date = scan.nextLine();
-							
-							
-							System.out.println("Please enter the time (hh:mm) you would like to book for: ");
-							String time = scan.nextLine();
-							
-							
-							custInst.bookSession(date, time, businesses.get(businessID));
-							}catch(NumberFormatException e){
-								System.out.println("Invalid Input");
-								break;
-							}						
+							custInst.makeBooking(bookings, businesses, scan);
 							break;
 						case "2"://view current bookings
 							custInst.viewBookingSummary(bookings);

@@ -1,7 +1,5 @@
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 
 public abstract class User implements Serializable{
@@ -9,7 +7,6 @@ public abstract class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 	String name, username, password, address, phone;
 	Booking [] booking;
-	LinkedHashMap<Date, ArrayList<Booking>> schedule;
 	
 	//constructor
 	User(String name, String username, String password, String address, String phone){
@@ -44,22 +41,8 @@ public abstract class User implements Serializable{
 		return phone;
 	}
 
-	// ?
 	public Booking[] getBooking() {
 		return booking;
 	}
-	
-	//What are these schedules for?
-	public void setSchedule(LinkedHashMap<Date, ArrayList<Booking>> schedule) {
-		this.schedule = schedule;
-	}
-	
-	public LinkedHashMap<Date, ArrayList<Booking>> getSchedule(){
-		return this.schedule;
-	}
 
-
-	
-	
-	
 }

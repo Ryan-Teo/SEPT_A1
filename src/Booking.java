@@ -3,13 +3,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Booking implements Serializable{
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 5L;
 	private LocalDate bookDate;
 	private LocalTime startTime;
 	private LocalTime endTime;
 	private Customer bookCust;
 	private Business bookBus;
 	private Employee bookEmp;
+	private boolean isBooked = false;
 
 	public Booking(LocalDate bookDate, LocalTime bookStart, LocalTime bookEnd, Customer bookCust, Business bookBus, Employee bookEmp){
 		this.bookDate = bookDate;
@@ -50,6 +51,17 @@ public class Booking implements Serializable{
 	
 	public void setCust(Customer cust){
 		this.bookCust = cust;
+	}
+	
+	public boolean getBookStat(){
+		return isBooked;
+	}
+	
+	public void unbooked(){
+		isBooked = false;
+	}
+	public void booked(){
+		isBooked = true;
 	}
 
 //	Why do we need setters? 

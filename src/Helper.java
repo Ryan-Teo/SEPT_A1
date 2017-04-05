@@ -1,12 +1,10 @@
-import java.io.Serializable;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 
-public class Helper implements Serializable{
-	private static final long serialVersionUID = 4L;
+public class Helper{
 
 	//To be removed
 	public LinkedHashMap<LocalDate, ArrayList<Booking>> asLinkedLinkedHashMap(ArrayList<Booking> bookings){
@@ -27,7 +25,7 @@ public class Helper implements Serializable{
 	public Booking[] initTimeSlots(LocalDate myDate,Business myBusiness){
 		Booking[] bookings = new Booking[16];
 		Employee emp = new Employee("emp001","Juls",myBusiness);
-		Customer cust = new Customer("TestCust", "TestUserCust", "password", "120 Address Str", "0435261626");
+		Customer cust = null;
 		LocalTime startTime, endTime;
 		String start = "09:00";
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");

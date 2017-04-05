@@ -3,24 +3,14 @@ import java.util.*;
 
 public class Business extends User {
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 2L;
 	private String busName;
-	private ArrayList<Employee> emp = new ArrayList<Employee>();
-	private Helper help = new Helper();
-	private LinkedHashMap<LocalDate, Booking[]>busDates = help.initDaySlots(this);
+	private ArrayList<Employee> emp = new ArrayList<Employee>();//IMPLEMENT
 	
 	
 	Business(String busName, String ownerName, String address, String phone, String username, String password){
 		super(ownerName,username,password,address,phone);
 		this.busName = busName;
-	}
-	
-	public void populateDays(){
-		for(LocalDate days	:	busDates.keySet()){
-			
-			busDates.put(days, help.initTimeSlots(days,  this));
-		}
 	}
 	
 	//return business name
@@ -38,10 +28,6 @@ public class Business extends User {
 		return emp;
 	}
 	
-//	public LinkedHashMap<LocalDate,Booking[]> getSchedule(){
-//		return help.asLinkedHashMap(schedule);
-//	}
-	
 	public void businessMenu(){
 		System.out.println("Welcome " + this.getName() + "!");
 		System.out.println("1 : Add Employee");
@@ -54,27 +40,27 @@ public class Business extends User {
 	}
 	
 	//view business weekly schedule 
-	public void printSchedule(){
-		ArrayList<Booking> sessions;
-		int i = 1;
-		for(Date key : this.getSchedule().keySet()){
-			// Day in month - date - day
-			System.out.printf("%1$s %2$tB %2$td, %2$tA", "Date:", key);
-			System.out.println();
-			System.out.println("-----------------------------");
-			System.out.println(String.format("	%-5s 	%-5s","session","Employee"));
-			sessions = this.getSchedule().get(key);
-			for(Booking session : sessions){
-				// %R => 24 hour time, no seconds
-				System.out.printf("%1$s. |%2$tR - %2$tR|	",i,session.getStartTime(),session.getEndTime());
-				System.out.printf("%-5s", session.getBookEmp().getName());
-				System.out.println();
-				i++;
-			}
-			i = 1;
-			System.out.println();
-		}
-	}
+//	public void printSchedule(){
+//		ArrayList<Booking> sessions;
+//		int i = 1;
+//		for(Date key : this.getSchedule().keySet()){
+//			// Day in month - date - day
+//			System.out.printf("%1$s %2$tB %2$td, %2$tA", "Date:", key);
+//			System.out.println();
+//			System.out.println("-----------------------------");
+//			System.out.println(String.format("	%-5s 	%-5s","session","Employee"));
+//			sessions = this.getSchedule().get(key);
+//			for(Booking session : sessions){
+//				// %R => 24 hour time, no seconds
+//				System.out.printf("%1$s. |%2$tR - %2$tR|	",i,session.getStartTime(),session.getEndTime());
+//				System.out.printf("%-5s", session.getBookEmp().getName());
+//				System.out.println();
+//				i++;
+//			}
+//			i = 1;
+//			System.out.println();
+//		}
+//	}
 	
 		//Adding a time slot on a specified day
 //	public ArrayList<Booking> addSessionTime(String startTime, String endTime,ArrayList<Booking> session){

@@ -2,10 +2,14 @@ import static org.junit.Assert.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,63 +17,103 @@ import org.junit.Test;
 
 public class BusinessTest {
 
+	public Booking[] initTimeSlots(LocalDate myDate,Business myBusiness){
+		Booking[] bookings = new Booking[16];
+		Employee emp = new Employee("emp001","Juls",myBusiness);
+		Customer cust = new Customer("TestCust", "TestUserCust", "password", "120 Address Str", "0435261626");
+		LocalTime startTime, endTime;
+		String start = "09:00";
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+		
+		startTime = LocalTime.parse(start, dtf);
+		endTime = startTime.plusMinutes(30);
+		
+		for(int i=0 ; i < bookings.length ; i++){
+			bookings[i] = new Booking(myDate,startTime.plusMinutes(30*i),endTime.plusMinutes(30*i),cust,myBusiness,emp);
+		}
+		
+		return bookings ;
+	}
+	
+	public LinkedHashMap<LocalDate,Booking[]> initDaySlots(Business myBusiness){
+	     int days = 31;
+	     
+		 LinkedHashMap<LocalDate,Booking[]> hm = new  LinkedHashMap<LocalDate,Booking[]>();
+		 LocalDate currentDate = LocalDate.now();
+		 
+		for(int i=0; i<days; i++){
+			hm.put(currentDate.plusDays(i), initTimeSlots(currentDate.plusDays(i),myBusiness));
+		}
+		return  hm;
+	}
+	
+	
+	
 	//Dummy schedule and Business
-	HashMap<Date,ArrayList<Booking>> schedule = new HashMap<Date,ArrayList<Booking>>();
+	Helper help = new Helper();
 	Business business = new Business("Bob inc.", "Bobb","iloveyou","Franklin Street","03 9924 3812","   sas");
 	
-	//Dummy Employees
-	Employee emp_1 = new Employee("Chris","chris");
-	Employee emp_2 = new Employee("John Wall", "Wall");
-	Employee emp_3 = new Employee("William Stryker", "Stryker");
 	
-	//Dummy sessions
-	ArrayList<Booking> mondaySessions = new ArrayList<Booking>();
-	ArrayList<Booking> tuesdaySessions = new ArrayList<Booking>();
+	//Dummy Employees
+	Employee emp_1 = new Employee("Chris","chris",business);
+	Employee emp_2 = new Employee("John Wall", "Wall",business);
+	Employee emp_3 = new Employee("William Stryker", "Stryker",business);
+
+	Customer cust = new Customer("Harry","HARRY","RMIT","01010102030","hello");
 	
 	//Date format for Day
 	SimpleDateFormat sdf = new SimpleDateFormat("EE");
 	String [] days = {"monday","tuesday","wednesday"};
 	
-	Date monday = new Date();
-	Date tuesday = new Date();
-	Date wednesday = new Date();
+	LocalTime startTime = LocalTime.now();
+	LocalTime endTime = startTime.plusMinutes(60);
+	LocalDate date = LocalDate.now();
 	
-	String startTime = "08:30";
-	String endTime = "09:30";
-
+	Booking  book_1 = new Booking( date, startTime , endTime,cust, business, emp_1);
+	Booking  book_2 = new Booking( date, startTime , endTime,cust, business, emp_1);
+	Booking  book_3 = new Booking( date, startTime , endTime,cust, business, emp_1);
+	
+	Booking [] book = {book_1,book_2,book_3};
+	
 	@Test
 	public void testPrintSchedule(){
+		LinkedHashMap<LocalDate, Booking[]> busDates = initDaySlots(business);	
 		
-		business.setSchedule(schedule);
-		mondaySessions = business.addSessionTime(startTime, endTime, mondaySessions,emp_1);
-		mondaySessions = business.addSessionTime("10:30","12:30", mondaySessions,emp_1);
-		mondaySessions = business.addSessionTime("13:30","14:30", mondaySessions,emp_2);
-		mondaySessions = business.addSessionTime("15:30","16:30", mondaySessions,emp_3);
+//		busDates.put(date, book);
+//		busDates.put(date.plusDays(1), book);
+//		busDates.put(date.plusDays(1), book);
+//		busDates.put(date.plusDays(1), book);
+//		busDates.put(date.plusDays(1), book);
 		
-		tuesdaySessions = business.addSessionTime(startTime, endTime, tuesdaySessions,emp_3);
-		tuesdaySessions = business.addSessionTime("15:30","17:30", tuesdaySessions,emp_2);
-		tuesdaySessions = business.addSessionTime("18:30","19:30", tuesdaySessions,emp_1);
-		tuesdaySessions = business.addSessionTime("20:30","21:30", tuesdaySessions,emp_1);
-		
-		business.addSession("monday", mondaySessions);
-		business.addSession("tuesday", tuesdaySessions);
-		
-		business.printSchedule();
+			for(LocalDate myDate : busDates.keySet()){		//For each date
+				System.out.printf("%1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
+				System.out.println("----------------------------------");
+				Booking[] myBooking = busDates.get(myDate);
+				for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
+					if(myBooking[i].getBookCust().equals(this)){ //REMOVE "!"
+						System.out.printf("%1$s. %2$tR - %2$tR	","Session time : ",myBooking[i].getStartTime(),myBooking[i].getEndTime());
+						System.out.println("Employee assigned to this session is : " + myBooking[i].getBookEmp().getName());
+					}
+				}
+								
+			}
 	}
 	
 	@Test
 	public void testInitialise() {
-		//Name of the business
-		assertTrue(business.getBusName() instanceof String);
 		
-		//Name of the Owner
-		assertTrue(business.getOwnerName() instanceof String);
 		
-		//List of Employees
-		assertTrue(business.getEmp() instanceof ArrayList);
-		
-		//Working schedule of the business
-		assertTrue(business.getSchedule() instanceof HashMap);
+//		//Name of the business
+//		assertTrue(business.getBusName() instanceof String);
+//		
+//		//Name of the Owner
+//		assertTrue(business.getOwnerName() instanceof String);
+//		
+//		//List of Employees
+//		assertTrue(business.getEmp() instanceof ArrayList);
+//		
+//		//Working schedule of the business
+//		assertTrue(business.getSchedule() instanceof HashMap);
 	}
 	
 	@Test

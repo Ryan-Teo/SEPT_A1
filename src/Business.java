@@ -6,7 +6,7 @@ public class Business extends User{
 	private String busName;
 	private ArrayList<Employee> emp = new ArrayList<Employee>();
 	private Helper help = new Helper();
-	private HashMap<LocalDate, Booking[]>busDates = help.initDaySlots(this);
+	private LinkedHashMap<LocalDate, Booking[]>busDates = help.initDaySlots(this);
 	
 	
 	Business(String busName, String ownerName, String address, String phone, String username, String password){
@@ -36,8 +36,8 @@ public class Business extends User{
 		return emp;
 	}
 	
-//	public HashMap<LocalDate,Booking[]> getSchedule(){
-//		return help.asHashmap(schedule);
+//	public LinkedHashMap<LocalDate,Booking[]> getSchedule(){
+//		return help.asLinkedHashMap(schedule);
 //	}
 	
 	public void businessMenu(){
@@ -146,7 +146,7 @@ public class Business extends User{
 //	public void assignEmployee(Employee empName,String day,String session_startTime, Business business){
 //		
 //		ArrayList<Booking> sessions;
-//		HashMap <Date,ArrayList<Booking>> schedule = business.getSchedule();
+//		LinkedHashMap <Date,ArrayList<Booking>> schedule = business.getSchedule();
 //		
 //		//Day-Date-Month-Year
 //		SimpleDateFormat dayFormat = new SimpleDateFormat ("E dd.mm");
@@ -271,7 +271,7 @@ public class Business extends User{
 //	}
 
 	@Override
-	public void viewBookingSummary(HashMap<Business, HashMap<LocalDate, Booking[]>> bookings) {
+	public void viewBookingSummary(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {
 		// TODO Auto-generated method stub
 		
 	}

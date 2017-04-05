@@ -1,13 +1,13 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public abstract class User {
 
 	String name, username, password, address, phone;
 	Booking [] booking;
-	HashMap<Date, ArrayList<Booking>> schedule;
+	LinkedHashMap<Date, ArrayList<Booking>> schedule;
 	
 	//constructor
 	User(String name, String username, String password, String address, String phone){
@@ -19,7 +19,7 @@ public abstract class User {
 	}
 	
 	//Show all number of bookings made by user
-	public abstract void viewBookingSummary(HashMap<Business, HashMap<LocalDate, Booking[]>> bookings);
+	public abstract void viewBookingSummary(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings);
 	
 	
 	public String getName() {
@@ -48,11 +48,11 @@ public abstract class User {
 	}
 	
 	//What are these schedules for?
-	public void setSchedule(HashMap<Date, ArrayList<Booking>> schedule) {
+	public void setSchedule(LinkedHashMap<Date, ArrayList<Booking>> schedule) {
 		this.schedule = schedule;
 	}
 	
-	public HashMap<Date, ArrayList<Booking>> getSchedule(){
+	public LinkedHashMap<Date, ArrayList<Booking>> getSchedule(){
 		return this.schedule;
 	}
 

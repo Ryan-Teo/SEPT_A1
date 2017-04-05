@@ -1,14 +1,14 @@
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 
 public class Helper {
 	
 	//To be removed
-	public HashMap<LocalDate, ArrayList<Booking>> asHashmap(ArrayList<Booking> bookings){
-		HashMap<LocalDate, ArrayList<Booking>> schedule = new HashMap<LocalDate, ArrayList<Booking>>();
+	public LinkedHashMap<LocalDate, ArrayList<Booking>> asLinkedLinkedHashMap(ArrayList<Booking> bookings){
+		LinkedHashMap<LocalDate, ArrayList<Booking>> schedule = new LinkedHashMap<LocalDate, ArrayList<Booking>>();
 		LocalDate bookDate;
 		for(Booking bookInst : bookings){
 			bookDate = bookInst.getBookDate();
@@ -29,9 +29,8 @@ public class Helper {
 		LocalTime startTime, endTime;
 		String start = "09:00";
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+		
 		startTime = LocalTime.parse(start, dtf);
-	
-		startTime.adjustInto(startTime);
 		endTime = startTime.plusMinutes(30);
 		
 		for(int i=0 ; i < bookings.length ; i++){
@@ -41,10 +40,10 @@ public class Helper {
 		return bookings ;
 	}
 	
-	public HashMap<LocalDate,Booking[]> initDaySlots(Business myBusiness){
+	public LinkedHashMap<LocalDate,Booking[]> initDaySlots(Business myBusiness){
 	     int days = 31;
 	     
-		 HashMap<LocalDate,Booking[]> hm = new  HashMap<LocalDate,Booking[]>();
+		 LinkedHashMap<LocalDate,Booking[]> hm = new  LinkedHashMap<LocalDate,Booking[]>();
 		 LocalDate currentDate = LocalDate.now();
 		 
 		for(int i=0; i<days; i++){

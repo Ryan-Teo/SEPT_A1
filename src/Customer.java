@@ -1,6 +1,6 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Customer extends User{
 	
@@ -34,14 +34,14 @@ public class Customer extends User{
 	 * Method for customer to check all of their current bookings
 	 */
 	@Override
-	public void viewBookingSummary(HashMap<Business, HashMap<LocalDate, Booking[]>> bookings) {
+	public void viewBookingSummary(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {
 		//loop that goes through all the session of the customer
 		//will then print in the following order:
 		//Date/Time, Business Name, Employee of the business taking the job
 //		
 //		ArrayList<Booking> sessions = new ArrayList<Booking>();
 //		ArrayList<Booking> booked = new ArrayList<Booking>();
-//		HashMap<LocalDate, Booking[]> busBookings = bookings.get(key)
+//		LinkedHashMap<LocalDate, Booking[]> busBookings = bookings.get(key)
 //		for each business
 //			for each day
 //				for each booking
@@ -50,7 +50,8 @@ public class Customer extends User{
 //		
 		
 		for(Business myBus : bookings.keySet()){	//For each business
-			HashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business hashmap
+			System.out.println("Business Name : " + myBus.getBusName());
+			LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
 			for(LocalDate myDate : myDay.keySet()){		//For each date
 				System.out.printf("%1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
 				System.out.println("----------------------------------");

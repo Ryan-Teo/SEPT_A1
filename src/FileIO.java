@@ -105,7 +105,6 @@ public class FileIO {
 
 	@SuppressWarnings("unchecked")
 	public LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> loadBook(Helper help, ArrayList<Business> businesses){
-		
 		//deal with exception here
 		LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = new LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>>(); //Check for null when called
 		try {

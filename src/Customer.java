@@ -21,9 +21,33 @@ public class Customer extends User{
 	}
 
 	public void viewSession(String businessName, LinkedHashMap<Business,LinkedHashMap<LocalDate, Booking[]>> hm) {
+<<<<<<< HEAD
+		int counter = 1;
+		int seven_days = 7;
+		for(Business key : hm.keySet()){
+			if(key.getName().equals(businessName)){
+				LinkedHashMap<LocalDate, Booking[]> businessSched = hm.get(key);
+				for(LocalDate myDate : businessSched.keySet()){		//For each date
+					System.out.printf("%1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
+					System.out.println("----------------------------------");
+			
+					Booking[] myBooking = businessSched.get(myDate);
+					for(int i =0 ; i< myBooking.length; i++){	//For all bookings on each day
+						System.out.printf("%1$s. %2$tR - %2$tR	","Session time : ",myBooking[i].getStartTime(),myBooking[i].getEndTime());
+						System.out.println("Employee assigned to this session is : " + myBooking[i].getBookEmp().getName());
+					}
+					
+					counter++;
+					if(counter == seven_days){
+						break;
+					
+					}
+				}
+=======
 		for(Business b : hm.keySet()){
 			if(b.getName().equals(businessName)){
 				b.printSchedule();
+>>>>>>> 39d6792be4e2c35acf83a6d017c36d8d81b65065
 			}
 		}
 	}
@@ -35,30 +59,17 @@ public class Customer extends User{
 	 * Method for customer to check all of their current bookings
 	 */
 	@Override
-	public void viewBookingSummary(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {
-		//loop that goes through all the session of the customer
-		//will then print in the following order:
-		//Date/Time, Business Name, Employee of the business taking the job
-//		
-//		ArrayList<Booking> sessions = new ArrayList<Booking>();
-//		ArrayList<Booking> booked = new ArrayList<Booking>();
-//		LinkedHashMap<LocalDate, Booking[]> busBookings = bookings.get(key)
-//		for each business
-//			for each day
-//				for each booking
-//					if customer == this.customer
-//						add to printArray / print
-//		
+	public void viewBookingSummary(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {	
 		
 		for(Business myBus : bookings.keySet()){	//For each business
-			System.out.println("Business Name : " + myBus.getBusName());
 			LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
 			for(LocalDate myDate : myDay.keySet()){		//For each date
-				System.out.printf("%1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
-				System.out.println("----------------------------------");
 				Booking[] myBooking = myDay.get(myDate);
 				for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
-					if(myBooking[i].getBookCust().equals(this)){ //REMOVE "!"
+					if(myBooking[i].getBookCust().equals(this)){
+						System.out.println("Business Name : " + myBus.getBusName());
+						System.out.printf("%1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
+						System.out.println("----------------------------------");
 						System.out.printf("%1$s. %2$tR - %2$tR	","Session time : ",myBooking[i].getStartTime(),myBooking[i].getEndTime());
 						System.out.println("Employee assigned to this session is : " + myBooking[i].getBookEmp().getName());
 					}
@@ -66,26 +77,6 @@ public class Customer extends User{
 								
 			}
 		}
-					
-				
-				
-//				
-//		for(Date date : busBookings.keySet()){
-//			sessions = busBookings.get(date);
-//			for(Booking session : sessions){
-//				System.out.printf("%1$s %2$tB %2$td, %2$tA", "Date:", date);
-//				System.out.println("----------------------------------");
-//				if(session.getBookCust() != null){
-//					booked.add(session);
-//				}
-//			}
-//			for(Booking book : booked){
-//				System.out.println("Company : " + book.getBookBus());
-//				System.out.printf("%1$s. %2$tR - %2$tR	","Session time : ",book.getStartTime(),book.getEndTime());
-//				System.out.println("Employee assigned to this session is : " + book.getBookEmp().getName());
-//			}
-//			booked.clear();
-//		}
 	}
 	
 	

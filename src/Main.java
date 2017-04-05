@@ -64,7 +64,11 @@ public class Main {
 							System.out.printf("%4s %15s\n", "ID", "Business Name");
 							System.out.println("---------------------------------------------------");
 							for(int i = 0; i < businesses.size(); i++){
+<<<<<<< HEAD
+								System.out.printf("%4s %15s\n", i, businesses.get(i).getName());
+=======
 								System.out.printf("$4s %15s\n", i, businesses.get(i).getBusName());
+>>>>>>> 39d6792be4e2c35acf83a6d017c36d8d81b65065
 							}
 							System.out.println("---------------------------------------------------");
 							

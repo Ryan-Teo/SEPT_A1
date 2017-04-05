@@ -109,7 +109,7 @@ public class FileIO {
 		//deal with exception here
 		LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = new LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>>(); //Check for null when called
 		try {
-			FileInputStream inFile = new FileInputStream("booking.txt");
+			FileInputStream inFile = new FileInputStream("bookings.txt");
 			ObjectInputStream in = new ObjectInputStream(inFile);
 			bookings = (LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>>) in.readObject();
 			in.close();

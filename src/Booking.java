@@ -1,15 +1,9 @@
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.StringTokenizer;
-import java.io.*;
 
-public class Booking {
+public class Booking implements Serializable{
+	private static final long serialVersionUID = 2L;
 	private LocalDate bookDate;
 	private LocalTime startTime;
 	private LocalTime endTime;

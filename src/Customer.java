@@ -1,9 +1,10 @@
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class Customer extends User{
-	
+	private static final long serialVersionUID = 1L;
+
+
 	Customer(String name, String username, String password, String address, String phone){
 		super(name,username,password,address,phone);
 	}
@@ -20,6 +21,7 @@ public class Customer extends User{
 	}
 
 	public void viewSession(String businessName, LinkedHashMap<Business,LinkedHashMap<LocalDate, Booking[]>> hm) {
+<<<<<<< HEAD
 		int counter = 1;
 		int seven_days = 7;
 		for(Business key : hm.keySet()){
@@ -41,6 +43,11 @@ public class Customer extends User{
 					
 					}
 				}
+=======
+		for(Business b : hm.keySet()){
+			if(b.getName().equals(businessName)){
+				b.printSchedule();
+>>>>>>> 39d6792be4e2c35acf83a6d017c36d8d81b65065
 			}
 		}
 	}
@@ -74,50 +81,50 @@ public class Customer extends User{
 	
 	
 	//Customer booking function
-	public void bookSession(String date, String sessionStart, Business busInst){
-				
-		//Time format for day and hour
-		SimpleDateFormat dayFormat = new SimpleDateFormat("EE");
-		SimpleDateFormat ft = new SimpleDateFormat("HH:mm");
-		Date d;
-		Date t;
-		
-		try {
-			//Parsing String to specified date format
-			d = dayFormat.parse(date);
-			t = ft.parse(sessionStart);
-			
-			//Iterate through schedule of the business and find the specified date
-			for(Date day : busInst.getSchedule().keySet()){
-				//when found,
-				if(d.equals(day)){
-					//Iterate through all the sessions on that day and find a specific session time
-					for(Booking book : busInst.getSchedule().get(day) ){
-
-						//when found,
-						if(book.getStartTime().equals(t)){
-							
-							//Check if no other customer books this session and there is at least
-							//an employee assigned to the session
-							//If condition is met, update the session info
-							if(book.getBookCust() == null) {
-								book.setCust(this);
-								
-								//Inform the customer the booking is successful
-								System.out.println("Booking successful");
-							}
-							else{
-								//Should we add some exception(?)
-								System.out.println("Session is not available");
-							}
-						}
-					}
-				}
-			}
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		
-	}
+//	public void bookSession(String date, String sessionStart, Business busInst){
+//				
+//		//Time format for day and hour
+//		SimpleDateFormat dayFormat = new SimpleDateFormat("EE");
+//		SimpleDateFormat ft = new SimpleDateFormat("HH:mm");
+//		Date d;
+//		Date t;
+//		
+//		try {
+//			//Parsing String to specified date format
+//			d = dayFormat.parse(date);
+//			t = ft.parse(sessionStart);
+//			
+//			//Iterate through schedule of the business and find the specified date
+//			for(Date day : busInst.getSchedule().keySet()){
+//				//when found,
+//				if(d.equals(day)){
+//					//Iterate through all the sessions on that day and find a specific session time
+//					for(Booking book : busInst.getSchedule().get(day) ){
+//
+//						//when found,
+//						if(book.getStartTime().equals(t)){
+//							
+//							//Check if no other customer books this session and there is at least
+//							//an employee assigned to the session
+//							//If condition is met, update the session info
+//							if(book.getBookCust() == null) {
+//								book.setCust(this);
+//								
+//								//Inform the customer the booking is successful
+//								System.out.println("Booking successful");
+//							}
+//							else{
+//								//Should we add some exception(?)
+//								System.out.println("Session is not available");
+//							}
+//						}
+//					}
+//				}
+//			}
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
+//		
+//	}
 
 }

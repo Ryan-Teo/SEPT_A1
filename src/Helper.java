@@ -1,11 +1,13 @@
+import java.io.Serializable;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 
-public class Helper {
-	
+public class Helper implements Serializable{
+	private static final long serialVersionUID = 4L;
+
 	//To be removed
 	public LinkedHashMap<LocalDate, ArrayList<Booking>> asLinkedLinkedHashMap(ArrayList<Booking> bookings){
 		LinkedHashMap<LocalDate, ArrayList<Booking>> schedule = new LinkedHashMap<LocalDate, ArrayList<Booking>>();

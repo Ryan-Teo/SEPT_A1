@@ -64,28 +64,35 @@ public class Main {
 							System.out.printf("%4s %15s\n", "ID", "Business Name");
 							System.out.println("---------------------------------------------------");
 							for(int i = 0; i < businesses.size(); i++){
+<<<<<<< HEAD
 								System.out.printf("%4s %15s\n", i, businesses.get(i).getName());
+=======
+								System.out.printf("$4s %15s\n", i, businesses.get(i).getBusName());
+>>>>>>> 39d6792be4e2c35acf83a6d017c36d8d81b65065
 							}
 							System.out.println("---------------------------------------------------");
 							
 							// NOTE! NEED TO CHANGE THE EE IN THE METHOD TO EEE BECAUSE OF FORMATTING OR TRY WITH E
+							try{
 							System.out.println("Please enter the business ID you would like to book for: ");
 							String business = scan.nextLine();
-							System.out.println("Business: " + business);
+							int businessID = Integer.parseInt(business);
+
+							custInst.viewSession(businesses.get(businessID).getBusName(), bookings);
 							
 							System.out.println("Please enter the day you would like to book for (eg. Monday/Tuesday/Wednesday...): ");
 							String date = scan.nextLine();
-							System.out.println("Date: " + date);
+							
 							
 							System.out.println("Please enter the time (hh:mm) you would like to book for: ");
 							String time = scan.nextLine();
-							System.out.println("Time: " + time);
 							
 							
-							
-
-							
-							
+							custInst.bookSession(date, time, businesses.get(businessID));
+							}catch(NumberFormatException e){
+								System.out.println("Invalid Input");
+								break;
+							}						
 							break;
 						case "2"://view current bookings
 							custInst.viewBookingSummary(bookings);

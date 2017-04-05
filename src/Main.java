@@ -64,7 +64,7 @@ public class Main {
 							System.out.printf("%4s %15s\n", "ID", "Business Name");
 							System.out.println("---------------------------------------------------");
 							for(int i = 0; i < businesses.size(); i++){
-								System.out.printf("$4s %15s\n", i, businesses.get(i).getName());
+								System.out.printf("$4s %15s\n", i, businesses.get(i).getBusName());
 							}
 							System.out.println("---------------------------------------------------");
 							
@@ -74,15 +74,15 @@ public class Main {
 							String business = scan.nextLine();
 							int businessID = Integer.parseInt(business);
 
-							custInst.viewSession(businesses.get(businessID).getName(), businesses);
+							custInst.viewSession(businesses.get(businessID).getBusName(), bookings);
 							
 							System.out.println("Please enter the day you would like to book for (eg. Monday/Tuesday/Wednesday...): ");
 							String date = scan.nextLine();
-							System.out.println("Date: " + date);
+							
 							
 							System.out.println("Please enter the time (hh:mm) you would like to book for: ");
 							String time = scan.nextLine();
-							System.out.println("Time: " + time);
+							
 							
 							custInst.bookSession(date, time, businesses.get(businessID));
 							}catch(NumberFormatException e){

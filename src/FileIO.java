@@ -109,7 +109,7 @@ public class FileIO {
 		//deal with exception here
 		HashMap<Business, HashMap<LocalDate, Booking[]>> bookings = new HashMap<Business, HashMap<LocalDate, Booking[]>>(); //Check for null when called
 		try {
-			FileInputStream inFile = new FileInputStream("booking.txt");
+			FileInputStream inFile = new FileInputStream("bookings.txt");
 			ObjectInputStream in = new ObjectInputStream(inFile);
 			bookings = (HashMap<Business, HashMap<LocalDate, Booking[]>>) in.readObject();
 			in.close();

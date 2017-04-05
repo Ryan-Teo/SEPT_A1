@@ -56,6 +56,36 @@ public class Main {
 					switch(userInput){
 						case "1"://add booking
 							
+							//change of plans!
+							//list out all of the businesses, and then pair with their index.  Then let the user pick using an index
+							Business busInst = null;
+							
+							System.out.println("-----Displaying Available Businesses-----");
+							System.out.printf("%4s %15s\n", "ID", "Business Name");
+							System.out.println("---------------------------------------------------");
+							for(int i = 0; i < businesses.size(); i++){
+								System.out.printf("$4s %15s\n", i, businesses.get(i).getName());
+							}
+							System.out.println("---------------------------------------------------");
+							
+							// NOTE! NEED TO CHANGE THE EE IN THE METHOD TO EEE BECAUSE OF FORMATTING OR TRY WITH E
+							System.out.println("Please enter the business ID you would like to book for: ");
+							String business = scan.nextLine();
+							System.out.println("Business: " + business);
+							
+							System.out.println("Please enter the day you would like to book for (eg. Monday/Tuesday/Wednesday...): ");
+							String date = scan.nextLine();
+							System.out.println("Date: " + date);
+							
+							System.out.println("Please enter the time (hh:mm) you would like to book for: ");
+							String time = scan.nextLine();
+							System.out.println("Time: " + time);
+							
+							
+							
+
+							
+							
 							break;
 						case "2"://view current bookings
 							custInst.viewBookingSummary(bookings);
@@ -112,9 +142,6 @@ public class Main {
 					System.out.println("-Logging Out & Exiting-");
 					userInst = null;
 					exit = true;
-					break;
-				case "98979": //secret command to populate the business days
-					busInst.populateDays();
 					break;
 				}
 				

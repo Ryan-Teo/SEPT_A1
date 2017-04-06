@@ -3,6 +3,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Customer extends User{
 	private static final long serialVersionUID = 3L;
@@ -79,13 +80,14 @@ public class Customer extends User{
 	@Override
 	public void viewBookingSummary(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {	
 		
+		System.out.println("Customer hey : " + this.getName());
 		for(Business myBus : bookings.keySet()){	//For each business
 			LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
 			for(LocalDate myDate : myDay.keySet()){		//For each date
 				Booking[] myBooking = myDay.get(myDate);
 				for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
 					if(myBooking[i].getBookStat()){
-						if(myBooking[i].getBookCust().equals(this)){
+						if(myBooking[i].getBookCust().getUsername().equals(this.username)){
 							System.out.println("----------------------------------");
 							System.out.println("Business Name : " + myBus.getBusName());
 							System.out.printf("%1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
@@ -144,6 +146,27 @@ public class Customer extends User{
 		LocalTime timeSelected = null;
 		boolean bookingSuccess = false;
 		
+		System.out.println("CUST Key set" + bookings.keySet());
+		Set<Business> busbus = bookings.keySet();
+		System.out.println("CUST Bus day maps:"+bookings.get(busbus.iterator().next()));
+		for(Business myBus : bookings.keySet()){	//For each business
+			LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
+			for(LocalDate myDate : myDay.keySet()){		//For each date
+				Booking[] myBooking = myDay.get(myDate);
+				for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
+					if(myBooking[i].getBookStat()){
+						if(myBooking[i].getBookStat()){
+							System.out.println("CUST ----------------------------------");
+							System.out.println("CUST Business Name : " + myBus.getBusName());
+							System.out.println("CUST Customer Name : "+ myBooking[i].getBookCust().getName());
+							System.out.printf("CUST %1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
+							System.out.println("CUST Session time : "+myBooking[i].getStartTime()+" - "+myBooking[i].getEndTime());
+							System.out.println("CUST Employee assigned to this session is : " + myBooking[i].getBookEmp().getName());
+						}
+					}
+				}		
+			}
+		}
 		
 		System.out.println("-----Displaying Available Businesses-----");
 		System.out.printf("%4s %15s\n", "ID", "Business Name");
@@ -152,13 +175,18 @@ public class Customer extends User{
 			System.out.printf("%4s %15s\n", i+1, businesses.get(i).getBusName());
 		}
 		System.out.println("---------------------------------------------------");
-		
 		try{
 			System.out.println("Please enter the business ID you would like to book for: ");
 			businessID = scan.nextInt();
 			scan.nextLine(); //CONSUME
-			busInst = businesses.get(businessID - 1);
+			for(Business thisBus : bookings.keySet()){
+				if(businesses.get(businessID - 1).getBusName().equals(thisBus.getBusName())){
+					busInst = thisBus;
+					System.out.println("BUS SET : " + busInst.getBusName());
+				}
+			}
 			LinkedHashMap<LocalDate, Booking[]> busBookings = bookings.get(busInst);
+			System.out.println("busBookings : " + busBookings);
 			do{
 				int i=0;
 				for(LocalDate myDate : busBookings.keySet()){

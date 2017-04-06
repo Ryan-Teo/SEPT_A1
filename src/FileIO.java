@@ -112,6 +112,7 @@ public class FileIO {
 			ObjectInputStream in = new ObjectInputStream(inFile);
 			bookings = (LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>>) in.readObject();
 			in.close();
+			inFile.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.out.println("-- POPULATING DATA --");
@@ -139,8 +140,5 @@ public class FileIO {
 	public static <T> T parseObjectFromString(String s, Class<T> clazz) throws Exception {
 	    return clazz.getConstructor(new Class[] {String.class }).newInstance(s);
 	}
-	
-	
-	
-	
+
 }

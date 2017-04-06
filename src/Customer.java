@@ -23,22 +23,43 @@ public class Customer extends User{
 		System.out.printf("Please select an option: ");
 	}
 
-	public void viewSession(String businessName, LinkedHashMap<Business,LinkedHashMap<LocalDate, Booking[]>> hm) {
+	public void viewSession(LinkedHashMap<Business,LinkedHashMap<LocalDate, Booking[]>> bookings,  ArrayList<Business> businesses, Scanner scan) {
 		int counter = 0;
 		int seven_days = 7;
-		for(Business key : hm.keySet()){
-			if(key.getBusName().equals(businessName)){
-				LinkedHashMap<LocalDate, Booking[]> businessSched = hm.get(key);
+		int businessID = -1;
+		Business busInst = null;
+		
+		System.out.println("-----Displaying Available Businesses-----");
+		System.out.printf("%4s %15s\n", "ID", "Business Name");
+		System.out.println("---------------------------------------------------");
+		for(int i = 0; i < businesses.size(); i++){
+			System.out.printf("%4s %15s\n", i, businesses.get(i).getBusName());
+		}
+		System.out.println("---------------------------------------------------");
+		try{
+		System.out.println("Please enter the business ID you would like to look at: ");
+		businessID = scan.nextInt();
+		scan.nextLine(); //CONSUME
+		busInst = businesses.get(businessID);
+		}catch(NumberFormatException e){
+			System.out.println("Invalid Input");
+		}
+		for(Business key : bookings.keySet()){
+			if(key.getBusName().equals(busInst.getBusName())){
+				LinkedHashMap<LocalDate, Booking[]> businessSched = bookings.get(key);
 				for(LocalDate myDate : businessSched.keySet()){		//For each date
-					System.out.printf("%1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
 					System.out.println("----------------------------------");
+					System.out.printf("%1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
+					
 			
 					Booking[] myBooking = businessSched.get(myDate);
 					for(int i =0 ; i< myBooking.length; i++){	//For all bookings on each day
+						if(myBooking[i].getBookStat() == false){
 						System.out.println("Session time : "+myBooking[i].getStartTime()+" - "+myBooking[i].getEndTime());
 						System.out.println("Employee assigned to this session is : " + myBooking[i].getBookEmp().getName());
-					}
 					
+						}
+					}
 					counter++;
 					if(counter == seven_days){
 						break;
@@ -128,7 +149,7 @@ public class Customer extends User{
 		System.out.printf("%4s %15s\n", "ID", "Business Name");
 		System.out.println("---------------------------------------------------");
 		for(int i = 0; i < businesses.size(); i++){
-			System.out.printf("%4s %15s\n", i, businesses.get(i).getBusName());
+			System.out.printf("%4s %15s\n", i+1, businesses.get(i).getBusName());
 		}
 		System.out.println("---------------------------------------------------");
 		
@@ -136,7 +157,7 @@ public class Customer extends User{
 			System.out.println("Please enter the business ID you would like to book for: ");
 			businessID = scan.nextInt();
 			scan.nextLine(); //CONSUME
-			busInst = businesses.get(businessID);
+			busInst = businesses.get(businessID - 1);
 			LinkedHashMap<LocalDate, Booking[]> busBookings = bookings.get(busInst);
 			do{
 				int i=0;

@@ -61,9 +61,7 @@ public class Main {
 							custInst.viewBookingSummary(bookings);
 							break;
 						case "3"://view sessions of a business
-							System.out.println("Please select a business to search up: ");
-							String bussName = scan.nextLine();
-//							custInst.viewSession(bussName, businesses);
+							custInst.viewSession(bookings, businesses, scan);
 							break;
 						case "4"://logout
 							System.out.println("-- Logging Out --");

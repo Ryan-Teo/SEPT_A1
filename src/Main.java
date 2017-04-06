@@ -11,30 +11,7 @@ public class Main {
 		Helper help = new Helper();//Remove
 		ArrayList<Customer> customers = FIO.loadCust();
 		ArrayList<Business> businesses = FIO.loadBus();
-		LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = FIO.loadBook(help, businesses); //Loading existing bookings
-		
-		System.out.println("MAIN Key set" + bookings.keySet());
-		Set<Business> busbus = bookings.keySet();
-		System.out.println("MAIN Bus day maps:"+bookings.get(busbus.iterator().next()));
-		for(Business myBus : bookings.keySet()){	//For each business
-			LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
-			for(LocalDate myDate : myDay.keySet()){		//For each date
-				Booking[] myBooking = myDay.get(myDate);
-				for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
-					if(myBooking[i].getBookStat()){
-						if(myBooking[i].getBookStat()){
-							System.out.println("MAIN ----------------------------------");
-							System.out.println("MAIN Business Name : " + myBus.getBusName());
-							System.out.println("MAIN Customer Name : "+ myBooking[i].getBookCust().getName());
-							System.out.printf("MAIN %1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
-							System.out.println("MAIN Session time : "+myBooking[i].getStartTime()+" - "+myBooking[i].getEndTime());
-							System.out.println("MAIN Employee assigned to this session is : " + myBooking[i].getBookEmp().getName());
-						}
-					}
-				}		
-			}
-		}
-		
+		LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = FIO.loadBook(help, businesses); //Loading existing bookings	
 		User userInst = null;
 		String userInput;
 		

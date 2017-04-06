@@ -112,30 +112,7 @@ public class FileIO {
 		try {
 			FileInputStream inFile = new FileInputStream("bookings.txt");
 			ObjectInputStream in = new ObjectInputStream(inFile);
-			bookings = (LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>>) in.readObject();
-
-			System.out.println("LOAD Key set" + bookings.keySet());
-			Set<Business> busbus = bookings.keySet();
-			System.out.println("LOAD Bus day maps:"+bookings.get(busbus.iterator().next()));
-			for(Business myBus : bookings.keySet()){	//For each business
-				LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
-				for(LocalDate myDate : myDay.keySet()){		//For each date
-					Booking[] myBooking = myDay.get(myDate);
-					for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
-						if(myBooking[i].getBookStat()){
-							if(myBooking[i].getBookStat()){
-								System.out.println("LOAD ----------------------------------");
-								System.out.println("LOAD Business Name : " + myBus.getBusName());
-								System.out.println("LOAD Customer Name : "+ myBooking[i].getBookCust().getName());
-								System.out.printf("LOAD %1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
-								System.out.println("LOAD Session time : "+myBooking[i].getStartTime()+" - "+myBooking[i].getEndTime());
-								System.out.println("LOAD Employee assigned to this session is : " + myBooking[i].getBookEmp().getName());
-							}
-						}
-					}		
-				}
-			}
-			
+			bookings = (LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>>) in.readObject();			
 			in.close();
 			inFile.close();
 		} catch (Exception e) {
@@ -153,29 +130,6 @@ public class FileIO {
 		try {
 	        FileOutputStream outFile = new FileOutputStream("bookings.txt");
 	        ObjectOutputStream out = new ObjectOutputStream(outFile);
-
-			System.out.println("SAVE Key set" + bookings.keySet());
-			Set<Business> busbus = bookings.keySet();
-			System.out.println("SAVE Bus day maps:"+bookings.get(busbus.iterator().next()));
-			for(Business myBus : bookings.keySet()){	//For each business
-				LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
-				for(LocalDate myDate : myDay.keySet()){		//For each date
-					Booking[] myBooking = myDay.get(myDate);
-					for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
-						if(myBooking[i].getBookStat()){
-							if(myBooking[i].getBookStat()){
-								System.out.println("SAVE ----------------------------------");
-								System.out.println("SAVE Business Name : " + myBus.getBusName());
-								System.out.println("SAVE Customer Name : "+ myBooking[i].getBookCust().getName());
-								System.out.printf("SAVE %1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
-								System.out.println("SAVE Session time : "+myBooking[i].getStartTime()+" - "+myBooking[i].getEndTime());
-								System.out.println("SAVE Employee assigned to this session is : " + myBooking[i].getBookEmp().getName());
-							}
-						}
-					}		
-				}
-			}
-			
 			out.reset();
 	        out.writeObject(bookings);
 	        out.close();

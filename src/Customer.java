@@ -172,12 +172,10 @@ public class Customer extends User{
 			for(Business thisBus : bookings.keySet()){
 				if(businesses.get(businessID).getBusName().equals(thisBus.getBusName())){
 					busInst = thisBus;
-					System.out.println("BUS SET : " + busInst.getBusName());
 				}
 			}
 			scan.nextLine(); //CONSUME
 			LinkedHashMap<LocalDate, Booking[]> busBookings = bookings.get(busInst);
-			System.out.println("busBookings : " + busBookings);
 			do{
 				int i=0;
 				for(LocalDate myDate : busBookings.keySet()){

@@ -33,6 +33,7 @@ public class FileIO {
 			sc.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			System.out.println("-- POPULATING CUSTOMERS --");
 			//no existing customers, file will be created
 		}
 		return customers;
@@ -78,6 +79,7 @@ public class FileIO {
 			scBus.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			System.out.println("-- POPULATING BUSINESSES --");
 			//no existing businesses, file will be created
 		}
 		return businesses;
@@ -117,7 +119,7 @@ public class FileIO {
 			inFile.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-			System.out.println("-- POPULATING DATA --");
+			System.out.println("-- POPULATING BOOKINGS --");
 			for(Business busInst : businesses){
 				bookings.put(busInst, help.initDaySlots(busInst));
 			}

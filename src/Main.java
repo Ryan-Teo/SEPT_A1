@@ -62,13 +62,13 @@ public class Main {
 						case "3"://view sessions of a business
 							custInst.viewSession(bookings, businesses, scan);
 							break;
-						case "4"://logout
+						case "4"://Cancel Booking
+							custInst.cancelBooking(bookings, scan);
+							break;
+						case "9"://log out
 							System.out.println("-- Logging Out --");
 							userInst = null;
 							exit = true;
-							break;
-						case "5"://Cancel Booking
-							custInst.cancelBooking(bookings, scan);
 							break;
 						case "0":
 							//customer log out and other log out stuff

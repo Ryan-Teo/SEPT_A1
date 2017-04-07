@@ -107,7 +107,8 @@ public class Account {
 				return;
 			default:
 				System.out.println("Invalid Input - Please Try Again");
-				break;
+				return;
+				
 		}
 		System.out.print("Please enter your name : ");
 		name = scan.nextLine();

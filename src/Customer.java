@@ -1,6 +1,7 @@
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
 
@@ -18,8 +19,8 @@ public class Customer extends User{
 		System.out.println("1 : Add Booking"); //refer to bookSession()
 		System.out.println("2 : View Bookings");//refer to viewBookingSummary()
 		System.out.println("3 : View Sessions of a Business"); //refer to viewSession Method
-		System.out.println("4 : Logout");
-		System.out.println("5 : Cancel Booking");
+		System.out.println("4 : Cancel Booking");
+		System.out.println("9 : Logout");
 		System.out.println("0 : Exit");
 		System.out.printf("Please select an option: ");
 	}
@@ -35,18 +36,15 @@ public class Customer extends User{
 		System.out.printf("%4s %15s\n", "ID", "Business Name");
 		System.out.println("---------------------------------------------------");
 		for(int i = 0; i < businesses.size(); i++){
-			System.out.printf("%4s %15s\n", i, businesses.get(i).getBusName());
+			System.out.printf("%4s %15s\n", i+1, businesses.get(i).getBusName());
 		}
 		System.out.println("---------------------------------------------------");
 		try{
 		System.out.println("Please enter the business ID you would like to look at: ");
-		businessID = scan.nextInt();
+		businessID = scan.nextInt()-1;
 		scan.nextLine(); //CONSUME
 		busInst = businesses.get(businessID);
-		}catch(NumberFormatException e){
-			System.out.println("Invalid I"
-					+ "nput");
-		}
+		
 		for(Business key : bookings.keySet()){
 			if(key.getBusName().equals(busInst.getBusName())){
 				LinkedHashMap<LocalDate, Booking[]> businessSched = bookings.get(key);
@@ -71,7 +69,13 @@ public class Customer extends User{
 					
 					}
 				}
+				}
 			}
+		}catch(IndexOutOfBoundsException e){
+			System.out.println("Invalid Input - Returning to menu");
+		}catch(InputMismatchException e){
+			scan.nextLine();
+			System.out.println("Invalid Input - Returning to Menu");
 		}
 	}
 
@@ -92,7 +96,7 @@ public class Customer extends User{
 					if(myBooking[i].getBookStat()){
 						if(myBooking[i].getBookCust().getUsername().equals(this.username)){
 							System.out.println();
-							System.out.println("----------------"+"["+ " Booking No : "+ counter + "]"+"----------------");
+							System.out.println("----------------"+"["+ " Booking No : "+ (counter+1) + "]"+"----------------");
 							System.out.println("|	Business Name : " + myBus.getBusName()+"	|");
 							System.out.printf("%1$s %2$tB %2$td, %2$tA ", "|	Date: ", myDate);
 							System.out.println("		|");
@@ -163,20 +167,21 @@ public class Customer extends User{
 		System.out.println("---------------------------------------------------");
 		try{
 			System.out.println("Please enter the business ID you would like to book for: ");
-			businessID = scan.nextInt();
-			scan.nextLine(); //CONSUME
+			businessID = scan.nextInt()-1;
+			
 			for(Business thisBus : bookings.keySet()){
-				if(businesses.get(businessID - 1).getBusName().equals(thisBus.getBusName())){
+				if(businesses.get(businessID).getBusName().equals(thisBus.getBusName())){
 					busInst = thisBus;
 					System.out.println("BUS SET : " + busInst.getBusName());
 				}
 			}
+			scan.nextLine(); //CONSUME
 			LinkedHashMap<LocalDate, Booking[]> busBookings = bookings.get(busInst);
 			System.out.println("busBookings : " + busBookings);
 			do{
 				int i=0;
 				for(LocalDate myDate : busBookings.keySet()){
-					System.out.printf("%4s %2$tB %2$td, %2$tA \n", i, myDate);
+					System.out.printf("%4s %2$tB %2$td, %2$tA \n", i+1, myDate);
 					i++;
 					if(i==7){
 						break;
@@ -185,8 +190,8 @@ public class Customer extends User{
 				int dateOption;
 				int timeOption;
 				do{
-					System.out.printf("Please pick your day: ");
-					dateOption = scan.nextInt();
+					System.out.printf("Please pick your day (or any non-numeral key to cancel): ");
+					dateOption = scan.nextInt()-1;
 					scan.nextLine();
 				}while(!(dateOption>=0 && dateOption<=6));
 				int j=0;
@@ -200,25 +205,29 @@ public class Customer extends User{
 				Booking[] daySlots = busBookings.get(dateSelected);
 				for(int k=0 ; k<daySlots.length; k++){
 					if(daySlots[k].getBookStat()==false){
-						System.out.println("Slot " + k + " : Time ["+daySlots[k].getStartTime()+" - "+daySlots[k].getEndTime()+"]");
+						System.out.println("Slot " + (k+1) + " : Time ["+daySlots[k].getStartTime()+" - "+daySlots[k].getEndTime()+"]");
 						System.out.printf("\tEmployee assigned to this session is : %s\n", daySlots[k].getBookEmp().getName());
 					}
 					else{
-						System.out.printf("Slot %s : %s\n",k,"UNAVAILABLE");
+						System.out.printf("Slot %s : %s\n",k+1,"UNAVAILABLE");
 					}
 				}
 				
 				do{
 					System.out.printf("Please pick your time slot: ");
-					timeOption = scan.nextInt();
+					timeOption = scan.nextInt()-1;
 					scan.nextLine();
 				}while(!(timeOption>=0 && timeOption<daySlots.length));
 				timeSelected = daySlots[timeOption].getStartTime();
 				bookingSuccess = bookSession(dateSelected, timeSelected, busInst, bookings);
 			}while(!bookingSuccess);
-		}catch(NumberFormatException e){
-			System.out.println("Invalid Input");
-		}						
+		}catch(IndexOutOfBoundsException e){
+			scan.nextLine();
+			System.out.println("Invalid Input - Returning to menu");
+		}catch(InputMismatchException e){
+			scan.nextLine();
+			System.out.println("Returning to Menu");
+		}
 	}
 
 	
@@ -237,7 +246,7 @@ public class Customer extends User{
 					if(myBooking[i].getBookStat()){
 						if(myBooking[i].getBookCust().getUsername().equals(this.username)){
 							System.out.println();
-							System.out.println("----------------"+"["+ " Booking No : "+ counter + "]"+"----------------");
+							System.out.println("----------------"+"["+ " Booking No : "+ (counter+1) + "]"+"----------------");
 							System.out.println("|	Business Name : " + myBus.getBusName()+"	|");
 							System.out.printf("%1$s %2$tB %2$td, %2$tA ", "|	Date: ", myDate);
 							System.out.println("		|");
@@ -253,9 +262,18 @@ public class Customer extends User{
 			}
 		}
 		do{
-			System.out.println("Which booking do you want to cancel?");
-			bookingID = scan.nextInt();
-			scan.nextLine();
+			try{
+				if(custBookings.size() > 0){
+				System.out.println("Which booking do you want to cancel? (Press any non-numeral key to cancel)");
+				bookingID = scan.nextInt()-1;
+				scan.nextLine();
+	
+				}
+			}catch(InputMismatchException e){
+				scan.nextLine();
+				bookingID = -1;
+			}
+			
 			if( bookingID >= 0 && bookingID <= custBookings.size()-1 ){
 				for(Business myBus : bookings.keySet()){	//For each business
 					LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
@@ -272,10 +290,25 @@ public class Customer extends User{
 					}
 				}
 				
-			}else{
-				System.out.println("Option is out of bounce");
+			}
+			else if(custBookings.size() == 0){
+				System.out.println("-----------------------------------");
+				System.out.println("There are no Bookings to Cancel");
+				System.out.println("Returning to Menu");
+				System.out.println("-----------------------------------");
+				isCancelSuccess = true;
+				
+			}
+			else if(bookingID == -1){
+				System.out.println("-----------------------------------");
+				System.out.println("Returning to menu");
+				System.out.println("-----------------------------------");
+				isCancelSuccess = true;
+			}
+			else{
+				System.out.println("Invalid Option");
 				do{
-					System.out.println("back to main menu? (y/n)");
+					System.out.println("Return to main menu? (y/n)");
 					response = scan.nextLine();
 					if(response.equals("y")){
 						isCancelSuccess = true;

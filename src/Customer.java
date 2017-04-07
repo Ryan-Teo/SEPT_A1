@@ -3,7 +3,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
-import java.util.Set;
 
 public class Customer extends User{
 	private static final long serialVersionUID = 3L;
@@ -20,6 +19,7 @@ public class Customer extends User{
 		System.out.println("2 : View Bookings");//refer to viewBookingSummary()
 		System.out.println("3 : View Sessions of a Business"); //refer to viewSession Method
 		System.out.println("4 : Logout");
+		System.out.println("5 : Cancel Booking");
 		System.out.println("0 : Exit");
 		System.out.printf("Please select an option: ");
 	}
@@ -28,6 +28,7 @@ public class Customer extends User{
 		int counter = 0;
 		int seven_days = 7;
 		int businessID = -1;
+		int currentElement = 0;
 		Business busInst = null;
 		
 		System.out.println("-----Displaying Available Businesses-----");
@@ -43,7 +44,8 @@ public class Customer extends User{
 		scan.nextLine(); //CONSUME
 		busInst = businesses.get(businessID);
 		}catch(NumberFormatException e){
-			System.out.println("Invalid Input");
+			System.out.println("Invalid I"
+					+ "nput");
 		}
 		for(Business key : bookings.keySet()){
 			if(key.getBusName().equals(busInst.getBusName())){
@@ -51,13 +53,15 @@ public class Customer extends User{
 				for(LocalDate myDate : businessSched.keySet()){		//For each date
 					System.out.println("----------------------------------");
 					System.out.printf("%1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
-					
-			
+				
 					Booking[] myBooking = businessSched.get(myDate);
-					for(int i =0 ; i< myBooking.length; i++){	//For all bookings on each day
+					for(int i = 0 ; i< myBooking.length; i++){	//For all bookings on each day
 						if(myBooking[i].getBookStat() == false){
-						System.out.println("Session time : "+myBooking[i].getStartTime()+" - "+myBooking[i].getEndTime());
-						System.out.println("Employee assigned to this session is : " + myBooking[i].getBookEmp().getName());
+					    System.out.println("-----------------------------------------");
+						System.out.println("|	Session time : "+myBooking[i].getStartTime()+" - "+myBooking[i].getEndTime()+"	|");
+						System.out.println("|	Employee assigned : " + myBooking[i].getBookEmp().getName()+"	|");
+						System.out.println("-----------------------------------------");
+						System.out.println();
 					
 						}
 					}
@@ -79,6 +83,7 @@ public class Customer extends User{
 	 */
 	@Override
 	public void viewBookingSummary(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {	
+		int counter = 0;
 		for(Business myBus : bookings.keySet()){	//For each business
 			LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
 			for(LocalDate myDate : myDay.keySet()){		//For each date
@@ -86,11 +91,16 @@ public class Customer extends User{
 				for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
 					if(myBooking[i].getBookStat()){
 						if(myBooking[i].getBookCust().getUsername().equals(this.username)){
-							System.out.println("----------------------------------");
-							System.out.println("Business Name : " + myBus.getBusName());
-							System.out.printf("%1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
-							System.out.println("Session time : "+myBooking[i].getStartTime()+" - "+myBooking[i].getEndTime());
-							System.out.println("Employee assigned to this session is : " + myBooking[i].getBookEmp().getName());
+							System.out.println();
+							System.out.println("----------------"+"["+ " Booking No : "+ counter + "]"+"----------------");
+							System.out.println("|	Business Name : " + myBus.getBusName()+"	|");
+							System.out.printf("%1$s %2$tB %2$td, %2$tA ", "|	Date: ", myDate);
+							System.out.println("		|");
+							System.out.println("|	Session time : "+myBooking[i].getStartTime()+" - "+myBooking[i].getEndTime()+"		|");
+							System.out.println("|	Employee assigned : " + myBooking[i].getBookEmp().getName()+"		|");
+							System.out.println("-------------------------------------------------");
+							System.out.println();
+							counter++;
 						}
 					}
 				}		
@@ -211,4 +221,77 @@ public class Customer extends User{
 		}						
 	}
 
+	
+	public void cancelBooking(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings, Scanner scan){
+		int bookingID = 0;
+		int counter = 0;
+		String response = null;
+		boolean isCancelSuccess = false;
+		boolean isInputValid = false;
+		ArrayList<Booking> custBookings = new ArrayList<Booking>();
+		for(Business myBus : bookings.keySet()){	//For each business
+			LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
+			for(LocalDate myDate : myDay.keySet()){		//For each date
+				Booking[] myBooking = myDay.get(myDate);
+				for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
+					if(myBooking[i].getBookStat()){
+						if(myBooking[i].getBookCust().getUsername().equals(this.username)){
+							System.out.println();
+							System.out.println("----------------"+"["+ " Booking No : "+ counter + "]"+"----------------");
+							System.out.println("|	Business Name : " + myBus.getBusName()+"	|");
+							System.out.printf("%1$s %2$tB %2$td, %2$tA ", "|	Date: ", myDate);
+							System.out.println("		|");
+							System.out.println("|	Session time : "+myBooking[i].getStartTime()+" - "+myBooking[i].getEndTime()+"		|");
+							System.out.println("|	Employee assigned : " + myBooking[i].getBookEmp().getName()+"		|");
+							System.out.println("-------------------------------------------------");
+							custBookings.add(myBooking[i]);
+							System.out.println();
+							counter++;
+						}
+					}
+				}		
+			}
+		}
+		do{
+			System.out.println("Which booking do you want to cancel?");
+			bookingID = scan.nextInt();
+			scan.nextLine();
+			if( bookingID >= 0 && bookingID <= custBookings.size()-1 ){
+				for(Business myBus : bookings.keySet()){	//For each business
+					LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
+					for(LocalDate myDate : myDay.keySet()){		//For each date
+						Booking[] myBooking = myDay.get(myDate);
+						for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
+							if(myBooking[i].equals(custBookings.get(bookingID))){
+								myBooking[i].unbooked();
+								myBooking[i].setCust(null);
+								isCancelSuccess = true;
+								System.out.println("--Cancel is successful--");
+							}
+						}		
+					}
+				}
+				
+			}else{
+				System.out.println("Option is out of bounce");
+				do{
+					System.out.println("back to main menu? (y/n)");
+					response = scan.nextLine();
+					if(response.equals("y")){
+						isCancelSuccess = true;
+						isInputValid = true;
+					}else if(response.equals("n")){
+						isInputValid = true;
+					}else{
+						System.out.println("Invalid input");
+					}
+				}while(isInputValid == false);	
+			}
+			
+		}while(isCancelSuccess == false);
+		
+		
+	}
+				
+				
 }

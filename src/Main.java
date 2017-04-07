@@ -67,6 +67,9 @@ public class Main {
 							userInst = null;
 							exit = true;
 							break;
+						case "5"://Cancel Booking
+							custInst.cancelBooking(bookings, scan);
+							break;
 						case "0":
 							//customer log out and other log out stuff
 							System.out.println("-Logging Out & Exiting-");

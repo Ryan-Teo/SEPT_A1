@@ -34,6 +34,11 @@ public class FileIO {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.out.println("-- POPULATING CUSTOMERS --");
+			customers.add(new Customer("Harry", "harryCust", "password", "utomorulz@sept.com", "0400000000"));
+			customers.add(new Customer("Ryan", "ryanCust", "password", "ryan@sept.com", "0411111111"));
+			customers.add(new Customer("Anton", "antonCust", "password", "anton@sept.com", "0422222222"));
+			customers.add(new Customer("Julia", "juliaCust", "password", "julia@sept.com", "0433333333"));
+			customers.add(new Customer("Grace", "graceCust", "password", "grace@sept.com", "0493020302"));
 			//no existing customers, file will be created
 		}
 		return customers;
@@ -80,6 +85,15 @@ public class FileIO {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			System.out.println("-- POPULATING BUSINESSES --");
+			businesses.add(new Business("Sal's Hair Salon", "Harry", "1 Alumbra St", "0400000000", "harryOwner", "password"));
+			businesses.add(new Business("East Medical Centre", "Ryan", "10 Car St", "0411111111", "ryanOwner", "password"));
+			businesses.add(new Business("Manny's Manicures", "Anton", "100 Leianne St", "0422222222", "antonOwner", "password"));
+			businesses.add(new Business("Don't Shop, Adopt", "Julia", "3 Puppy St", "0433333333", "juliaOwner", "password"));
+			businesses.add(new Business("Doctor Approved", "Sally", "35 Novia St", "0444444444", "sallyOwner", "password"));
+			businesses.add(new Business("Netherlands", "Nathan", "40 Oak St", "0455555555", "nathanOwner", "password"));
+			businesses.add(new Business("Blinding Smiles", "Grace", "209 Yellow St", "0466666666", "graceOwner", "password"));
+			businesses.add(new Business("Beds R Us", "Paulo", "245 Hunny St", "0477777777", "pauloOwner", "password"));
+			businesses.add(new Business("Personally Fit", "Jayden", "90 Twin St", "0488888888", "jaydenOwner", "password"));
 			//no existing businesses, file will be created
 		}
 		return businesses;

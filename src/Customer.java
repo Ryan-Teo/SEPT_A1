@@ -110,6 +110,9 @@ public class Customer extends User{
 				}		
 			}
 		}
+		if(counter == 0){
+			System.out.printf("\n-- You have no current bookings! --\n\n");
+		}
 	}
 	
 	

@@ -37,8 +37,6 @@ public class Helper implements Serializable{
 		
 		for(int i=0 ; i < bookings.length ; i++){
 			bookings[i] = new Booking(myDate,startTime.plusMinutes(30*i),endTime.plusMinutes(30*i),cust,myBusiness,emp);
-			System.out.println("starttime:" + bookings[i].getStartTime());
-			System.out.println("endtime:" + bookings[i].getEndTime());
 		}
 		
 		return bookings ;

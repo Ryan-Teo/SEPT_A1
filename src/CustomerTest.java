@@ -1,13 +1,31 @@
 import static org.junit.Assert.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.junit.BeforeClass;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class CustomerTest {
-	Customer customer = new Customer("Bob", "Bobber", "Bobby123", "Bob@bob.com", "999999999");;
+	FileIO FIO = new FileIO();
+	Helper help = new Helper();
+	Customer customer = new Customer("Bob", "Bobber", "Bobby123", "Bob@bob.com", "999999999");
+	Business myBusiness = new Business("Sal's Hair Salon","Harry","Alumbra St","0120103004","harryOwner","password");
+	ArrayList<Business> businesses = new ArrayList<Business>();
+	Employee emp = new Employee("james","james",myBusiness);
+	LinkedHashMap<LocalDate,Booking[]> linkedHm = new LinkedHashMap<LocalDate, Booking[]>();
+	LinkedHashMap<Business,LinkedHashMap<LocalDate,Booking[]>> businesslinkedHm = new LinkedHashMap<Business,LinkedHashMap<LocalDate,Booking[]>>();
+	DateTimeFormatter daytimeformat = DateTimeFormatter.ofPattern("EE");
+	DateTimeFormatter timeformat = DateTimeFormatter.ofPattern("HH:mm");
+	LocalDate myDate = LocalDate.now();
+	LocalTime myTime = LocalTime.parse("09:00", timeformat);
+	Scanner scan = new Scanner(System.in);
 	
 	
 	@Test
@@ -62,6 +80,72 @@ public class CustomerTest {
 		Matcher phoneM = phoneP.matcher(customer.getPhone());
 		assertTrue(phoneM.matches());
 		
+	}
+	
+	@Test
+	public void testBookSession(){
+		Booking [] myBookings;
+		Booking newBooking = null;
+		linkedHm = initHashMapDummy();
+		for(LocalDate date : linkedHm.keySet()){
+			if (date.equals(myDate)){
+				myBookings = linkedHm.get(date);
+				for(int i=0; i<linkedHm.get(date).length; i++){
+					if(myBookings[i].getStartTime().equals(myTime) && myBookings[i].getBookStat() != true){
+						myBookings[i].booked();
+						newBooking = new Booking(myDate,myTime,myBookings[i].getEndTime(),customer,myBusiness,emp);
+					}
+				}
+			}
+		}
+			Assert.assertEquals(newBooking.getBookCust(),customer);
+			Assert.assertEquals(newBooking.getBookDate(), myDate);
+			Assert.assertEquals(newBooking.getStartTime(), myTime);
+			Assert.assertEquals(newBooking.getBookStat(), false);
+	}
+	
+	@Test
+	public void testViewSession(){
+		businesses.add(myBusiness);
+		customer.viewSession(businesslinkedHm, businesses, scan);
+		for(Business bus : businesslinkedHm.keySet()){
+			linkedHm = businesslinkedHm.get(bus);
+			for(LocalDate myDate : linkedHm.keySet() ){
+				for(int i =0; i<linkedHm.get(myDate).length ; i++){
+					System.out.println(linkedHm.get(myDate)[i].toString());
+				}
+			}
+		}
+	}
+	
+	@Test
+	public void cancelBooking(){
+		Booking [] myBookings;
+		Booking currentBooking = null;
+		linkedHm = initHashMapDummy();
+		for(LocalDate date : linkedHm.keySet()){
+			if (date.equals(myDate)){
+				myBookings = linkedHm.get(date);
+				for(int i=0; i<linkedHm.get(date).length; i++){
+					if(myBookings[i].getStartTime().equals(myTime) && myBookings[i].getBookStat() == true){
+						myBookings[i].unbooked();
+						myBookings[i].setCust(null);
+						currentBooking = myBookings[i];
+						currentBooking.unbooked();
+					}
+				}
+			}
+		}
+	}
+	
+	@Test
+	public void testBookingSummary(){
+		customer.viewBookingSummary(businesslinkedHm);
+	}
+	
+	public LinkedHashMap<LocalDate, Booking[]> initHashMapDummy(){
+		LinkedHashMap<LocalDate, Booking[]> businessSched = help.initDaySlots(myBusiness);
+		return businessSched;
 	}
 
 }

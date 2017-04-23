@@ -28,6 +28,62 @@ public class Business extends User {
 		return emp;
 	}
 	
+	//Adding a new employee into the business
+	public void addNewEmployee(){
+		
+	}
+	
+	//Add working time for the business?
+	public void addWorkingTime(){
+		
+	}
+	
+	//View all bookings for a business
+	@Override
+	public void viewBookingSummary(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {	
+		int counter = 0;
+		for(Business myBus : bookings.keySet()){	//For each business
+			if(myBus.busName.equals(this.busName)){
+				LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);
+				for(LocalDate myDate : myDay.keySet()){		//For each date
+					Booking[] myBooking = myDay.get(myDate);
+					for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
+						if(myBooking[i].getBookStat()){
+							System.out.println();
+							System.out.println("----------------"+"["+ " Booking No : "+ (counter+1) + "]"+"----------------");
+							System.out.println("|	Customer Name : " + myBooking[i].getBookCust().name +"	|");
+							System.out.printf("%1$s %2$tB %2$td, %2$tA ", "|	Date: ", myDate);
+							System.out.println("		|");
+							System.out.println("|	Session time : "+myBooking[i].getStartTime()+" - "+myBooking[i].getEndTime()+"		|");
+							System.out.println("|	Employee assigned : " + myBooking[i].getBookEmp().getName()+"		|");
+							System.out.println("-------------------------------------------------");
+							System.out.println();
+							counter++;
+						}
+					}		
+				}
+			}
+			
+		}
+		if(counter == 0){
+			System.out.printf("\n-- You have no current bookings! --\n\n");
+		}
+	}
+	
+	//Adding booking on behalf of customer
+	//Do we need to make "makeBooking" as a function in the super class?
+	public void makeBooking(){
+		
+	}
+	
+	public void showWorkerAvailability(){
+		//display all employees
+		//choose employees from the given options
+		//Show the worker's availability
+		//==== OR ====
+		//Display all workers along side with their availabilities
+	}
+	
 	public void businessMenu(){
 		System.out.println("Welcome " + this.getName() + "!");
 		System.out.println("1 : Add Employee");
@@ -38,6 +94,7 @@ public class Business extends User {
 		System.out.println("0 : Exit");
 		System.out.printf("Please select an option: ");
 	}
+	
 	
 	//view business weekly schedule 
 //	public void printSchedule(){
@@ -258,9 +315,4 @@ public class Business extends User {
 //		}
 //	}
 
-	@Override
-	public void viewBookingSummary(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {
-		// TODO Auto-generated method stub
-		
-	}
 }

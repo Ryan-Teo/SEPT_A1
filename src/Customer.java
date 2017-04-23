@@ -79,7 +79,6 @@ public class Customer extends User{
 		}
 	}
 
-
 	/*
 	 * (non-Javadoc)
 	 * @see User#viewBookingSummary()
@@ -114,7 +113,6 @@ public class Customer extends User{
 			System.out.printf("\n-- You have no current bookings! --\n\n");
 		}
 	}
-	
 	
 	//Customer booking function
 	private boolean bookSession(LocalDate date, LocalTime sessionStart, Business busInst ,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings){
@@ -231,7 +229,6 @@ public class Customer extends User{
 		}
 	}
 
-	
 	public void cancelBooking(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings, Scanner scan){
 		int bookingID = 0;
 		int counter = 0;

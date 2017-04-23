@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 public class Business extends User {
@@ -29,15 +30,91 @@ public class Business extends User {
 	}
 	
 	//Adding a new employee into the business
-	public void addNewEmployee(){
-		
+	public void addNewEmployee(String empID, String name){
+		Employee new_emp = new Employee(empID,name,this);
+		emp.add(new_emp);
 	}
 	
-	//Add working time for the business?
-	public void addWorkingTime(){
+	//Add working time for employee or Assign employee working time 
+	public void addWorkingTime(Employee emp,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings,Scanner scan){
+		//Display all sessions with the specified date
+		//List out all of the sessions, and then pair with their index
 		
-	}
+		LocalDate dateSelected = null;
+		LocalTime timeSelected = null;
+		boolean addWorkingTimeSuccess = false;
+		try{
+			LinkedHashMap<LocalDate, Booking[]> busBookings = bookings.get(this);
+			do{
+				int i=0;
+				for(LocalDate myDate : busBookings.keySet()){
+					System.out.printf("%4s %2$tB %2$td, %2$tA \n", i+1, myDate);
+					i++;
+					if(i==7){
+						break;
+					}
+				}
+				int dateOption;
+				int timeOption;
+				do{
+					System.out.printf("Please pick your day (or any non-numeral key to cancel): ");
+					dateOption = scan.nextInt()-1;
+					scan.nextLine();
+				}while(!(dateOption>=0 && dateOption<=6));
+				int j=0;
+				for(LocalDate myDate : busBookings.keySet()){
+					if(j==dateOption){
+						dateSelected = myDate;
+						break;
+					}
+					j++;
+				}
+				Booking[] daySlots = busBookings.get(dateSelected);
+				for(int k=0 ; k<daySlots.length; k++){
+					System.out.println("Slot " + (k+1) + " : Time ["+daySlots[k].getStartTime()+" - "+daySlots[k].getEndTime()+"]");
+					System.out.printf("\tEmployee assigned to this session is : %s\n", daySlots[k].getBookEmp().getName());
+				}
+				
+				do{
+					System.out.printf("Please pick your time slot: ");
+					timeOption = scan.nextInt()-1;
+					scan.nextLine();
+				}while(!(timeOption>=0 && timeOption<daySlots.length));
+				timeSelected = daySlots[timeOption].getStartTime();
+				addWorkingTimeSuccess = assignEmpToSession(emp, dateSelected, timeSelected,bookings);
+			}while(!addWorkingTimeSuccess);
+		}catch(IndexOutOfBoundsException e){
+			scan.nextLine();
+			System.out.println("Invalid Input - Returning to menu");
+		}
+}
 	
+	public boolean assignEmpToSession(Employee emp, LocalDate date ,LocalTime sessionStart,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings){
+		
+		//Time format for day and hour
+				LinkedHashMap<LocalDate, Booking[]> busSchedule = bookings.get(this);
+				Booking[] daySessions;
+				boolean assignEmpSuccess = false;
+				
+				//Iterate through schedule of the business and find the specified date
+				for(LocalDate dayInst : busSchedule.keySet()){ //For each day
+					//when found,
+					if(date.equals(dayInst)){
+						//Iterate through all the sessions on that day and find a specific session time
+						daySessions = busSchedule.get(dayInst);
+						for(int i=0; i<daySessions.length ; i++){
+							if(daySessions[i].getStartTime().equals(sessionStart)){
+									daySessions[i].setEmployee(emp);
+									daySessions[i].booked();
+									System.out.println("-- Booking Successful! --");
+									assignEmpSuccess = true;
+							}
+						}
+					}
+				}
+				return assignEmpSuccess;
+	}
+
 	//View all bookings for a business
 	@Override
 	public void viewBookingSummary(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {	

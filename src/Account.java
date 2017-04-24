@@ -4,16 +4,15 @@ import java.util.regex.Pattern;
 
 public class Account {
 	
-	public User login(Scanner scan, ArrayList<Customer> customers, ArrayList<Business> businesses){
+	public User login(ArrayList<Customer> customers, ArrayList<Business> businesses, String username, String password){
 		//Make usable for owner as well
 		//Change return type include owner
-		String username, password;
 		User userInst = null;
 		Boolean usernameCheck = false, passCheck = false;
-		System.out.print("Username : ");
-		username = scan.nextLine();
-		System.out.print("Password : ");
-		password = scan.nextLine();
+//		System.out.print("Username : ");
+//		username = scan.nextLine();
+//		System.out.print("Password : ");
+//		password = scan.nextLine();
 		for(int i=0 ; i<customers.size(); i++){
 			if(customers.get(i).getUsername().equals(username)){
 				usernameCheck = true;

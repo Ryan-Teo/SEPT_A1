@@ -31,7 +31,7 @@ public class Main extends Application{
 	@Override
     public void start(Stage primaryStage) {	
 		
-		SceneManager manager = new SceneManager(customers, businesses, acct, primaryStage);
+		SceneManager manager = new SceneManager(customers, businesses, acct,bookings, primaryStage);
      
     	// load main menu at the start
     	manager.showMainMenu();

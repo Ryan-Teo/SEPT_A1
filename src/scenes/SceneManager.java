@@ -1,14 +1,22 @@
 package scenes;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
@@ -16,23 +24,29 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import system.Account;
+import system.Booking;
 import users.Business;
 import users.Customer;
+import users.Employee;
 import users.User;
 
 public class SceneManager {
 	Stage window;
+	
 	Scene mainMenu, customerRegister, registerMenu, customerMenu, scene4, customerBookingSummary;
 	ArrayList<Customer> customers;
 	ArrayList<Business> businesses;
+	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings;
 	User userInst = null;
 	Account acct;
 
-	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
+	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses,
+			Account account,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings,
 			Stage primaryStage) {
 		this.customers = customers;
 		this.businesses = businesses;
 		this.acct = account;
+		this.bookings = bookings;
 		window = primaryStage;
 	}
 
@@ -59,21 +73,54 @@ public class SceneManager {
 	}
 
 	public void showBookingSummary() {
+		
+
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(30, 30, 30, 30));
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
 		grid.setVgap(10);
 
-		Text header = new Text("Your Summary");
+		Text header = new Text("Your Booking Summary");
 		header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
 		grid.add(header, 0, 1, 2, 1);
 		
+		TableView<Booking> table;
 		
-
+		//Business Column
+		TableColumn<Booking,Business> business =  new TableColumn<>("Business");
+		business.setMinWidth(200);
+		business.setCellValueFactory(new PropertyValueFactory<Booking,Business>("bookBus"));
 		
+		//Date Column
+		TableColumn<Booking,LocalDate> bookingDate =  new TableColumn<>("Date");
+		bookingDate.setMinWidth(200);
+		bookingDate.setCellValueFactory(new PropertyValueFactory<Booking,LocalDate>("bookDate"));
 		
+		//Session start column
+		TableColumn<Booking,LocalTime> sessionStart =  new TableColumn<>("Session Start");
+		sessionStart.setMinWidth(200);
+		sessionStart.setCellValueFactory(new PropertyValueFactory<Booking,LocalTime>("startTime"));
+				
+		//Session ends column
+		TableColumn<Booking,LocalTime> sessionEnd =  new TableColumn<>("Session End");
+		sessionEnd.setMinWidth(200);
+		sessionEnd.setCellValueFactory(new PropertyValueFactory<Booking,LocalTime>("endTime"));
 		
+		//Employee
+		TableColumn<Booking,Employee> emp =  new TableColumn<>("Employee");
+		emp.setMinWidth(200);
+		emp.setCellValueFactory(new PropertyValueFactory<Booking,Employee>("emp"));
+	 	
+		table = new TableView<>();
+		if(getCustomerBooking( (Customer) userInst,bookings) != null){
+			table.setItems(getCustomerBooking((Customer) userInst,bookings));
+			table.getColumns().addAll(business,bookingDate,sessionStart,sessionEnd,emp);
+		}else{
+			Text message = new Text("You have no booking summaries");
+			header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+			grid.add(message, 0, 1, 2, 1);
+		}
 		
 		Button backToMenuButton = new Button("Go back to menu");
 		HBox hbBackToMenuButton = new HBox(10);
@@ -357,5 +404,32 @@ public class SceneManager {
 		window.setMinWidth(600);
 		window.setScene(mainMenu);
 		window.show();
+	}
+
+	public ObservableList<Booking> getCustomerBooking(Customer cust,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {
+		ObservableList<Booking> bookingsToBeViewed = FXCollections.observableArrayList();
+
+		int counter = 0;
+		for(Business myBus : bookings.keySet()){	//For each business
+			LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
+			for(LocalDate myDate : myDay.keySet()){		//For each date
+				Booking[] myBooking = myDay.get(myDate);
+				for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
+					if(myBooking[i].getBookStat()){
+						if(myBooking[i].getBookCust().getUsername().equals(cust.getUsername())){
+							System.out.println("Test");
+							bookingsToBeViewed.add(myBooking[i]);
+							counter++;
+						}
+					}
+				}		
+			}
+		}
+		if(counter == 0){
+			System.out.printf("\n-- You have no current bookings! --\n\n");
+		}
+		
+		return bookingsToBeViewed;
+		
 	}
 }

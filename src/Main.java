@@ -25,7 +25,7 @@ import javafx.stage.Stage;
 public class Main extends Application{
 	
 	Stage window;
-	Scene scene1, scene2, scene2a, scene3, scene4;
+	Scene mainMenu, customerRegister, registerMenu, customerMenu, scene4;
 	User userInst = null;
 	Account acct = new Account();
 	FileIO FIO = new FileIO();
@@ -42,18 +42,46 @@ public class Main extends Application{
 	@Override
     public void start(Stage primaryStage) {	
 		
-		Scanner scan = new Scanner(System.in);
-		
-		
-		
-//		User userInst = null;
-		String userInput;
-		
-		
-// SIGN IN SCREEN		
 		window = primaryStage;
     	window.setTitle("Press The Button");
         
+    	loadScenes();
+
+        window.setMinHeight(300);
+        window.setMinWidth(600);
+        window.setScene(mainMenu);
+        window.show();
+
+
+        
+
+
+		FIO.saveBook(bookings);	// Saving all bookings
+		FIO.saveBus(businesses);
+		FIO.saveCust(customers);
+//		System.exit(0);
+        
+        
+        
+	}
+	public void mainLogIn(ArrayList<Customer> customers, ArrayList<Business> businesses, String username, String password){
+		userInst = acct.login(customers, businesses, username, password);
+	}
+	public void mainRegisterCust(ArrayList<Customer> customers, String name, String username, String password1, String password2, String phone, String address){
+		if(acct.registerCustomer(name,  username, password1, password2, phone, address, customers)){
+			/*
+			 * If the registration is successful, then show a pop up box.
+			 * The pop up box will tell the user that they have successfully registered.
+			 * The pop up box needs to have a button in it.
+			 * After the user clicks on the button, return them to the main menu scene.
+			 */
+			
+			
+		}
+		
+	}
+	
+	public void showMainMenu(){
     	GridPane grid = new GridPane();
     	grid.setPadding(new Insets(30, 30, 30, 30));
         grid.setAlignment(Pos.CENTER);
@@ -94,6 +122,9 @@ public class Main extends Application{
         	String userNameString = userNameInput.getText();
         	String passwordString = passwordInput.getText();
         	mainLogIn(customers, businesses, userNameString, passwordString);
+        	customerMenu();
+        	if(userInst instanceof Customer)
+        		window.setScene(customerMenu);
         });
 
         Button registerButton = new Button("Click Here to Register");
@@ -104,11 +135,11 @@ public class Main extends Application{
         registerButton.setStyle("-fx-font: 10 arial; -fx-base: #009900;");
         hbRegisterButton.getChildren().add(registerButton);
         grid.add(hbRegisterButton, 1, 0);
-        registerButton.setOnAction(e -> window.setScene(scene2a));
-        scene1 = new Scene(grid, 600, 250);
-
-// REGISTER SCREEN        
-        
+        registerButton.setOnAction(e -> window.setScene(registerMenu));
+        mainMenu = new Scene(grid, 600, 250);
+	}
+	
+	public void showRegister(){
         GridPane grid2a = new GridPane();
         grid2a.setPadding(new Insets(30, 30, 30, 30));
         grid2a.setAlignment(Pos.CENTER);
@@ -126,7 +157,7 @@ public class Main extends Application{
         custInstButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
         hbcustInstButton.getChildren().add(custInstButton);
         grid2a.add(hbcustInstButton, 0, 2);
-        custInstButton.setOnAction(e -> window.setScene(scene2));
+        custInstButton.setOnAction(e -> window.setScene(customerRegister));
         
         Button ownerInstButton = new Button("Business");
         HBox hbOwnerInstButton = new HBox(10);
@@ -135,21 +166,13 @@ public class Main extends Application{
         ownerInstButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
         hbOwnerInstButton.getChildren().add(ownerInstButton);
         grid2a.add(hbOwnerInstButton, 1, 2);
-        ownerInstButton.setOnAction(e -> window.setScene(scene1));
+        ownerInstButton.setOnAction(e -> window.setScene(mainMenu));
         
         
-        scene2a = new Scene(grid2a, 600, 250);
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        registerMenu = new Scene(grid2a, 600, 250);
+	}
+	
+	public void registerCustomer() {
         GridPane grid2 = new GridPane();
     	grid2.setPadding(new Insets(30, 30, 30, 30));
     	grid2.setAlignment(Pos.CENTER);
@@ -203,32 +226,26 @@ public class Main extends Application{
         addressNew.setPromptText("phone number");
         grid2.add(addressNew, 1, 7);
         
-        Button register2 = new Button("Register!");
-        HBox hbRegister2 = new HBox(10);
-        hbRegister2.setAlignment(Pos.BOTTOM_RIGHT);
-        register2.setMinWidth(80);
-        register2.setMinHeight(50);
-        register2.setStyle("-fx-font: 22 arial; -fx-base: #009900;");
-        hbRegister2.getChildren().add(register2);
-        register2.setOnAction(e -> acct.register(scan, customers, businesses));
-        grid2.add(hbRegister2, 1, 8);
+        Button register = new Button("Register!");
+        HBox hbRegister = new HBox(10);
+        hbRegister.setAlignment(Pos.BOTTOM_RIGHT);
+        register.setMinWidth(80);
+        register.setMinHeight(50);
+        register.setStyle("-fx-font: 22 arial; -fx-base: #009900;");
+        hbRegister.getChildren().add(register);
+        grid2.add(hbRegister, 1, 8);
         
-        register2.setOnAction(e -> {
+        register.setOnAction(e -> {
         	String fullNameString = fullNameText.getText();
         	String newUserNameString = newUserNameInput.getText();
         	String newPasswordString = newPasswordInput.getText();
         	String newPasswordString2 = newPasswordInput2.getText();
         	String phoneString = phoneText.getText();
         	String addressString = addressNew.getText();
-//        	mainRegister(customers, businesses, fullNameString, newUserNameString, newPasswordString, newPasswordString2, phoneString, addressString);
+        	mainRegisterCust(customers, fullNameString, newUserNameString, newPasswordString, newPasswordString2, phoneString, addressString);
+
         });
-        
-        
-        
-        
-        
-        
-        
+            
         Button back = new Button("Back");
         HBox hbBack = new HBox(10);
         hbBack.setAlignment(Pos.TOP_RIGHT);
@@ -237,17 +254,19 @@ public class Main extends Application{
         back.setStyle("-fx-font: 10 arial; -fx-base: #000555;");
         hbBack.getChildren().add(back);
         grid2.add(hbBack, 1, 0);
-        back.setOnAction(e -> window.setScene(scene1));
+        back.setOnAction(e -> window.setScene(mainMenu));
         
-        scene2 = new Scene(grid2, 200, 400);
-        
+        customerRegister = new Scene(grid2, 200, 400);
+	}
+	
+	public void customerMenu(){
         GridPane grid3 = new GridPane();
     	grid3.setPadding(new Insets(30, 30, 30, 30));
     	grid3.setAlignment(Pos.CENTER);
     	grid3.setHgap(10);
     	grid3.setVgap(10);
         
-    	Text custTitle = new Text("Welcome --INSERT NAME HERE--");
+    	Text custTitle = new Text("Welcome --" + userInst.getName() + "--");
     	custTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
         grid3.add(custTitle, 0, 1, 2, 1);
         
@@ -299,154 +318,12 @@ public class Main extends Application{
         grid3.add(hbCustLogOut, 5, 0);
         
         
-        scene3 = new Scene(grid3, 200, 400);
-        
-        window.setMinHeight(300);
-        window.setMinWidth(600);
-        window.setScene(scene1);
-        window.show();
-        
-        
-        
-        
-        
-        
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-//		do{
-			/*
-			 * MAIN MENU
-			 */
-//			System.out.println("--Welcome to ABC Booking system--");
-//			System.out.println("1 : Login");
-//			System.out.println("2 : Register");
-//			System.out.println("0 : Quit");
-//			System.out.print("Please enter your selection : ");
-//			userInput = scan.nextLine();
-//			System.out.println("########################");
-//			switch(userInput){
-//				case "1":
-//					userInst = acct.login(scan, customers, businesses);
-//					break;
-//				case "2":
-//					acct.register(scan, customers, businesses);
-//					break;
-//				case "0":
-//					System.out.println("--Bye Bye--");
-//					break;
-//				default:
-//					System.out.println("Invalid Input - Please Try Again");
-//					break;
-//			}
-			
-			
-			/*
-			 * CUSTOMER MENU BELOW
-			 */
-//			if(userInst instanceof Customer){
-//				System.out.println("-Customer Mode-");
-//				Customer custInst = (Customer)userInst;
-//				boolean exit = false;
-//				do{
-//					custInst.customerMenu();
-//					userInput = scan.nextLine();
-//					switch(userInput){
-//						case "1"://add booking
-//							custInst.makeBooking(bookings, businesses, scan);
-//							break;
-//						case "2"://view current bookings
-//							custInst.viewBookingSummary(bookings);
-//							break;
-//						case "3"://view sessions of a business
-//							custInst.viewSession(bookings, businesses, scan);
-//							break;
-//						case "4"://Cancel Booking
-//							custInst.cancelBooking(bookings, scan);
-//							break;
-//						case "9"://log out
-//							System.out.println("-- Logging Out --");
-//							userInst = null;
-//							exit = true;
-//							break;
-//						case "0":
-//							//customer log out and other log out stuff
-//							System.out.println("-Logging Out & Exiting-");
-//							userInst = null;
-//							exit = true;
-//							break;
-//						default:
-//							System.out.println("Invalid Input - Please Try Again");
-//							break;
-//					}
-//					System.out.println("#######################");
-//				}while(exit == false);
-//				try{
-//					Thread.sleep(1500);
-//				}catch(Exception e){
-//					System.out.println(e.getMessage());
-//				}
-//			}
-//			
-//			
-//			/*
-//			 * BUSINESS MENU BELOW
-//			 */
-//			else if (userInst instanceof Business){
-//				System.out.println("-Owner Mode-");
-//				System.out.println("Welcome, "+ userInst.getName() +"!");
-//				
-//				boolean exit = false;
-//				do{
-//				Business busInst = (Business)userInst;
-//				userInput = scan.nextLine();
-//				busInst.businessMenu();
-//				
-//				switch(userInput){
-//				case "1": //add booking
-//					break;
-//				case "2": //other stuff..
-//					break;
-//				case "0": //log off
-//					System.out.println("-Logging Out & Exiting-");
-//					userInst = null;
-//					exit = true;
-//					break;
-//				}
-//				
-//				}while (exit == false);
-//			}
-//		
-//			
-//		}while(!userInput.equals("0") && userInst == null);
-		
-		FIO.saveBook(bookings);	// Saving all bookings
-		FIO.saveBus(businesses);
-		FIO.saveCust(customers);
-//		System.exit(0);
-        
-        
-        
+        customerMenu = new Scene(grid3, 200, 400);
 	}
-	public void mainLogIn(ArrayList<Customer> customers, ArrayList<Business> businesses, String username, String password){
-		userInst = acct.login(customers, businesses, username, password);
-	}
-	public void mainRegister(ArrayList<Customer> customers, ArrayList<Business> businesses, String username, String password){
-		userInst = acct.login(customers, businesses, username, password);
+	
+	public void loadScenes(){
+		showMainMenu();
+		showRegister();
+		registerCustomer();
 	}
 }

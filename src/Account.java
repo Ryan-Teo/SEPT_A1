@@ -5,14 +5,10 @@ import java.util.regex.Pattern;
 public class Account {
 	
 	public User login(ArrayList<Customer> customers, ArrayList<Business> businesses, String username, String password){
-		//Make usable for owner as well
-		//Change return type include owner
+
 		User userInst = null;
 		Boolean usernameCheck = false, passCheck = false;
-//		System.out.print("Username : ");
-//		username = scan.nextLine();
-//		System.out.print("Password : ");
-//		password = scan.nextLine();
+
 		for(int i=0 ; i<customers.size(); i++){
 			if(customers.get(i).getUsername().equals(username)){
 				usernameCheck = true;
@@ -41,8 +37,7 @@ public class Account {
 				System.out.println(e.getMessage());
 			}
 		}
-		//check user exists & password is correct
-		System.out.println("########################");
+
 		return userInst;
 	}
 	
@@ -68,13 +63,11 @@ public class Account {
 		return false;
 	}
 	
-	//What is this for? -- NOT USED
-	public boolean checkCustPass(String password, ArrayList<Customer> customers){
-		for(int i=0 ; i<customers.size(); i++){
-			if(customers.get(i).getPassword().equals(password))
-				return true;
-		}
-		return false;
+	public boolean checkPass(String password1, String password2){
+		if (password1.equals(password2))
+			return true;
+		else
+			return false;
 	}
 	
 	public boolean checkPhone(String phone){
@@ -86,92 +79,19 @@ public class Account {
 		return false;
 	}
 
-	public void register(Scanner scan, ArrayList<Customer> customers, ArrayList<Business> businesses){
-		//Change return type?
-		//take user input, create new customer, write customer info to file/db
-		String busName, name, username, password1, password2, address, phone, userInput, userType = null;
-		Boolean userCheck = true;
-		System.out.println("--Who are you?--");
-		System.out.printf("1 : Customer\n2 : Owner\n3 : I'm not sure where I am!\n");
-		System.out.printf("Please enter your selection : ");
-		userInput = scan.nextLine();
-		switch(userInput){
-			case "1":
-				userType = "cust";
-				break;
-			case "2":
-				userType = "business";
-				break;
-			case "3":
-				return;
-			default:
-				System.out.println("Invalid Input - Please Try Again");
-				return;
-				
-		}
-		System.out.print("Please enter your name : ");
-		name = scan.nextLine();
+	public boolean registerCustomer(String name, String username, String password1, String password2, String phone, String address, ArrayList<Customer> customers){
+		if(!checkLength(name, 6, 12))
+			return false;
+		else if(!checkCustName(username, customers))
+			return false;
+		else if(!checkPass(password1, password2))
+			return false;
+		else if(!checkPhone(phone))
+			return false;
 		
-		do{
-			System.out.print("Please enter your desired username with 6-12 characters: ");
-			username = scan.nextLine();
-			if (checkLength(username, 6, 12) == true){
-				System.out.println("-- Please enter a username with 6-12 characters. --");
-			}
-			else{
-				if(userCheck = (checkCustName(username, customers) || checkBusName(username, businesses))){
-					System.out.println("-- Username Not Available - Please Try Again-- ");
-				}
-				else{
-					break;
-				}
-			}
-			//Check for uniqueness
-		}while(userCheck);		
-		
-		do{
-			System.out.print("Please enter your password with 6-12 characters : ");		//limit 6-15
-			password1 = scan.nextLine();
-			if (checkLength(password1, 6, 12) == true)
-				System.out.println("-- Please enter a password with 6-12 characters! --");
-			else{ 
-				System.out.print("Please re-enter your password to confirm : ");
-				password2 = scan.nextLine();
-				if(!password1.equals(password2)){
-					System.out.println("-- Passwords entered do not match! --");
-				}
-				else 
-					break;
-			}
-			
-		}while(1>0);
-		//loop this
-		
-		System.out.print("Please enter your address : ");
-		address = scan.nextLine();
-		do{
-			System.out.print("Please enter a valid Australian phone number : ");
-			phone = scan.nextLine();
-			if (checkPhone(phone)==true)
-				break;
-			else 
-				System.out.println("--Invalid Australian phone number--");
-		}while(1>0);
-
-		if(userType.equals("cust")){
+		else{
 			customers.add(new Customer(name, username, password1, address, phone));
-		}
-		else if (userType.equals("business")){
-			System.out.printf("Please enter business name : ");
-			busName = scan.nextLine();
-			businesses.add(new Business(busName, name, address, phone, username, password1));
-		}
-		System.out.println("You have successfully registered!");
-		System.out.println("#################################");
-		try{
-			Thread.sleep(1500);
-		}catch(Exception e){
-			System.out.println(e.getMessage());
+			return true;
 		}
 	}
 

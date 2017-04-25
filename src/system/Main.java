@@ -41,7 +41,7 @@ public class Main extends Application{
 
 		FIO.saveBook(bookings);	// Saving all bookings
 		FIO.saveBus(businesses);
-		FIO.saveCust(customers);
+
 //		System.exit(0);
         
 

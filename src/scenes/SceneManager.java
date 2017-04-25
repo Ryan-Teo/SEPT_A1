@@ -8,6 +8,11 @@ import java.util.Scanner;
 
 import javax.security.auth.callback.Callback;
 
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -15,8 +20,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
+
 import javafx.scene.control.TableCell;
+
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -36,14 +44,17 @@ import users.User;
 
 public class SceneManager {
 	Stage window;
-	
-	Scene mainMenu, customerRegister, registerMenu, customerMenu, scene4, customerBookingSummary;
+
+	Scene mainMenu, customerRegister, registerMenu, customerMenu, custSelectBus, custSelectSession, customerBookingSummary;
+
 	ArrayList<Customer> customers;
 	ArrayList<Business> businesses;
 	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings;
 	User userInst = null;
 	Account acct;
-	Scanner scan = new Scanner(System.in);
+
+	int busIndex;
+
 
 	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses,
 			Account account,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings,
@@ -72,7 +83,6 @@ public class SceneManager {
 			 */
 
 			System.out.println("successful");
-
 		}
 
 	}
@@ -126,23 +136,51 @@ public class SceneManager {
 		}else{
 			System.out.println("No bookings yet");
 		}
-		
-		Button backToMenuButton = new Button("Go back to menu");
-		HBox hbBackToMenuButton = new HBox(10);
-		hbBackToMenuButton.setAlignment(Pos.BOTTOM_RIGHT);
-		backToMenuButton.minHeight(50);
-		backToMenuButton.minWidth(100);
-		backToMenuButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
-		hbBackToMenuButton.getChildren().add(backToMenuButton);
-		grid.add(hbBackToMenuButton, 1, 5);
 
-		backToMenuButton.setOnAction(e -> {
-			customerMenu();
-			window.setScene(customerMenu);
-		});
+	}
+
+	public void selectTime(){
 		
-		customerBookingSummary = new Scene(grid,600, 250);
+	}
+	public void selectBusiness(){
 		
+		
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(30, 30, 30, 30));
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        
+        Text header = new Text("Select a Bussiness to Book");
+        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+        grid.add(header, 0, 1, 2, 1);
+        
+        //list for selecting a bussiness
+        ListView<String> busList = new ListView<String>(); 
+        ObservableList<String>busItems = FXCollections.observableArrayList();
+        for(Business business : businesses){
+        	busItems.add(business.getBusName());
+        }
+        busList.setItems(busItems);
+        
+        busList.setPrefHeight(300);
+        busList.setPrefWidth(300);
+        
+        grid.add(busList, 1,2);
+        
+        Button selectButton = new Button("Select");
+        selectButton.setMinHeight(50);
+        selectButton.setMinWidth(100);
+        selectButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        grid.add(selectButton, 1, 3);
+        selectButton.setOnAction(e -> {
+        	busIndex = busList.getSelectionModel().getSelectedIndex();
+        	System.out.println(busList.getSelectionModel().getSelectedIndex());
+        	if(busIndex != -1){
+//        	window.setScene(custSelectSession);
+        	}
+        });
+        custSelectBus = new Scene(grid, 500, 500);
 	}
 
 	public void showMainMenu() {
@@ -336,38 +374,49 @@ public class SceneManager {
 		customerRegister = new Scene(grid2, 200, 400);
 	}
 
-	public void customerMenu() {
-		GridPane grid3 = new GridPane();
-		grid3.setPadding(new Insets(30, 30, 30, 30));
-		grid3.setAlignment(Pos.CENTER);
-		grid3.setHgap(10);
-		grid3.setVgap(10);
 
-		Text custTitle = new Text("Welcome --" + userInst.getName() + "--");
-		custTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
-		grid3.add(custTitle, 0, 1, 2, 1);
+	
+	public void customerMenu(){
+        GridPane grid3 = new GridPane();
+    	grid3.setPadding(new Insets(30, 30, 30, 30));
+    	grid3.setAlignment(Pos.CENTER);
+    	grid3.setHgap(10);
+    	grid3.setVgap(10);
+        
+    	Text custTitle = new Text("Welcome --" + userInst.getName() + "--");
+    	custTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+        grid3.add(custTitle, 0, 1, 2, 1);
+        
+        Button custAdd = new Button("Add Booking");
+        HBox hbCustAdd = new HBox(10);
+        hbCustAdd.setAlignment(Pos.TOP_RIGHT);
+        custAdd.setMinWidth(50);
+        custAdd.setMinHeight(25);
+        custAdd.setStyle("-fx-font: 10 arial; -fx-base: #000555;");
+        hbCustAdd.getChildren().add(custAdd);
+        grid3.add(hbCustAdd, 1, 0);
+        custAdd.setOnAction(e -> {
+        	//add a booking
+        	//only to change the scene to the booking page
+        	selectBusiness();
+        	window.setScene(custSelectBus);
+        });
+        
+    
+        Button custCurrent = new Button("View Current Bookings");
+        HBox hbCustCurrent = new HBox(10);
+        hbCustCurrent.setAlignment(Pos.TOP_RIGHT);
+        custCurrent.setMinWidth(50);
+        custCurrent.setMinHeight(25);
+        custCurrent.setStyle("-fx-font: 10 arial; -fx-base: #000555;");
+        hbCustCurrent.getChildren().add(custCurrent);
+        grid3.add(hbCustCurrent, 2, 0);
 
-		Button custAdd = new Button("Add Booking");
-		HBox hbCustAdd = new HBox(10);
-		hbCustAdd.setAlignment(Pos.TOP_RIGHT);
-		custAdd.setMinWidth(50);
-		custAdd.setMinHeight(25);
-		custAdd.setStyle("-fx-font: 10 arial; -fx-base: #000555;");
-		hbCustAdd.getChildren().add(custAdd);
-		grid3.add(hbCustAdd, 1, 0);
-
-		Button custCurrent = new Button("View Current Bookings");
-		HBox hbCustCurrent = new HBox(10);
-		hbCustCurrent.setAlignment(Pos.TOP_RIGHT);
-		custCurrent.setMinWidth(50);
-		custCurrent.setMinHeight(25);
-		custCurrent.setStyle("-fx-font: 10 arial; -fx-base: #000555;");
-		hbCustCurrent.getChildren().add(custCurrent);
-		grid3.add(hbCustCurrent, 2, 0);
 		custCurrent.setOnAction(e -> {
 			showBookingSummary();
 			window.setScene(customerBookingSummary);
 		});
+
 
 		Button custSession = new Button("View Available Sessions");
 		HBox hbCustSession = new HBox(10);
@@ -402,6 +451,7 @@ public class SceneManager {
 		});
 
 		customerMenu = new Scene(grid3, 200, 400);
+        
 	}
 
 	public void show() {
@@ -435,6 +485,5 @@ public class SceneManager {
 		}
 		
 		return bookingsToBeViewed;
-		
 	}
 }

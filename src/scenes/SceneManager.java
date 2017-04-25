@@ -72,16 +72,7 @@ public class SceneManager {
 		Text header = new Text("Your Summary");
 		header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
 		grid.add(header, 0, 1, 2, 1);
-		
-		
 
-		
-
-
-		
-		
-		
-		
 		Button backToMenuButton = new Button("Go back to menu");
 		HBox hbBackToMenuButton = new HBox(10);
 		hbBackToMenuButton.setAlignment(Pos.BOTTOM_RIGHT);
@@ -96,25 +87,7 @@ public class SceneManager {
 			window.setScene(customerMenu);
 		});
 		
-		customerBookingSummary = new Scene(grid,600, 250);
-		
-		
-		
-		Button backToMenuButton = new Button("Go back to menu");
-		HBox hbBackToMenuButton = new HBox(10);
-		hbBackToMenuButton.setAlignment(Pos.BOTTOM_RIGHT);
-		backToMenuButton.minHeight(50);
-		backToMenuButton.minWidth(100);
-		backToMenuButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
-		hbBackToMenuButton.getChildren().add(backToMenuButton);
-		grid.add(hbBackToMenuButton, 1, 5);
-
-		backToMenuButton.setOnAction(e -> {
-			customerMenu();
-			window.setScene(customerMenu);
-		});
-		
-		customerBookingSummary = new Scene(grid,600, 250);
+		customerBookingSummary = new Scene(grid,600, 250);	
 		
 	}
 	public void selectTime(){

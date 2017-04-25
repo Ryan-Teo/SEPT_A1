@@ -1,6 +1,8 @@
 package scenes;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,7 +13,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
@@ -19,8 +24,10 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import system.Account;
+import system.Booking;
 import users.Business;
 import users.Customer;
+import users.Employee;
 import users.User;
 
 public class SceneManager {
@@ -28,15 +35,19 @@ public class SceneManager {
 	Scene mainMenu, customerRegister, registerMenu, customerMenu, custSelectBus, custSelectSession, customerBookingSummary;
 	ArrayList<Customer> customers;
 	ArrayList<Business> businesses;
+	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings;
 	User userInst = null;
 	Account acct;
 	int busIndex;
 
-	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
+
+	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses,
+			Account account,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings,
 			Stage primaryStage) {
 		this.customers = customers;
 		this.businesses = businesses;
 		this.acct = account;
+		this.bookings = bookings;
 		window = primaryStage;
 	}
 

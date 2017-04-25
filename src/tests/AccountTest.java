@@ -1,3 +1,4 @@
+package tests;
 import static org.junit.Assert.*;
 
 import java.io.InputStream;
@@ -6,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.junit.Test;
+
+import users.Customer;
 
 public class AccountTest {
 	

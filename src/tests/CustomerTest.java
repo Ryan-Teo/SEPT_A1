@@ -1,3 +1,4 @@
+package tests;
 import static org.junit.Assert.*;
 
 import java.time.LocalDate;
@@ -11,6 +12,13 @@ import java.util.regex.Pattern;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import system.Booking;
+import system.FileIO;
+import system.Helper;
+import users.Business;
+import users.Customer;
+import users.Employee;
 
 public class CustomerTest {
 	FileIO FIO = new FileIO();

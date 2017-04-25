@@ -45,7 +45,8 @@ public class Main extends Application{
 		window = primaryStage;
     	window.setTitle("Press The Button");
         
-    	loadScenes();
+    	// load main menu at the start
+    	showMainMenu();
 
         window.setMinHeight(300);
         window.setMinWidth(600);
@@ -68,7 +69,7 @@ public class Main extends Application{
 		userInst = acct.login(customers, businesses, username, password);
 	}
 	public void mainRegisterCust(ArrayList<Customer> customers, String name, String username, String password1, String password2, String phone, String address){
-		if(acct.registerCustomer(name,  username, password1, password2, phone, address, customers)){
+		if(acct.registerCustomer(name, username, password1, password2, phone, address, customers)){
 			/*
 			 * If the registration is successful, then show a pop up box.
 			 * The pop up box will tell the user that they have successfully registered.
@@ -76,6 +77,8 @@ public class Main extends Application{
 			 * After the user clicks on the button, return them to the main menu scene.
 			 */
 			
+			System.out.println("successful");
+		
 			
 		}
 		
@@ -122,9 +125,12 @@ public class Main extends Application{
         	String userNameString = userNameInput.getText();
         	String passwordString = passwordInput.getText();
         	mainLogIn(customers, businesses, userNameString, passwordString);
-        	customerMenu();
-        	if(userInst instanceof Customer)
+        	
+        	
+        	if(userInst instanceof Customer){
+        		customerMenu();
         		window.setScene(customerMenu);
+        	}
         });
 
         Button registerButton = new Button("Click Here to Register");
@@ -135,7 +141,10 @@ public class Main extends Application{
         registerButton.setStyle("-fx-font: 10 arial; -fx-base: #009900;");
         hbRegisterButton.getChildren().add(registerButton);
         grid.add(hbRegisterButton, 1, 0);
-        registerButton.setOnAction(e -> window.setScene(registerMenu));
+        registerButton.setOnAction(e -> {
+	        	showRegister();
+	        	window.setScene(registerMenu);
+        	});
         mainMenu = new Scene(grid, 600, 250);
 	}
 	
@@ -157,7 +166,10 @@ public class Main extends Application{
         custInstButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
         hbcustInstButton.getChildren().add(custInstButton);
         grid2a.add(hbcustInstButton, 0, 2);
-        custInstButton.setOnAction(e -> window.setScene(customerRegister));
+        custInstButton.setOnAction(e -> {
+        	registerCustomer();
+        	window.setScene(customerRegister);
+        });
         
         Button ownerInstButton = new Button("Business");
         HBox hbOwnerInstButton = new HBox(10);
@@ -166,7 +178,11 @@ public class Main extends Application{
         ownerInstButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
         hbOwnerInstButton.getChildren().add(ownerInstButton);
         grid2a.add(hbOwnerInstButton, 1, 2);
-        ownerInstButton.setOnAction(e -> window.setScene(mainMenu));
+        ownerInstButton.setOnAction(e -> {
+        		//meant to show the business menu
+        		showMainMenu();
+        		window.setScene(mainMenu);
+        	});
         
         
         registerMenu = new Scene(grid2a, 600, 250);
@@ -219,11 +235,11 @@ public class Main extends Application{
         phoneText.setPromptText("phone number");
         grid2.add(phoneText, 1, 6);
         
-        Label address = new Label("Contact Number ");
+        Label address = new Label("Address ");
         grid2.add(address, 0, 7);
 
         TextField addressNew = new TextField();
-        addressNew.setPromptText("phone number");
+        addressNew.setPromptText("address");
         grid2.add(addressNew, 1, 7);
         
         Button register = new Button("Register!");
@@ -243,7 +259,9 @@ public class Main extends Application{
         	String phoneString = phoneText.getText();
         	String addressString = addressNew.getText();
         	mainRegisterCust(customers, fullNameString, newUserNameString, newPasswordString, newPasswordString2, phoneString, addressString);
-
+        	showMainMenu();
+        	window.setScene(mainMenu);
+        	
         });
             
         Button back = new Button("Back");
@@ -254,7 +272,10 @@ public class Main extends Application{
         back.setStyle("-fx-font: 10 arial; -fx-base: #000555;");
         hbBack.getChildren().add(back);
         grid2.add(hbBack, 1, 0);
-        back.setOnAction(e -> window.setScene(mainMenu));
+        back.setOnAction(e -> {
+        	showMainMenu();
+        	window.setScene(mainMenu);
+        });
         
         customerRegister = new Scene(grid2, 200, 400);
 	}
@@ -316,14 +337,14 @@ public class Main extends Application{
         custLogOut.setStyle("-fx-font: 10 arial; -fx-base: #000555;");
         hbCustLogOut.getChildren().add(custLogOut);
         grid3.add(hbCustLogOut, 5, 0);
-        
+        custLogOut.setOnAction(e -> {
+        	showMainMenu();
+        	window.setScene(mainMenu);
+        	userInst = null;
+        	});
         
         customerMenu = new Scene(grid3, 200, 400);
 	}
 	
-	public void loadScenes(){
-		showMainMenu();
-		showRegister();
-		registerCustomer();
-	}
+
 }

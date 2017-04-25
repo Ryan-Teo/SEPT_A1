@@ -30,6 +30,7 @@ public class Account {
 			}
 		}
 		if(usernameCheck == false || passCheck == false){
+			//Please change this to a pop up box
 			System.out.println("-- Incorrect Username/Password --");
 			try{
 				Thread.sleep(1500);
@@ -80,15 +81,22 @@ public class Account {
 	}
 
 	public boolean registerCustomer(String name, String username, String password1, String password2, String phone, String address, ArrayList<Customer> customers){
-		if(!checkLength(name, 6, 12))
+		if(checkLength(name, 6, 12)){
+			System.out.println("fail name length");
 			return false;
-		else if(!checkCustName(username, customers))
+		}
+		else if(checkCustName(username, customers)){
+			System.out.println("fail name check");
 			return false;
-		else if(!checkPass(password1, password2))
+		}
+		else if(!checkPass(password1, password2)){
+			System.out.println("fail password");
 			return false;
-		else if(!checkPhone(phone))
+		}
+		else if(!checkPhone(phone)){
+			System.out.println("fail phone");
 			return false;
-		
+		}
 		else{
 			customers.add(new Customer(name, username, password1, address, phone));
 			return true;

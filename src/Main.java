@@ -95,26 +95,35 @@ public class Main {
 			 */
 			else if (userInst instanceof Business){
 				System.out.println("-Owner Mode-");
-				System.out.println("Welcome, "+ userInst.getName() +"!");
 				
 				boolean exit = false;
 				do{
-				Business busInst = (Business)userInst;
-				userInput = scan.nextLine();
-				busInst.businessMenu();
-				
-				switch(userInput){
-				case "1": //add booking
-					break;
-				case "2": //other stuff..
-					break;
-				case "0": //log off
-					System.out.println("-Logging Out & Exiting-");
-					userInst = null;
-					exit = true;
-					break;
-				}
-				
+					Business busInst = (Business)userInst;
+					busInst.businessMenu();
+					userInput = scan.nextLine();
+					switch(userInput){
+						case "1": //Add employee
+							busInst.addNewEmployee(scan);
+							busInst.viewEmployees();
+							break;
+						case "2": //Add working Time & Dates
+							busInst.addWorkingTime(bookings, scan);
+							break;
+						case "3": //View booking summary
+							busInst.viewBookingSummary(bookings);
+							break;
+						case "4": //Make new booking
+							busInst.makeBooking();
+							break;
+						case "5":
+							busInst.showWorkerAvailability();
+							break;
+						case "0": //log off
+							System.out.println("-Logging Out & Exiting-");
+							userInst = null;
+							exit = true;
+							break;
+					}
 				}while (exit == false);
 			}
 		

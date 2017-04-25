@@ -30,19 +30,52 @@ public class Business extends User {
 	}
 	
 	//Adding a new employee into the business
-	public void addNewEmployee(String empID, String name){
-		Employee new_emp = new Employee(empID,name,this);
-		emp.add(new_emp);
+	public void addNewEmployee(Scanner scan){
+		/*
+		 * 		TAKE INPUT IN HERE 
+		 */
+		String empID, name;
+		Boolean empAdded = false;
+		System.out.println("-Type \"exit\" at anytime to return to main menu-");
+		do{
+			System.out.printf("Please enter employee name : ");
+			name = scan.nextLine();
+			if (name == "exit"){
+				break;
+			}
+			//Make sure emp id is unique
+			empID = String.format("emp%03d", emp.size());
+			Employee new_emp = new Employee(empID,name,this);
+			emp.add(new_emp);
+			System.out.println("-Employee Added-");
+			System.out.println("Name : " + name);
+			System.out.println("Employee ID : " + empID);
+			System.out.println("#######################");
+			empAdded = true;
+		}while(!empAdded);
+
+	}
+	
+	public void viewEmployees(){
+		System.out.printf("-%s's Employees-\n",busName);
+		for(Employee myEmp : emp){
+			System.out.printf("Name : %s | ID : %s\n", myEmp.getName(), myEmp.getEmpID());
+		}
+		System.out.println("########################");
 	}
 	
 	//Add working time for employee or Assign employee working time 
-	public void addWorkingTime(Employee emp,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings,Scanner scan){
+	public void addWorkingTime(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings,Scanner scan){
 		//Display all sessions with the specified date
 		//List out all of the sessions, and then pair with their index
-		
+		/*
+		 * 			SELECT EMPLOYEE IN HERE
+		 */
 		LocalDate dateSelected = null;
 		LocalTime timeSelected = null;
 		boolean addWorkingTimeSuccess = false;
+		Employee empInst;
+		System.out.printf("Please select which employee you would like to add times to: ");
 		try{
 			LinkedHashMap<LocalDate, Booking[]> busBookings = bookings.get(this);
 			do{
@@ -81,7 +114,7 @@ public class Business extends User {
 					scan.nextLine();
 				}while(!(timeOption>=0 && timeOption<daySlots.length));
 				timeSelected = daySlots[timeOption].getStartTime();
-				addWorkingTimeSuccess = assignEmpToSession(emp, dateSelected, timeSelected,bookings);
+				addWorkingTimeSuccess = assignEmpToSession(empInst, dateSelected, timeSelected,bookings);
 			}while(!addWorkingTimeSuccess);
 		}catch(IndexOutOfBoundsException e){
 			scan.nextLine();
@@ -162,7 +195,7 @@ public class Business extends User {
 	}
 	
 	public void businessMenu(){
-		System.out.println("Welcome " + this.getName() + "!");
+		System.out.println("Welcome, " + this.getName() + "!");
 		System.out.println("1 : Add Employee");
 		System.out.println("2 : Add Working Time/Dates");
 		System.out.println("3 : View Booking Summary");

@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Scanner;
+
+import javax.security.auth.callback.Callback;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -39,6 +43,7 @@ public class SceneManager {
 	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings;
 	User userInst = null;
 	Account acct;
+	Scanner scan = new Scanner(System.in);
 
 	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses,
 			Account account,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings,
@@ -72,6 +77,7 @@ public class SceneManager {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void showBookingSummary() {
 		
 
@@ -90,36 +96,35 @@ public class SceneManager {
 		//Business Column
 		TableColumn<Booking,Business> business =  new TableColumn<>("Business");
 		business.setMinWidth(200);
-		business.setCellValueFactory(new PropertyValueFactory<Booking,Business>("bookBus"));
+		business.setCellValueFactory(new PropertyValueFactory<>("bookBus"));
 		
 		//Date Column
 		TableColumn<Booking,LocalDate> bookingDate =  new TableColumn<>("Date");
 		bookingDate.setMinWidth(200);
-		bookingDate.setCellValueFactory(new PropertyValueFactory<Booking,LocalDate>("bookDate"));
+		bookingDate.setCellValueFactory(new PropertyValueFactory<>("bookDate"));
 		
 		//Session start column
 		TableColumn<Booking,LocalTime> sessionStart =  new TableColumn<>("Session Start");
 		sessionStart.setMinWidth(200);
-		sessionStart.setCellValueFactory(new PropertyValueFactory<Booking,LocalTime>("startTime"));
+		sessionStart.setCellValueFactory(new PropertyValueFactory<>("startTime"));
 				
 		//Session ends column
 		TableColumn<Booking,LocalTime> sessionEnd =  new TableColumn<>("Session End");
 		sessionEnd.setMinWidth(200);
-		sessionEnd.setCellValueFactory(new PropertyValueFactory<Booking,LocalTime>("endTime"));
+		sessionEnd.setCellValueFactory(new PropertyValueFactory<>("endTime"));
 		
 		//Employee
-		TableColumn<Booking,Employee> emp =  new TableColumn<>("Employee");
+		TableColumn<Booking, Employee> emp =  new TableColumn<>("Employee");
 		emp.setMinWidth(200);
-		emp.setCellValueFactory(new PropertyValueFactory<Booking,Employee>("emp"));
-	 	
-		table = new TableView<>();
-		if(getCustomerBooking( (Customer) userInst,bookings) != null){
-			table.setItems(getCustomerBooking((Customer) userInst,bookings));
+		emp.setCellValueFactory(new PropertyValueFactory<>("bookEmp"));
+		
+		ObservableList<Booking> empList = getCustomerBookings((Customer) userInst,bookings);
+		if(empList.isEmpty() == false){
+			table = new TableView<>();
+			table.setItems(getCustomerBookings((Customer) userInst,bookings));
 			table.getColumns().addAll(business,bookingDate,sessionStart,sessionEnd,emp);
 		}else{
-			Text message = new Text("You have no booking summaries");
-			header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
-			grid.add(message, 0, 1, 2, 1);
+			System.out.println("No bookings yet");
 		}
 		
 		Button backToMenuButton = new Button("Go back to menu");
@@ -406,9 +411,9 @@ public class SceneManager {
 		window.show();
 	}
 
-	public ObservableList<Booking> getCustomerBooking(Customer cust,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {
+	public ObservableList<Booking> getCustomerBookings(Customer cust,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {
 		ObservableList<Booking> bookingsToBeViewed = FXCollections.observableArrayList();
-
+		
 		int counter = 0;
 		for(Business myBus : bookings.keySet()){	//For each business
 			LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap

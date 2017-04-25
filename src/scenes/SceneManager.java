@@ -2,11 +2,14 @@ package scenes;
 
 import java.util.ArrayList;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -22,11 +25,12 @@ import users.User;
 
 public class SceneManager {
 	Stage window;
-	Scene mainMenu, customerRegister, registerMenu, customerMenu, scene4;
+	Scene mainMenu, customerRegister, registerMenu, customerMenu, custSelectBus, custSelectSession;
 	ArrayList<Customer> customers;
 	ArrayList<Business> businesses;
 	User userInst = null;
 	Account acct;
+	int busIndex;
 	
 	
 	public SceneManager(ArrayList<Customer> customers,	ArrayList<Business> businesses, Account account, Stage primaryStage){
@@ -53,6 +57,49 @@ public class SceneManager {
 			
 		}
 		
+	}
+	public void selectTime(){
+		
+	}
+	public void selectBusiness(){
+		
+		
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(30, 30, 30, 30));
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        
+        Text header = new Text("Select a Bussiness to Book");
+        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+        grid.add(header, 0, 1, 2, 1);
+        
+        //list for selecting a bussiness
+        ListView<String> busList = new ListView<String>(); 
+        ObservableList<String>busItems = FXCollections.observableArrayList();
+        for(Business business : businesses){
+        	busItems.add(business.getBusName());
+        }
+        busList.setItems(busItems);
+        
+        busList.setPrefHeight(300);
+        busList.setPrefWidth(300);
+        
+        grid.add(busList, 1,2);
+        
+        Button selectButton = new Button("Select");
+        selectButton.setMinHeight(50);
+        selectButton.setMinWidth(100);
+        selectButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        grid.add(selectButton, 1, 3);
+        selectButton.setOnAction(e -> {
+        	busIndex = busList.getSelectionModel().getSelectedIndex();
+        	System.out.println(busList.getSelectionModel().getSelectedIndex());
+        	if(busIndex != -1){
+//        	window.setScene(custSelectSession);
+        	}
+        });
+        custSelectBus = new Scene(grid, 500, 500);
 	}
 	
 	public void showMainMenu(){
@@ -270,6 +317,12 @@ public class SceneManager {
         custAdd.setStyle("-fx-font: 10 arial; -fx-base: #000555;");
         hbCustAdd.getChildren().add(custAdd);
         grid3.add(hbCustAdd, 1, 0);
+        custAdd.setOnAction(e -> {
+        	//add a booking
+        	//only to change the scene to the booking page
+        	selectBusiness();
+        	window.setScene(custSelectBus);
+        });
         
     
         Button custCurrent = new Button("View Current Bookings");

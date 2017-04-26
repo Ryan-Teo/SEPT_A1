@@ -175,6 +175,44 @@ public class Business extends User {
 		System.out.printf("Please select an option: ");
 	}
 	
+	public void addEmp(Employee myEmp){
+		emp.add(myEmp);
+	}
+	
+	//Adding a new employee into the business
+	public void addNewEmployee(Scanner scan){
+		/*
+		 * 		TAKE INPUT IN HERE 
+		 */
+		String empID, name;
+		Boolean empAdded = false;
+		System.out.println("-Type \"exit\" at anytime to return to main menu-");
+		do{
+			System.out.printf("Please enter employee name : ");
+			name = scan.nextLine();
+			if (name.equals("exit")){
+				return;
+			}
+			//Make sure emp id is unique
+			empID = String.format("emp%03d", emp.size());
+			Employee new_emp = new Employee(empID,name,this);
+			emp.add(new_emp);
+			System.out.println("-Employee Added-");
+			System.out.println("Name : " + name);
+			System.out.println("Employee ID : " + empID);
+			System.out.println("#######################");
+			empAdded = true;
+		}while(!empAdded);
+
+	}
+	
+	public void viewEmployees(){
+		System.out.printf("-%s's Employees-\n",busName);
+		for(Employee myEmp : emp){
+			System.out.printf("Name : %s | ID : %s\n", myEmp.getName(), myEmp.getEmpID());
+		}
+		System.out.println("########################");
+	}
 	
 	//view business weekly schedule 
 //	public void printSchedule(){
@@ -396,3 +434,4 @@ public class Business extends User {
 //	}
 
 }
+

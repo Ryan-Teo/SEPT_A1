@@ -72,6 +72,14 @@ public class Account {
 		return false;
 	}
 	
+	public boolean checkBusBusName(String busName, ArrayList<Business> businesses){
+		for(int i=0 ; i<businesses.size(); i++){
+			if(businesses.get(i).getBusName().equals(busName))
+				return true;
+		}
+		return false;
+	}
+	
 	public boolean checkPass(String password1, String password2){
 		if (password1.equals(password2))
 			return true;
@@ -87,7 +95,33 @@ public class Account {
 			return true;
 		return false;
 	}
-
+	public boolean registerBusiness(String name, String username, String busName, String password1, String password2, String phone, String address, ArrayList<Business> businesses){
+		if(checkLength(username, 6, 12)){
+			System.out.println("fail name length");
+			return false;
+		}
+		else if(checkBusName(username, businesses)){
+			System.out.println("fail username check");
+			return false;
+		}
+		else if (checkBusBusName(busName, businesses)){
+			System.out.println("fail business name");
+			return false;
+		}
+		else if(!checkPass(password1, password2)){
+			System.out.println("fail password");
+			return false;
+		}
+		else if(!checkPhone(phone)){
+			System.out.println("fail phone");
+			return false;
+		}
+		else{
+			businesses.add(new Business(name, username, busName, password1, address, phone));
+			FIO.saveBus(businesses);
+			return true;
+		}
+	}
 	public boolean registerCustomer(String name, String username, String password1, String password2, String phone, String address, ArrayList<Customer> customers){
 		if(checkLength(username, 6, 12)){
 			System.out.println("fail name length");

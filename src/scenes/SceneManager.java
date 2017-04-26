@@ -1,8 +1,10 @@
 package scenes;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Scanner;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +17,11 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -28,6 +34,7 @@ import system.Account;
 import system.Booking;
 import users.Business;
 import users.Customer;
+import users.Employee;
 import users.User;
 
 public class SceneManager {
@@ -38,12 +45,14 @@ public class SceneManager {
 	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings;
 	User userInst = null;
 	Account acct;
+	Scanner scan = new Scanner(System.in);
 
-	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
+	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings,
 			Stage primaryStage) {
 		this.customers = customers;
 		this.businesses = businesses;
 		this.acct = account;
+		this.bookings = bookings;
 		window = primaryStage;
 	}
 
@@ -51,7 +60,16 @@ public class SceneManager {
 			String password) {
 		userInst = acct.login(customers, businesses, username, password);
 	}
-
+	public void mainRegisterBusiness(ArrayList<Business>businesses, String name, String username, String busName, String password1, String password2, String phone, String address){
+		if(acct.registerBusiness(name, username, busName, password1, password2, phone, address, businesses)){
+			/*
+			 * Registration successful for popup box
+			 * As with register customer.
+			 */
+			
+		}
+	}
+	
 	public void mainRegisterCust(ArrayList<Customer> customers, String name, String username, String password1,
 			String password2, String phone, String address) {
 		if (acct.registerCustomer(name, username, password1, password2, phone, address, customers)) {
@@ -69,36 +87,83 @@ public class SceneManager {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void showBookingSummary() {
+		
+
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(30, 30, 30, 30));
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
 		grid.setVgap(10);
 
-		Text header = new Text("Your Summary");
+		Text header = new Text("Your Booking Summary");
 		header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
 		grid.add(header, 0, 1, 2, 1);
 		
-		Button backToMenuButton = new Button("Go back to menu");
-		HBox hbBackToMenuButton = new HBox(10);
-		hbBackToMenuButton.setAlignment(Pos.BOTTOM_RIGHT);
-		backToMenuButton.minHeight(50);
-		backToMenuButton.minWidth(100);
-		backToMenuButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
-		hbBackToMenuButton.getChildren().add(backToMenuButton);
-		grid.add(hbBackToMenuButton, 1, 5);
+		TableView<Booking> table;
+		
+		//Business Column
+		TableColumn<Booking,Business> business =  new TableColumn<>("Business");
+		business.setMinWidth(200);
+		business.setCellValueFactory(new PropertyValueFactory<>("bookBus"));
+		
+		//Date Column
+		TableColumn<Booking,LocalDate> bookingDate =  new TableColumn<>("Date");
+		bookingDate.setMinWidth(200);
+		bookingDate.setCellValueFactory(new PropertyValueFactory<>("bookDate"));
+		
+		//Session start column
+		TableColumn<Booking,LocalTime> sessionStart =  new TableColumn<>("Session Start");
+		sessionStart.setMinWidth(200);
+		sessionStart.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+				
+		//Session ends column
+		TableColumn<Booking,LocalTime> sessionEnd =  new TableColumn<>("Session End");
+		sessionEnd.setMinWidth(200);
+		sessionEnd.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+		
+		//Employee
+		TableColumn<Booking, Employee> emp =  new TableColumn<>("Employee");
+		emp.setMinWidth(200);
+		emp.setCellValueFactory(new PropertyValueFactory<>("bookEmp"));
+		
+		emp = new TableColumn<>("Employee");
+		emp.setCellValueFactory(new PropertyValueFactory<>("bookEmp"));
+		// ======== setting the cell factory for the city column  
+		emp.setCellFactory(new Callback<TableColumn<Booking, Employee>,TableCell<Booking, Employee>>(){
 
-		backToMenuButton.setOnAction(e -> {
-			customerMenu();
-			window.setScene(customerMenu);
-		});
+				@Override
+		        public TableCell<Booking, Employee> call(TableColumn<Booking, Employee> param) {
+
+		            TableCell<Booking, Employee> cityCell = new TableCell<Booking, Employee>(){
+		            	
+		            	protected void updateItem(Employee item, boolean empty) {
+		                    if (item != null) {
+		                        Label cityLabel = new Label(item.getName());
+		                        setGraphic(cityLabel);
+		                    }
+		                }                    
+		            };               
+
+		            return cityCell;                
+		        }
+
+		    });
 		
-		customerBookingSummary = new Scene(grid,600, 250);
-		
+		ObservableList<Booking> empList = getCustomerBookings((Customer) userInst,bookings);
+		if(empList.isEmpty() == false){
+			table = new TableView<>();
+			table.setItems(getCustomerBookings((Customer) userInst,bookings));
+			table.getColumns().addAll(business,bookingDate,sessionStart,sessionEnd,emp);
+		}else{
+			System.out.println("No bookings yet");
+		}
+
 	}
 
 	public void selectTime(int busIndex){
+		
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(30, 30, 30, 30));
         grid.setAlignment(Pos.CENTER);
@@ -139,12 +204,15 @@ public class SceneManager {
         checkButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
         grid.add(checkButton, 1, 3);
         checkButton.setOnAction(e -> {
-        	System.out.println(datePicker.getValue());
-        	System.out.println(businesses.get(busIndex).getBusName());
-        	System.out.println(bookings.get(businesses.get(busIndex)).get(datePicker.getValue())[0].getStartTime()); //HAVING BIG TROUBLE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        	Business bus = null;
+        	for(Business myBus : bookings.keySet()){
+        		if(businesses.get(busIndex).getBusName().equals(myBus.getBusName()))
+        			bus = myBus;
+        	}
+        	
+        	customerMenu();
+        	window.setScene(customerMenu);
         });
-        
-//        LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings;
         
         Button returnButton = new Button("Back");
         returnButton.setMinHeight(50);
@@ -501,9 +569,10 @@ public class SceneManager {
         	String newUserNameString = newUserNameInput.getText();
         	String newPasswordString = newPasswordInput.getText();
         	String newPasswordString2 = newPasswordInput2.getText();
+        	String busNameString = newBusinessInput.getText();
         	String phoneString = phoneText.getText();
         	String addressString = addressNew.getText();
-        	mainRegisterCust(customers, fullNameString, newUserNameString, newPasswordString, newPasswordString2, phoneString, addressString);
+        	mainRegisterBusiness(businesses, fullNameString, newUserNameString, busNameString, newPasswordString, newPasswordString2, phoneString, addressString);
         	showMainMenu();
         	window.setScene(mainMenu);
         	
@@ -544,6 +613,10 @@ public class SceneManager {
         custAdd.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
         hbCustAdd.getChildren().add(custAdd);
         grid3.add(hbCustAdd, 0, 1);
+        custAdd.setOnAction(e -> {
+        	selectBusiness();
+        	window.setScene(custSelectBus);
+        });
         
     
         Button custCurrent = new Button("View Current Bookings");
@@ -554,6 +627,10 @@ public class SceneManager {
         custCurrent.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
         hbCustCurrent.getChildren().add(custCurrent);
         grid3.add(hbCustCurrent, 0, 2);
+        custCurrent.setOnAction(e -> {
+          	showBookingSummary();
+        	window.setScene(customerBookingSummary);
+        });
         
         Button custSession = new Button("View Available Sessions");
         HBox hbCustSession = new HBox(10);
@@ -673,6 +750,31 @@ public class SceneManager {
         	});
         
         businessMenu = new Scene(grid3, 200, 400);
+	}
+	public ObservableList<Booking> getCustomerBookings(Customer cust,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {
+		ObservableList<Booking> bookingsToBeViewed = FXCollections.observableArrayList();
+		
+		int counter = 0;
+		for(Business myBus : bookings.keySet()){	//For each business
+			LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
+			for(LocalDate myDate : myDay.keySet()){		//For each date
+				Booking[] myBooking = myDay.get(myDate);
+				for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
+					if(myBooking[i].getBookStat()){
+						if(myBooking[i].getBookCust().getUsername().equals(cust.getUsername())){
+							System.out.println("Test");
+							bookingsToBeViewed.add(myBooking[i]);
+							counter++;
+						}
+					}
+				}		
+			}
+		}
+		if(counter == 0){
+			System.out.printf("\n-- You have no current bookings! --\n\n");
+		}
+		
+		return bookingsToBeViewed;
 	}
 	
 	public void show(){

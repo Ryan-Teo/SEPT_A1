@@ -10,6 +10,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
@@ -23,6 +25,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import system.Account;
 import system.Booking;
 import users.Business;
@@ -38,8 +41,8 @@ public class SceneManager {
 	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings;
 	User userInst = null;
 	Account acct;
-	int busIndex;
-
+	
+	
 
 	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses,
 			Account account,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings,
@@ -101,8 +104,67 @@ public class SceneManager {
 		customerBookingSummary = new Scene(grid,600, 250);	
 		
 	}
-	public void selectTime(){
-		
+	public void selectTime(int busIndex){
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(30, 30, 30, 30));
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        
+        Text header = new Text("Select a Date");
+        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+        grid.add(header, 2, 0);
+        
+        DatePicker datePicker = new DatePicker();
+        
+        /*
+         * code based on https://docs.oracle.com/javase/8/javafx/user-interface-tutorial/date-picker.htm
+         */
+        final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+            public DateCell call(final DatePicker datePicker) {
+                return new DateCell() {
+                    @Override public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        
+                        if (item.isBefore(LocalDate.now())) {
+                            setDisable(true);
+                            setStyle("-fx-background-color: #ffc0cb;");
+                        }
+                    }
+                };
+            }
+        };
+        datePicker.setDayCellFactory(dayCellFactory);
+        grid.add(datePicker, 2, 2);
+        
+        
+        
+        Button checkButton = new Button("Check");
+        checkButton.setMinHeight(50);
+        checkButton.setMinWidth(100);
+        checkButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        grid.add(checkButton, 1, 3);
+        checkButton.setOnAction(e -> {
+        	System.out.println(datePicker.getValue());
+        	System.out.println(businesses.get(busIndex).getBusName());
+        	System.out.println(bookings.get(businesses.get(busIndex)).get(datePicker.getValue())[0].getStartTime()); //HAVING BIG TROUBLE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        });
+        
+//        LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings;
+        
+        Button returnButton = new Button("Back");
+        returnButton.setMinHeight(50);
+        returnButton.setMinWidth(100);
+        returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        grid.add(returnButton, 3, 3);
+        returnButton.setOnAction(e -> {
+        	selectBusiness();
+        	window.setScene(custSelectBus);
+        });
+        
+        
+        custSelectSession = new Scene(grid, 500, 500);
+        
 	}
 	public void selectBusiness(){
 		
@@ -113,11 +175,11 @@ public class SceneManager {
         grid.setHgap(10);
         grid.setVgap(10);
         
-        Text header = new Text("Select a Bussiness to Book");
+        Text header = new Text("Select a Business to Book");
         header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
         grid.add(header, 0, 1, 2, 1);
         
-        //list for selecting a bussiness
+        //list for selecting a business
         ListView<String> busList = new ListView<String>(); 
         ObservableList<String>busItems = FXCollections.observableArrayList();
         for(Business business : businesses){
@@ -128,7 +190,7 @@ public class SceneManager {
         busList.setPrefHeight(300);
         busList.setPrefWidth(300);
         
-        grid.add(busList, 1,2);
+        grid.add(busList, 2,2);
         
         Button selectButton = new Button("Select");
         selectButton.setMinHeight(50);
@@ -136,11 +198,21 @@ public class SceneManager {
         selectButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
         grid.add(selectButton, 1, 3);
         selectButton.setOnAction(e -> {
-        	busIndex = busList.getSelectionModel().getSelectedIndex();
-        	System.out.println(busList.getSelectionModel().getSelectedIndex());
+        	int busIndex = busList.getSelectionModel().getSelectedIndex();
         	if(busIndex != -1){
-//        	window.setScene(custSelectSession);
+        		selectTime(busIndex);
+        		window.setScene(custSelectSession);
         	}
+        });
+        
+        Button returnButton = new Button("Back");
+        returnButton.setMinHeight(50);
+        returnButton.setMinWidth(100);
+        returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        grid.add(returnButton, 3, 3);
+        returnButton.setOnAction(e -> {
+        	customerMenu();
+        	window.setScene(customerMenu);
         });
         custSelectBus = new Scene(grid, 500, 500);
 	}

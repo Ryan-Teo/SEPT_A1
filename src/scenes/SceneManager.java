@@ -128,6 +128,30 @@ public class SceneManager {
 		emp.setMinWidth(200);
 		emp.setCellValueFactory(new PropertyValueFactory<>("bookEmp"));
 		
+		emp = new TableColumn<>("Employee");
+		emp.setCellValueFactory(new PropertyValueFactory<>("bookEmp"));
+		// ======== setting the cell factory for the city column  
+		emp.setCellFactory(new Callback<TableColumn<Booking, Employee>,TableCell<Booking, Employee>>(){
+
+				@Override
+		        public TableCell<Booking, Employee> call(TableColumn<Booking, Employee> param) {
+
+		            TableCell<Booking, Employee> cityCell = new TableCell<Booking, Employee>(){
+		            	
+		            	@Override
+		                protected void updateItem(Booking item, boolean empty) {
+		                    if (item != null) {
+		                        Label cityLabel = new Label(item.getCity());
+		                        setGraphic(cityLabel);
+		                    }
+		                }                    
+		            };               
+
+		            return cityCell;                
+		        }
+
+		    });
+		
 		ObservableList<Booking> empList = getCustomerBookings((Customer) userInst,bookings);
 		if(empList.isEmpty() == false){
 			table = new TableView<>();

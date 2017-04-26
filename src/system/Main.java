@@ -24,7 +24,11 @@ public class Main extends Application{
 	ArrayList<Business> businesses = FIO.loadBus();
 	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = FIO.loadBook(help, businesses); //Loading existing bookings	
 	
+	
+	
+	
 	public static void main(String args[]) throws IOException{ //Handle exceptions
+	
 		launch(args);
 	}
 	
@@ -32,7 +36,7 @@ public class Main extends Application{
     public void start(Stage primaryStage) {	
 		
 		SceneManager manager = new SceneManager(customers, businesses, acct,bookings, primaryStage);
-     
+
     	// load main menu at the start
     	manager.showMainMenu();
     	manager.show();
@@ -45,5 +49,5 @@ public class Main extends Application{
 //		System.exit(0);
         
 
-}
+	}
 }

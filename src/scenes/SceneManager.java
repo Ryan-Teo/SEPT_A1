@@ -8,8 +8,11 @@ import java.util.Scanner;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DateCell;
@@ -24,11 +27,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Callback;
 import system.Account;
 import system.Booking;
@@ -45,9 +52,8 @@ public class SceneManager {
 	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings;
 	User userInst = null;
 	Account acct;
-	Scanner scan = new Scanner(System.in);
 
-	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings,
+	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings, 
 			Stage primaryStage) {
 		this.customers = customers;
 		this.businesses = businesses;
@@ -70,7 +76,9 @@ public class SceneManager {
 		}
 	}
 	
-	public void mainRegisterCust(ArrayList<Customer> customers, String name, String username, String password1,
+
+
+	public boolean mainRegisterCust(ArrayList<Customer> customers, String name, String username, String password1,
 			String password2, String phone, String address) {
 		if (acct.registerCustomer(name, username, password1, password2, phone, address, customers)) {
 			/*
@@ -82,9 +90,9 @@ public class SceneManager {
 			 */
 
 			System.out.println("successful");
-
+			return true;
 		}
-
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -97,11 +105,27 @@ public class SceneManager {
 		grid.setHgap(10);
 		grid.setVgap(10);
 
-		Text header = new Text("Your Booking Summary");
-		header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
-		grid.add(header, 0, 1, 2, 1);
+
 		
 		TableView<Booking> table;
+		Text header = new Text("Your Summary");
+		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
+		grid.add(header, 0, 1, 2, 1);
+		
+		Button backToMenuButton = new Button("Go back to menu");
+		HBox hbBackToMenuButton = new HBox(10);
+		hbBackToMenuButton.setAlignment(Pos.BOTTOM_RIGHT);
+		backToMenuButton.minHeight(50);
+		backToMenuButton.minWidth(100);
+		backToMenuButton.setStyle("-fx-font: 22 verdana; -fx-base: #000555;");
+		hbBackToMenuButton.getChildren().add(backToMenuButton);
+		grid.add(hbBackToMenuButton, 1, 5);
+
+		backToMenuButton.setOnAction(e -> {
+			customerMenu();
+			window.setScene(customerMenu);
+		});
+
 		
 		//Business Column
 		TableColumn<Booking,Business> business =  new TableColumn<>("Business");
@@ -267,8 +291,6 @@ public class SceneManager {
         	String userNameString = userNameInput.getText();
         	String passwordString = passwordInput.getText();
         	mainLogIn(customers, businesses, userNameString, passwordString);
-        	
-        	
         	if(userInst instanceof Customer){
         		customerMenu();
         		window.setScene(customerMenu);
@@ -288,7 +310,7 @@ public class SceneManager {
         hbRegisterButton.getChildren().add(registerButton);
         grid.add(hbRegisterButton, 1, 0);
         registerButton.setOnAction(e -> {
-	        	showRegister();
+        		showRegister();
 	        	window.setScene(registerMenu);
         	});
         mainMenu = new Scene(grid, 600, 250);
@@ -402,6 +424,115 @@ public class SceneManager {
         registerMenu = new Scene(grid2a, 600, 250);
 	}
         
+	public void handleSuccess(Stage window) {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(window);
+        GridPane dialogVbox = new GridPane();
+        
+        dialogVbox.setPadding(new Insets(30, 30, 30, 30));
+        dialogVbox.setHgap(10);
+        dialogVbox.setVgap(5);
+        Text successful = new Text("You have successfully registered!");
+        successful.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        successful.setTextAlignment(TextAlignment.CENTER);
+        dialogVbox.add(successful, 0, 1);
+        
+        Button back = new Button("Return");
+        HBox hbBack = new HBox(15);
+        hbBack.setAlignment(Pos.BASELINE_CENTER);
+        back.setMinWidth(100);
+        back.setMinHeight(20);
+        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
+        dialogVbox.getChildren().add(hbBack);
+        dialogVbox.add(back, 0, 4);
+        back.setOnAction(e -> {
+        	showMainMenu();
+        	window.setScene(mainMenu);
+        	((Node)(e.getSource())).getScene().getWindow().hide();
+        });
+        GridPane.setHalignment(back, HPos.CENTER);
+        dialogVbox.setAlignment(Pos.CENTER);
+        
+        Scene dialogScene = new Scene(dialogVbox, 300, 100);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
+	
+	public void handleFail(Stage window, Boolean checkUser, Boolean checkPassLength, Boolean checkPassword1, Boolean checkPhone) {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(window);
+        GridPane dialogVbox = new GridPane();
+        
+        dialogVbox.setPadding(new Insets(30, 30, 30, 30));
+        dialogVbox.setHgap(10);
+        dialogVbox.setVgap(5);
+        Text fail = new Text("Incorrect Registration Entry!");
+        Text fail1 = new Text("Please amend the following errors:");
+        fail.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        fail.setTextAlignment(TextAlignment.CENTER);
+        fail1.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        fail1.setTextAlignment(TextAlignment.CENTER);
+        dialogVbox.add(fail, 0, 1);
+        dialogVbox.add(fail1, 0, 2);
+        
+        int i = 2;
+        
+        if (checkUser == false){
+        	Text user = new Text("-  UserName already exists");
+        	user.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	user.setTextAlignment(TextAlignment.CENTER);
+        	user.setFill(Color.RED);
+            dialogVbox.add(user, 0, i+=1);
+        }
+        
+        if (checkPassLength == false){
+        	Text passlength = new Text("-  Password must be between 6-12 characters");
+        	passlength.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	passlength.setTextAlignment(TextAlignment.CENTER);
+        	passlength.setFill(Color.RED);
+            dialogVbox.add(passlength, 0, i+=1);
+        }
+        else if (checkPassLength == true){
+        	if (checkPassword1 == false){
+        		Text passCopy = new Text("-  Password doesn't match");
+        		passCopy.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        		passCopy.setTextAlignment(TextAlignment.CENTER);
+        		passCopy.setFill(Color.RED);
+                dialogVbox.add(passCopy, 0, i+=1);
+        	}
+        }
+        
+        if (checkPhone == false){
+        	Text phone = new Text("-  Incorrect phone format");
+        	phone.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	phone.setTextAlignment(TextAlignment.CENTER);
+        	phone.setFill(Color.RED);
+            dialogVbox.add(phone, 0, i+=1);
+        }
+        
+        Button back = new Button("Return");
+        HBox hbBack = new HBox(15);
+        hbBack.setAlignment(Pos.BASELINE_CENTER);
+        back.setMinWidth(100);
+        back.setMinHeight(20);
+        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
+        dialogVbox.getChildren().add(hbBack);
+        dialogVbox.add(back, 0, i+=1);
+        back.setOnAction(e -> {
+        	showMainMenu();
+        	window.setScene(mainMenu);
+        	((Node)(e.getSource())).getScene().getWindow().hide();
+        });
+        GridPane.setHalignment(back, HPos.CENTER);
+        dialogVbox.setAlignment(Pos.CENTER);
+        
+        Scene dialogScene = new Scene(dialogVbox, 300, 200);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
+	
 	public void registerCustomer() {
         GridPane grid2 = new GridPane();
     	grid2.setPadding(new Insets(30, 30, 30, 30));
@@ -461,7 +592,7 @@ public class SceneManager {
         hbRegister.setAlignment(Pos.BOTTOM_RIGHT);
         register.setMinWidth(80);
         register.setMinHeight(40);
-        register.setStyle("-fx-font: 15 arial; -fx-base: #79B8FF;");
+        register.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
         hbRegister.getChildren().add(register);
         grid2.add(hbRegister, 1, 8);
         
@@ -472,7 +603,20 @@ public class SceneManager {
         	String newPasswordString2 = newPasswordInput2.getText();
         	String phoneString = phoneText.getText();
         	String addressString = addressNew.getText();
-        	mainRegisterCust(customers, fullNameString, newUserNameString, newPasswordString, newPasswordString2, phoneString, addressString);
+        	
+        	
+        	Boolean checkUser = acct.checkCustName(newUserNameString, customers);
+        	Boolean checkPassLength = acct.checkLength(newPasswordString, 6, 12);
+        	Boolean checkPassword1 = acct.checkPass(newPasswordString, newPasswordString2);
+        	Boolean checkPhone = acct.checkPhone(phoneString);
+        	Boolean check = mainRegisterCust(customers, fullNameString, newUserNameString, newPasswordString, newPasswordString2, phoneString, addressString);
+        	if (check){
+        		handleSuccess(window);
+        	}
+        	else{
+        		handleFail(window, checkUser, checkPassLength, checkPassword1, checkPhone);
+        	}
+        	
         	showMainMenu();
         	window.setScene(mainMenu);
         	
@@ -483,7 +627,7 @@ public class SceneManager {
         hbBack.setAlignment(Pos.TOP_RIGHT);
         back.setMinWidth(50);
         back.setMinHeight(20);
-        back.setStyle("-fx-font: 10 arial; -fx-base: #B7FF6E;");
+        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
         hbBack.getChildren().add(back);
         grid2.add(hbBack, 1, 0);
         back.setOnAction(e -> {
@@ -572,9 +716,17 @@ public class SceneManager {
         	String busNameString = newBusinessInput.getText();
         	String phoneString = phoneText.getText();
         	String addressString = addressNew.getText();
+
         	mainRegisterBusiness(businesses, fullNameString, newUserNameString, busNameString, newPasswordString, newPasswordString2, phoneString, addressString);
+        	Boolean check = mainRegisterCust(customers, fullNameString, newUserNameString, newPasswordString, newPasswordString2, phoneString, addressString);
+        	
+        	if (check){
+        		handleSuccess(window);
+        	}
         	showMainMenu();
         	window.setScene(mainMenu);
+        	
+       	
         	
         });
             

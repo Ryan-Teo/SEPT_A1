@@ -31,7 +31,7 @@ public class Main extends Application{
 	@Override
     public void start(Stage primaryStage) {	
 		
-		SceneManager manager = new SceneManager(customers, businesses, acct, primaryStage);
+		SceneManager manager = new SceneManager(customers, businesses, acct,bookings, primaryStage);
      
     	// load main menu at the start
     	manager.showMainMenu();
@@ -41,7 +41,7 @@ public class Main extends Application{
 
 		FIO.saveBook(bookings);	// Saving all bookings
 		FIO.saveBus(businesses);
-		FIO.saveCust(customers);
+
 //		System.exit(0);
         
 

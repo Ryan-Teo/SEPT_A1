@@ -10,6 +10,8 @@ import users.User;
 
 public class Account {
 	
+	FileIO FIO = new FileIO();
+	
 	public User login(ArrayList<Customer> customers, ArrayList<Business> businesses, String username, String password){
 
 		User userInst = null;
@@ -105,6 +107,7 @@ public class Account {
 		}
 		else{
 			customers.add(new Customer(name, username, password1, address, phone));
+			FIO.saveCust(customers);
 			return true;
 		}
 	}

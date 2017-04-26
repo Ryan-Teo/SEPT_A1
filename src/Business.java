@@ -29,6 +29,10 @@ public class Business extends User {
 		return emp;
 	}
 	
+	public void addEmp(Employee myEmp){
+		emp.add(myEmp);
+	}
+	
 	//Adding a new employee into the business
 	public void addNewEmployee(Scanner scan){
 		/*
@@ -40,8 +44,8 @@ public class Business extends User {
 		do{
 			System.out.printf("Please enter employee name : ");
 			name = scan.nextLine();
-			if (name == "exit"){
-				break;
+			if (name.equals("exit")){
+				return;
 			}
 			//Make sure emp id is unique
 			empID = String.format("emp%03d", emp.size());
@@ -201,7 +205,8 @@ public class Business extends User {
 		System.out.println("3 : View Booking Summary");
 		System.out.println("4 : Add Booking");
 		System.out.println("5 : Show Worker Availability");
-		System.out.println("0 : Exit");
+		System.out.println("9 : Logout");
+		System.out.println("0 : Logout & Exit");
 		System.out.printf("Please select an option: ");
 	}
 	

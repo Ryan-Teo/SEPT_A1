@@ -118,6 +118,11 @@ public class Main {
 						case "5":
 							busInst.showWorkerAvailability();
 							break;
+						case "9"://log out
+							System.out.println("-- Logging Out --");
+							userInst = null;
+							exit = true;
+							break;
 						case "0": //log off
 							System.out.println("-Logging Out & Exiting-");
 							userInst = null;

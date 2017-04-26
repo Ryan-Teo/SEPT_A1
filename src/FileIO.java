@@ -64,6 +64,7 @@ public class FileIO {
 		pw.close();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public ArrayList<Business> loadBus(){
 		ArrayList<Business> businesses = new ArrayList<Business>();
 		String line, busName, name, username, password, address, phone;
@@ -96,6 +97,34 @@ public class FileIO {
 			businesses.add(new Business("Personally Fit", "Jayden", "90 Twin St", "0488888888", "jaydenOwner", "password"));
 			//no existing businesses, file will be created
 		}
+
+
+		ArrayList<Employee> emps = new ArrayList<Employee>();
+		try {
+			FileInputStream inFile = new FileInputStream("employees");
+			ObjectInputStream in = new ObjectInputStream(inFile);
+			emps = (ArrayList<Employee>) in.readObject();
+			in.close();
+			inFile.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for(Employee emp : emps){
+			//ADD EMP TO BUSINESS
+			Business myBus = emp.getEmployer();
+			for(Business myBus1 : businesses){
+				if(myBus.getBusName().equals(myBus1.getBusName())){
+					myBus1.addEmp(emp);
+				}
+			}
+		}
+		
+		
 		return businesses;
 	}
 	
@@ -118,6 +147,24 @@ public class FileIO {
 			pwBus.printf("%s|%s|%s|%s|%s|%s\n", busName, name, address, phone, username, password);			
 		}
 		pwBus.close();
+		ArrayList<Employee> emps = new ArrayList<Employee>();
+		//Saving employee arraylist for each business
+		try {
+	        FileOutputStream outFile = new FileOutputStream("employees");
+	        ObjectOutputStream out = new ObjectOutputStream(outFile);
+			out.reset();
+			for(Business busInst : businesses){
+				for(Employee emp : busInst.getEmp()){
+					emps.add(emp);
+				}
+			}
+	        out.writeObject(emps);
+	        out.close();
+	        outFile.close();
+	     }catch(Exception e) {
+	    	 System.out.println(e.getMessage());
+	    	 e.printStackTrace();
+	     }
 	}
 	
 

@@ -37,7 +37,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import system.Account;
 import system.Booking;
 import users.Business;
@@ -55,14 +54,8 @@ public class SceneManager {
 	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings;
 	User userInst = null;
 	Account acct;
-<<<<<<< HEAD
 
 	int busIndex;
-
-=======
-	
-	
->>>>>>> 8fbf232be7c30e4dd083a4feaba02ae32e0f2dd1
 
 	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses,
 			Account account,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings,
@@ -190,7 +183,9 @@ public class SceneManager {
         final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
             public DateCell call(final DatePicker datePicker) {
                 return new DateCell() {
-                    @Override public void updateItem(LocalDate item, boolean empty) {
+                	
+                    @Override 
+                    public void updateItem(LocalDate item, boolean empty) {
                         super.updateItem(item, empty);
                         
                         if (item.isBefore(LocalDate.now())) {
@@ -232,7 +227,7 @@ public class SceneManager {
         
         custSelectSession = new Scene(grid, 500, 500);
         
->>>>>>> 8fbf232be7c30e4dd083a4feaba02ae32e0f2dd1
+
 	}
 	public void selectBusiness(){
 		

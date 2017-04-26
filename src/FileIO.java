@@ -124,7 +124,6 @@ public class FileIO {
 			}
 		}
 		
-		
 		return businesses;
 	}
 	

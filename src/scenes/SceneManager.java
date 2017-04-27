@@ -46,7 +46,7 @@ import users.User;
 
 public class SceneManager {
 	Stage window;
-	Scene mainMenu, customerRegister, ownerRegister, registerMenu, customerMenu, 
+	Scene mainMenu, customerRegister, ownerRegister, registerMenu, customerMenu, custSelectService,
 			custSelectBus, custSelectDate, custSelectTime, custSelectEmp, businessMenu, scene4, customerBookingSummary;
 	ArrayList<Customer> customers;
 	ArrayList<Business> businesses;
@@ -657,8 +657,8 @@ public class SceneManager {
         selectButton.setOnAction(e -> {
         	int busIndex = busList.getSelectionModel().getSelectedIndex();
         	if(busIndex != -1){
-        		selectDate(busIndex);
-        		window.setScene(custSelectDate);
+        		selectService(busIndex);
+        		window.setScene(custSelectService);
         	}
         });
         
@@ -674,7 +674,61 @@ public class SceneManager {
         custSelectBus = new Scene(grid, 500, 500);
 	}
 	
-	public void selectDate(int busIndex){
+	public void selectService(int busIndex){
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(30, 30, 30, 30));
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        
+        Text header = new Text("Select a Service");
+        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+        grid.add(header, 0, 1,2, 1);
+        
+        Business bus = null;
+    	for(Business myBus : bookings.keySet()){
+    		if(businesses.get(busIndex).getBusName().equals(myBus.getBusName()))
+    			bus = myBus;
+    	}
+        
+        
+        ListView<String> serviceList = new ListView<String>(); 
+        ObservableList<String> serviceItems = FXCollections.observableArrayList();
+        for(String myService : bus.getServices().keySet()){
+        	serviceItems.add(myService);
+        }
+        serviceList.setItems(serviceItems);
+        
+        serviceList.setPrefHeight(300);
+        serviceList.setPrefWidth(300);
+        
+        grid.add(serviceList, 2,2);
+        
+        Button selectButton = new Button("Select");
+        selectButton.setMinHeight(50);
+        selectButton.setMinWidth(100);
+        selectButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        grid.add(selectButton, 1, 3);
+        selectButton.setOnAction(e -> {
+    		String service = serviceList.getSelectionModel().getSelectedItem();
+    		selectDate(busIndex, service);
+    		window.setScene(custSelectDate);
+        });
+        
+        Button returnButton = new Button("Back");
+        returnButton.setMinHeight(50);
+        returnButton.setMinWidth(100);
+        returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        grid.add(returnButton, 3, 3);
+        returnButton.setOnAction(e -> {
+        	selectBusiness();
+        	window.setScene(custSelectBus);
+        });
+		
+		custSelectService = new Scene(grid, 500, 500);
+	}
+	
+	public void selectDate(int busIndex, String service){
 		
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(30, 30, 30, 30));
@@ -722,7 +776,7 @@ public class SceneManager {
         			bus = myBus;
         	}
         	
-        	selectTime(bus, datePicker.getValue());
+        	selectTime(busIndex ,bus, datePicker.getValue() , service);
         	window.setScene(custSelectTime);
         });
         
@@ -732,8 +786,8 @@ public class SceneManager {
         returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
         grid.add(returnButton, 3, 3);
         returnButton.setOnAction(e -> {
-        	selectBusiness();
-        	window.setScene(custSelectBus);
+    		selectService(busIndex);
+    		window.setScene(custSelectService);
         });
         
         
@@ -741,7 +795,7 @@ public class SceneManager {
         
 	}
 		
-	public void selectTime(Business bus, LocalDate date){
+	public void selectTime(int busIndex, Business bus, LocalDate date, String service){
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(30, 30, 30, 30));
         grid.setAlignment(Pos.CENTER);
@@ -760,6 +814,7 @@ public class SceneManager {
     	openTime = bus.getOpenTime();
     	closeTime = bus.getCloseTime();
     	timeSlot = bus.getTimeSlotInMins();
+    	int noOfTimeSlots = bus.getServices().get(service);
     	//uhm, get number of timeslots for each service from business
     	//service needs to be selected before time is shown.
     	
@@ -770,11 +825,11 @@ public class SceneManager {
     	do{
     		timeSlots.add(openTime.plusMinutes(i*timeSlot));
     		i++;
-    	}while(openTime.plusMinutes(i*timeSlot).isBefore(closeTime));
-        
+    	}while(!openTime.plusMinutes(i*timeSlot+noOfTimeSlots*timeSlot).isAfter(closeTime));
+    	
         ObservableList<String>timeItems = FXCollections.observableArrayList();
         for(LocalTime times : timeSlots){
-        	timeItems.add("Start time : " + times + " | End time : " + times.plusMinutes(timeSlot));
+        	timeItems.add("Start time : " + times + " | End time : " + times.plusMinutes(timeSlot*noOfTimeSlots));
         }
         timeList.setItems(timeItems);
         
@@ -792,7 +847,7 @@ public class SceneManager {
         	int timeIndex = timeList.getSelectionModel().getSelectedIndex();
         	if(timeIndex != -1){
         		LocalTime selected = timeSlots.get(timeIndex);
-        		selectEmployee(selected); //add interval needed for pacific whatever
+        		selectEmployee(selected); //add interval needed for specific services
         		window.setScene(custSelectEmp);
         		
         	}
@@ -804,8 +859,8 @@ public class SceneManager {
         returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
         grid.add(returnButton, 3, 3);
         returnButton.setOnAction(e -> {
-        	selectBusiness();
-        	window.setScene(custSelectBus);
+    		selectDate(busIndex, service);
+    		window.setScene(custSelectDate);
         });
         
         custSelectTime = new Scene(grid, 500, 500);
@@ -813,7 +868,8 @@ public class SceneManager {
 	}
 	
 	public void selectEmployee(LocalTime time){ //add interval needed for specific whatever... services? sure
-		
+		//Check bus employee list
+		//Check their availability for the slots needed, use the no of slots for each service too
 	}
 	
 		//End Customer Add Booking Stuff

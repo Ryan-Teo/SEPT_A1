@@ -21,14 +21,13 @@ public class Business extends User {
 		
 		String start = "09:00" , end = "17:00";
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-		System.out.println("Bus added++++++++++++++++");
 		
 		openTime = LocalTime.parse(start, dtf);
 		closeTime = LocalTime.parse(end, dtf);
-		System.out.println(openTime);
-		System.out.println(closeTime);
 		
 		services.put("General",1);
+		services.put("General 2", 2); //HARDCODED REMOVE
+		services.put("General 3", 3);
 	}
 	
 	//return business name
@@ -92,6 +91,9 @@ public class Business extends User {
 		if(services.containsKey(serviceName)){
 			System.err.println("Add Service : Service already exists"); //LOG
 		}
+		else if(noOfTimeSlots<1){ //Minimum 1 slot
+			System.err.println("Each service has to take up at least one time slot"); //LOG
+		}
 		else{
 			services.put(serviceName, noOfTimeSlots); //LOG
 		}
@@ -101,6 +103,9 @@ public class Business extends User {
 	public void updateService(String serviceName, int noOfTimeSlots){
 		if(services.containsKey(serviceName)){
 			services.put(serviceName, noOfTimeSlots); //LOG
+		}
+		else if(noOfTimeSlots<1){ //Minimum 1 slot
+			System.err.println("Each service has to take up at least one time slot"); //LOG
 		}
 		else{
 			System.err.println("Update Service : Service does not exist"); //LOG

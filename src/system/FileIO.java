@@ -112,8 +112,7 @@ public class FileIO {
 			in.close();
 			inFile.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("-No existing employees-");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -166,9 +165,8 @@ public class FileIO {
 	        out.writeObject(emps);
 	        out.close();
 	        outFile.close();
-	     }catch(Exception e) {
-	    	 System.out.println(e.getMessage());
-	    	 e.printStackTrace();
+	     }catch(IOException e) {
+	    	 System.err.println("-employees file has been created-");
 	     }
 	}
 	

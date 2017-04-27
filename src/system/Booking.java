@@ -10,8 +10,7 @@ import users.Employee;
 public class Booking implements Serializable{
 	private static final long serialVersionUID = 5L;
 	private LocalDate bookDate;
-	private LocalTime startTime;
-	private LocalTime endTime;
+	private LocalTime startTime, endTime;
 	private Customer bookCust;
 	private Business bookBus;
 	private Employee bookEmp;

@@ -104,33 +104,33 @@ public class SceneManager {
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
 		grid.setVgap(10);
-
-
-		
+	
 		TableView<Booking> table;
 		Text header = new Text("Your Summary");
 		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
 		grid.add(header, 0, 1, 2, 1);
 		
-		Button backToMenuButton = new Button("Go back to menu");
-		HBox hbBackToMenuButton = new HBox(10);
-		hbBackToMenuButton.setAlignment(Pos.BOTTOM_RIGHT);
-		backToMenuButton.minHeight(50);
-		backToMenuButton.minWidth(100);
-		backToMenuButton.setStyle("-fx-font: 22 verdana; -fx-base: #000555;");
-		hbBackToMenuButton.getChildren().add(backToMenuButton);
-		grid.add(hbBackToMenuButton, 1, 5);
-
-		backToMenuButton.setOnAction(e -> {
-			customerMenu();
-			window.setScene(customerMenu);
-		});
-
-		
 		//Business Column
 		TableColumn<Booking,Business> business =  new TableColumn<>("Business");
 		business.setMinWidth(200);
 		business.setCellValueFactory(new PropertyValueFactory<>("bookBus"));
+		business.setCellFactory(new Callback<TableColumn<Booking, Business>,TableCell<Booking, Business>>(){
+			@Override
+	        public TableCell<Booking, Business> call(TableColumn<Booking, Business> param) {
+
+	            TableCell<Booking, Business> busCell = new TableCell<Booking, Business>(){
+	            	
+	            	protected void updateItem(Business myBus, boolean empty) {
+	                    if (myBus != null) {
+	                        Label busCell = new Label(myBus.getBusName());
+	                        setGraphic(busCell);
+	                    }
+	                }                    
+	            };               
+
+	            return busCell;                
+	        }
+	    });
 		
 		//Date Column
 		TableColumn<Booking,LocalDate> bookingDate =  new TableColumn<>("Date");
@@ -151,26 +151,21 @@ public class SceneManager {
 		TableColumn<Booking, Employee> emp =  new TableColumn<>("Employee");
 		emp.setMinWidth(200);
 		emp.setCellValueFactory(new PropertyValueFactory<>("bookEmp"));
-		
-		emp = new TableColumn<>("Employee");
-		emp.setCellValueFactory(new PropertyValueFactory<>("bookEmp"));
-		// ======== setting the cell factory for the city column  
 		emp.setCellFactory(new Callback<TableColumn<Booking, Employee>,TableCell<Booking, Employee>>(){
-
 				@Override
 		        public TableCell<Booking, Employee> call(TableColumn<Booking, Employee> param) {
 
-		            TableCell<Booking, Employee> cityCell = new TableCell<Booking, Employee>(){
+		            TableCell<Booking, Employee> empCell = new TableCell<Booking, Employee>(){
 		            	
-		            	protected void updateItem(Employee item, boolean empty) {
-		                    if (item != null) {
-		                        Label cityLabel = new Label(item.getName());
-		                        setGraphic(cityLabel);
+		            	protected void updateItem(Employee myEmp, boolean empty) {
+		                    if (myEmp != null) {
+		                        Label empCell = new Label(myEmp.getName());
+		                        setGraphic(empCell);
 		                    }
 		                }                    
 		            };               
 
-		            return cityCell;                
+		            return empCell;                
 		        }
 
 		    });
@@ -183,6 +178,20 @@ public class SceneManager {
 		}else{
 			System.out.println("No bookings yet");
 		}
+		
+		Button backToMenuButton = new Button("Go back to menu");
+		HBox hbBackToMenuButton = new HBox(10);
+		hbBackToMenuButton.setAlignment(Pos.BOTTOM_RIGHT);
+		backToMenuButton.minHeight(50);
+		backToMenuButton.minWidth(100);
+		backToMenuButton.setStyle("-fx-font: 22 verdana; -fx-base: #000555;");
+		hbBackToMenuButton.getChildren().add(backToMenuButton);
+		grid.add(hbBackToMenuButton, 1, 5);
+
+		backToMenuButton.setOnAction(e -> {
+			customerMenu();
+			window.setScene(customerMenu);
+		});
 
 	}
 
@@ -315,7 +324,6 @@ public class SceneManager {
         	});
         mainMenu = new Scene(grid, 600, 250);
 	}
-
 	
 	public void selectBusiness(){
 		
@@ -366,9 +374,7 @@ public class SceneManager {
         });
         custSelectBus = new Scene(grid, 500, 500);
 	}
-
-        
-	
+       	
 	public void showRegister(){
         GridPane grid2a = new GridPane();
         grid2a.setPadding(new Insets(30, 30, 30, 30));

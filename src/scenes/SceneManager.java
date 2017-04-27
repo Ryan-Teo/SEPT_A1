@@ -47,7 +47,7 @@ import users.User;
 public class SceneManager {
 	Stage window;
 	Scene mainMenu, customerRegister, ownerRegister, registerMenu, customerMenu, 
-			custSelectBus, custSelectSession, businessMenu, scene4, customerBookingSummary;
+			custSelectBus, custSelectDate, custSelectTime, custSelectEmp, businessMenu, scene4, customerBookingSummary;
 	ArrayList<Customer> customers;
 	ArrayList<Business> businesses;
 	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings;
@@ -560,7 +560,7 @@ public class SceneManager {
         	int busIndex = busList.getSelectionModel().getSelectedIndex();
         	if(busIndex != -1){
         		selectDate(busIndex);
-        		window.setScene(custSelectSession);
+        		window.setScene(custSelectDate);
         	}
         });
         
@@ -625,7 +625,7 @@ public class SceneManager {
         	}
         	
         	selectTime(bus, datePicker.getValue());
-        	window.setScene(customerMenu);
+        	window.setScene(custSelectTime);
         });
         
         Button returnButton = new Button("Back");
@@ -639,7 +639,7 @@ public class SceneManager {
         });
         
         
-        custSelectSession = new Scene(grid, 500, 500);
+        custSelectDate = new Scene(grid, 500, 500);
         
 	}
 		
@@ -654,7 +654,7 @@ public class SceneManager {
         header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
         grid.add(header, 2, 0);
         
-        TableView<Booking> table = new TableView<Booking>();
+        ListView<String> timeList = new ListView<String>();
         
     	//Show times here based on bus opening, closing hour and time slots
     	LocalTime openTime, closeTime;
@@ -662,6 +662,11 @@ public class SceneManager {
     	openTime = bus.getOpenTime();
     	closeTime = bus.getCloseTime();
     	timeSlot = bus.getTimeSlotInMins();
+    	//uhm, get number of timeslots for each service from business
+    	//service needs to be selected before time is shown.
+    	
+    	//do the service after selecting the business
+    	
     	ArrayList<LocalTime> timeSlots = new ArrayList<LocalTime>();
     	int i = 0;
     	do{
@@ -669,7 +674,50 @@ public class SceneManager {
     		i++;
     	}while(openTime.plusMinutes(i*timeSlot).isBefore(closeTime));
         
+        ObservableList<String>timeItems = FXCollections.observableArrayList();
+        for(LocalTime times : timeSlots){
+        	timeItems.add("Start time : " + times + " | End time : " + times.plusMinutes(timeSlot));
+        }
+        timeList.setItems(timeItems);
+        
+        timeList.setPrefHeight(300);
+        timeList.setPrefWidth(300);
+        
+        grid.add(timeList, 2,2);
+        
+        Button selectButton = new Button("Select");
+        selectButton.setMinHeight(50);
+        selectButton.setMinWidth(100);
+        selectButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        grid.add(selectButton, 1, 3);
+        selectButton.setOnAction(e -> {
+        	int timeIndex = timeList.getSelectionModel().getSelectedIndex();
+        	if(timeIndex != -1){
+        		LocalTime selected = timeSlots.get(timeIndex);
+        		selectEmployee(selected); //add interval needed for pacific whatever
+        		window.setScene(custSelectEmp);
+        		
+        	}
+        });
+        
+        Button returnButton = new Button("Back");
+        returnButton.setMinHeight(50);
+        returnButton.setMinWidth(100);
+        returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        grid.add(returnButton, 3, 3);
+        returnButton.setOnAction(e -> {
+        	selectBusiness();
+        	window.setScene(custSelectBus);
+        });
+        
+        custSelectTime = new Scene(grid, 500, 500);
+        
 	}
+	
+	public void selectEmployee(LocalTime time){ //add interval needed for specific whatever... services? sure
+		
+	}
+	
 		//End Customer Add Booking Stuff
 	@SuppressWarnings("unchecked")
 	public void showBookingSummary() {

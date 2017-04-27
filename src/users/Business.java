@@ -21,9 +21,12 @@ public class Business extends User {
 		
 		String start = "09:00" , end = "17:00";
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+		System.out.println("Bus added++++++++++++++++");
 		
 		openTime = LocalTime.parse(start, dtf);
 		closeTime = LocalTime.parse(end, dtf);
+		System.out.println(openTime);
+		System.out.println(closeTime);
 	}
 	
 	//return business name

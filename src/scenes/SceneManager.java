@@ -182,12 +182,12 @@ public class SceneManager {
         
         Button back = new Button("Back");
         HBox hbBack = new HBox(10);
-        hbBack.setAlignment(Pos.TOP_RIGHT);
+        hbBack.setAlignment(Pos.TOP_LEFT);
         back.setMinWidth(50);
         back.setMinHeight(25);
         back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
         hbBack.getChildren().add(back);
-        grid2a.add(hbBack, 1, 0);
+        grid2a.add(hbBack, 0, 0);
         back.setOnAction(e -> {
         	showMainMenu();
         	window.setScene(mainMenu);
@@ -319,12 +319,12 @@ public class SceneManager {
             
         Button back = new Button("Back");
         HBox hbBack = new HBox(10);
-        hbBack.setAlignment(Pos.TOP_RIGHT);
+        hbBack.setAlignment(Pos.TOP_LEFT);
         back.setMinWidth(50);
         back.setMinHeight(20);
         back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
         hbBack.getChildren().add(back);
-        grid2.add(hbBack, 1, 0);
+        grid2.add(hbBack, 0, 0);
         back.setOnAction(e -> {
         	showMainMenu();
         	window.setScene(registerMenu);
@@ -436,12 +436,12 @@ public class SceneManager {
             
         Button back = new Button("Back");
         HBox hbBack = new HBox(10);
-        hbBack.setAlignment(Pos.CENTER);
+        hbBack.setAlignment(Pos.TOP_LEFT);
         back.setMinWidth(50);
         back.setMinHeight(25);
         back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
         hbBack.getChildren().add(back);
-        grid3.add(hbBack, 1, 0);
+        grid3.add(hbBack, 0, 0);
         back.setOnAction(e -> {
         	showMainMenu();
         	window.setScene(registerMenu);

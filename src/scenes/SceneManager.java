@@ -154,6 +154,8 @@ public class SceneManager {
         		businessMenu();
         		window.setScene(businessMenu);
         	}
+        	else
+        		handleSignInFail(window);
         });
 
         Button registerButton = new Button("Click Here to Register");
@@ -297,7 +299,7 @@ public class SceneManager {
         	String phoneString = phoneText.getText();
         	String addressString = addressNew.getText();
         	
-        	
+        	Boolean checkUserLength = acct.checkLength(newUserNameString, 6, 12);
         	Boolean checkUser = acct.checkCustName(newUserNameString, customers);
         	Boolean checkPassLength = acct.checkLength(newPasswordString, 6, 12);
         	Boolean checkPassword1 = acct.checkPass(newPasswordString, newPasswordString2);
@@ -307,7 +309,7 @@ public class SceneManager {
         		handleSuccess(window);
         	}
         	else{
-        		handleFail(window, checkUser, checkPassLength, checkPassword1, checkPhone);
+        		handleFail(window, checkUserLength, checkUser, checkPassLength, checkPassword1, checkPhone);
         	}
         	
         	showMainMenu();
@@ -413,8 +415,17 @@ public class SceneManager {
         	mainRegisterBusiness(businesses, fullNameString, newUserNameString, busNameString, newPasswordString, newPasswordString2, phoneString, addressString);
         	Boolean check = mainRegisterCust(customers, fullNameString, newUserNameString, newPasswordString, newPasswordString2, phoneString, addressString);
         	
+        	Boolean checkUserLength = acct.checkLength(newUserNameString, 6, 12);
+        	Boolean checkUser = acct.checkCustName(newUserNameString, customers);
+        	Boolean checkPassLength = acct.checkLength(newPasswordString, 6, 12);
+        	Boolean checkPassword1 = acct.checkPass(newPasswordString, newPasswordString2);
+        	Boolean checkPhone = acct.checkPhone(phoneString);
+        	
         	if (check){
         		handleSuccess(window);
+        	}
+        	else{
+        		handleFail(window, checkUserLength, checkUser, checkPassLength, checkPassword1, checkPhone);
         	}
         	showMainMenu();
         	window.setScene(mainMenu);
@@ -880,7 +891,7 @@ public class SceneManager {
         dialog.show();
     }
 	
-	public void handleFail(Stage window, Boolean checkUser, Boolean checkPassLength, Boolean checkPassword1, Boolean checkPhone) {
+	public void handleFail(Stage window, Boolean checkUserLength, Boolean checkUser, Boolean checkPassLength, Boolean checkPassword1, Boolean checkPhone) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(window);
@@ -899,16 +910,25 @@ public class SceneManager {
         dialogVbox.add(fail1, 0, 2);
         
         int i = 2;
-        
-        if (checkUser == false){
-        	Text user = new Text("-  UserName already exists");
+       
+        if (checkUserLength == true){
+        	Text user = new Text("-  Username must be between 6-12 characters");
         	user.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
         	user.setTextAlignment(TextAlignment.CENTER);
         	user.setFill(Color.RED);
             dialogVbox.add(user, 0, i+=1);
         }
+        else if (checkUserLength == false){
+    		if (checkUser == true){
+    			Text user = new Text("-  UserName already exists");
+	        	user.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+	        	user.setTextAlignment(TextAlignment.CENTER);
+	        	user.setFill(Color.RED);
+	            dialogVbox.add(user, 0, i+=1);
+    		}
+    	}    
         
-        if (checkPassLength == false){
+        if (checkPassLength == true){
         	Text passlength = new Text("-  Password must be between 6-12 characters");
         	passlength.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
         	passlength.setTextAlignment(TextAlignment.CENTER);
@@ -954,6 +974,41 @@ public class SceneManager {
         dialog.show();
     }
 	
+	public void handleSignInFail(Stage window){
+		Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(window);
+        GridPane dialogVbox = new GridPane();
+        
+        dialogVbox.setPadding(new Insets(30, 30, 30, 30));
+        dialogVbox.setHgap(10);
+        dialogVbox.setVgap(5);
+        Text successful = new Text("Incorrect Username/Password Input");
+        successful.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        successful.setTextAlignment(TextAlignment.CENTER);
+        successful.setFill(Color.RED);
+        dialogVbox.add(successful, 0, 1);
+        
+        Button back = new Button("Return");
+        HBox hbBack = new HBox(15);
+        hbBack.setAlignment(Pos.BASELINE_CENTER);
+        back.setMinWidth(100);
+        back.setMinHeight(20);
+        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
+        dialogVbox.getChildren().add(hbBack);
+        dialogVbox.add(back, 0, 4);
+        back.setOnAction(e -> {
+        	showMainMenu();
+        	window.setScene(mainMenu);
+        	((Node)(e.getSource())).getScene().getWindow().hide();
+        });
+        GridPane.setHalignment(back, HPos.CENTER);
+        dialogVbox.setAlignment(Pos.CENTER);
+        
+        Scene dialogScene = new Scene(dialogVbox, 300, 100);
+        dialog.setScene(dialogScene);
+        dialog.show();
+	}
 	
 	
 	

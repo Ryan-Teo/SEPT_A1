@@ -656,6 +656,19 @@ public class SceneManager {
         
         TableView<Booking> table = new TableView<Booking>();
         
+    	//Show times here based on bus opening, closing hour and time slots
+    	LocalTime openTime, closeTime;
+    	int timeSlot;
+    	openTime = bus.getOpenTime();
+    	closeTime = bus.getCloseTime();
+    	timeSlot = bus.getTimeSlotInMins();
+    	ArrayList<LocalTime> timeSlots = new ArrayList<LocalTime>();
+    	int i = 0;
+    	do{
+    		timeSlots.add(openTime.plusMinutes(i*timeSlot));
+    		i++;
+    	}while(openTime.plusMinutes(i*timeSlot).isBefore(closeTime));
+        
 	}
 		//End Customer Add Booking Stuff
 	@SuppressWarnings("unchecked")

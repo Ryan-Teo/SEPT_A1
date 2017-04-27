@@ -1,6 +1,7 @@
 package users;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import system.Booking;
@@ -10,13 +11,19 @@ public class Business extends User {
 	private static final long serialVersionUID = 2L;
 	private String busName;
 	private ArrayList<Employee> emp = new ArrayList<Employee>();
-	private LocalTime openTime, closeTime;
-	private int timeSlotInMins;
+	private LocalTime openTime, closeTime; //hardcoded
+	private int timeSlotInMins = 30;
 	
 	
 	public Business(String busName, String ownerName, String address, String phone, String username, String password){
 		super(ownerName,username,password,address,phone);
 		this.busName = busName;
+		
+		String start = "09:00" , end = "17:00";
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+		
+		openTime = LocalTime.parse(start, dtf);
+		closeTime = LocalTime.parse(end, dtf);
 	}
 	
 	//return business name

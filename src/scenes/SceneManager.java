@@ -64,8 +64,11 @@ public class SceneManager {
 		window = primaryStage;
 	}
 
-	public void mainLogIn(ArrayList<Customer> customers, ArrayList<Business> businesses, 
-			String username, String password) {
+	/*
+	 * Methods for interacting with outside methods
+	 */
+	public void mainLogIn(ArrayList<Customer> customers, ArrayList<Business> businesses, String username,
+			String password) {
 		userInst = acct.login(customers, businesses, username, password);
 	}
 	public void mainRegisterBusiness(ArrayList<Business>businesses, String name, String username, 
@@ -78,11 +81,7 @@ public class SceneManager {
 			
 		}
 	}
-	
-
-
-	public boolean mainRegisterCust(ArrayList<Customer> customers, String name, String username, String password1,
-			String password2, String phone, String address) {
+	public boolean mainRegisterCust(ArrayList<Customer> customers, String name, String username, String password1, String password2, String phone, String address) {
 		if (acct.registerCustomer(name, username, password1, password2, phone, address, customers)) {
 			/*
 			 * If the registration is successful, then show a pop up box. The
@@ -97,163 +96,22 @@ public class SceneManager {
 		}
 		return false;
 	}
-
-	@SuppressWarnings("unchecked")
-	public void showBookingSummary() {
-		
-
-		GridPane grid = new GridPane();
-		grid.setPadding(new Insets(30, 30, 30, 30));
-		grid.setAlignment(Pos.CENTER);
-		grid.setHgap(10);
-		grid.setVgap(10);
-
-
-		
-		TableView<Booking> table;
-		Text header = new Text("Your Summary");
-		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
-		grid.add(header, 0, 1, 2, 1);
-		
-		Button backToMenuButton = new Button("Go back to menu");
-		HBox hbBackToMenuButton = new HBox(10);
-		hbBackToMenuButton.setAlignment(Pos.BOTTOM_RIGHT);
-		backToMenuButton.minHeight(50);
-		backToMenuButton.minWidth(100);
-		backToMenuButton.setStyle("-fx-font: 22 verdana; -fx-base: #000555;");
-		hbBackToMenuButton.getChildren().add(backToMenuButton);
-		grid.add(hbBackToMenuButton, 1, 5);
-
-		backToMenuButton.setOnAction(e -> {
-			customerMenu();
-			window.setScene(customerMenu);
-		});
-
-		
-		//Business Column
-		TableColumn<Booking,Business> business =  new TableColumn<>("Business");
-		business.setMinWidth(200);
-		business.setCellValueFactory(new PropertyValueFactory<>("bookBus"));
-		
-		//Date Column
-		TableColumn<Booking,LocalDate> bookingDate =  new TableColumn<>("Date");
-		bookingDate.setMinWidth(200);
-		bookingDate.setCellValueFactory(new PropertyValueFactory<>("bookDate"));
-		
-		//Session start column
-		TableColumn<Booking,LocalTime> sessionStart =  new TableColumn<>("Session Start");
-		sessionStart.setMinWidth(200);
-		sessionStart.setCellValueFactory(new PropertyValueFactory<>("startTime"));
-				
-		//Session ends column
-		TableColumn<Booking,LocalTime> sessionEnd =  new TableColumn<>("Session End");
-		sessionEnd.setMinWidth(200);
-		sessionEnd.setCellValueFactory(new PropertyValueFactory<>("endTime"));
-		
-		//Employee
-		TableColumn<Booking, Employee> emp =  new TableColumn<>("Employee");
-		emp.setMinWidth(200);
-		emp.setCellValueFactory(new PropertyValueFactory<>("bookEmp"));
-		
-		emp = new TableColumn<>("Employee");
-		emp.setCellValueFactory(new PropertyValueFactory<>("bookEmp"));
-		// ======== setting the cell factory for the city column  
-		emp.setCellFactory(new Callback<TableColumn<Booking, Employee>,TableCell<Booking, Employee>>(){
-
-				@Override
-		        public TableCell<Booking, Employee> call(TableColumn<Booking, Employee> param) {
-
-		            TableCell<Booking, Employee> cityCell = new TableCell<Booking, Employee>(){
-		            	
-		            	protected void updateItem(Employee item, boolean empty) {
-		                    if (item != null) {
-		                        Label cityLabel = new Label(item.getName());
-		                        setGraphic(cityLabel);
-		                    }
-		                }                    
-		            };               
-
-		            return cityCell;                
-		        }
-
-		    });
-		
-		ObservableList<Booking> empList = getCustomerBookings((Customer) userInst,bookings);
-		if(empList.isEmpty() == false){
-			table = new TableView<>();
-			table.setItems(getCustomerBookings((Customer) userInst,bookings));
-			table.getColumns().addAll(business,bookingDate,sessionStart,sessionEnd,emp);
-		}else{
-			System.out.println("No bookings yet");
-		}
-
+	
+	/*
+	 * END METHODS FOR OUTSIDE METHODS
+	 */
+	
+	
+	/*
+	 * Methods for the main menu + registering
+	 */
+	public void show(){
+        window.setMinHeight(300);
+        window.setMinWidth(600);
+        window.setScene(mainMenu);
+        window.show();
 	}
 
-	public void selectDate(int busIndex){
-		
-		GridPane grid = new GridPane();
-		grid.setPadding(new Insets(30, 30, 30, 30));
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        
-        Text header = new Text("Select a Date");
-        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
-        grid.add(header, 2, 0);
-        
-        DatePicker datePicker = new DatePicker();
-        
-        /*
-         * code based on https://docs.oracle.com/javase/8/javafx/user-interface-tutorial/date-picker.htm
-         */
-        final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
-            public DateCell call(final DatePicker datePicker) {
-                return new DateCell() {
-                    @Override public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        
-                        if (item.isBefore(LocalDate.now())) {
-                            setDisable(true);
-                            setStyle("-fx-background-color: #ffc0cb;");
-                        }
-                    }
-                };
-            }
-        };
-        datePicker.setDayCellFactory(dayCellFactory);
-        grid.add(datePicker, 2, 2);
-        
-        
-        
-        Button checkButton = new Button("Check");
-        checkButton.setMinHeight(50);
-        checkButton.setMinWidth(100);
-        checkButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
-        grid.add(checkButton, 1, 3);
-        checkButton.setOnAction(e -> {
-        	Business bus = null;
-        	for(Business myBus : bookings.keySet()){
-        		if(businesses.get(busIndex).getBusName().equals(myBus.getBusName()))
-        			bus = myBus;
-        	}
-
-        	window.setScene(customerMenu);
-        });
-        
-        Button returnButton = new Button("Back");
-        returnButton.setMinHeight(50);
-        returnButton.setMinWidth(100);
-        returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
-        grid.add(returnButton, 3, 3);
-        returnButton.setOnAction(e -> {
-        	selectBusiness();
-        	window.setScene(custSelectBus);
-        });
-        
-        
-        custSelectSession = new Scene(grid, 500, 500);
-        
-	}
 	
 	public void showMainMenu(){
     	GridPane grid = new GridPane();
@@ -318,59 +176,6 @@ public class SceneManager {
         mainMenu = new Scene(grid, 600, 250);
 	}
 
-	
-	public void selectBusiness(){
-		
-		
-		GridPane grid = new GridPane();
-		grid.setPadding(new Insets(30, 30, 30, 30));
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        
-        Text header = new Text("Select a Business to Book");
-        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
-        grid.add(header, 0, 1,2, 1);
-        
-        ListView<String> busList = new ListView<String>(); 
-        ObservableList<String>busItems = FXCollections.observableArrayList();
-        for(Business business : businesses){
-        	busItems.add(business.getBusName());
-        }
-        busList.setItems(busItems);
-        
-        busList.setPrefHeight(300);
-        busList.setPrefWidth(300);
-        
-        grid.add(busList, 2,2);
-        
-        Button selectButton = new Button("Select");
-        selectButton.setMinHeight(50);
-        selectButton.setMinWidth(100);
-        selectButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
-        grid.add(selectButton, 1, 3);
-        selectButton.setOnAction(e -> {
-        	int busIndex = busList.getSelectionModel().getSelectedIndex();
-        	if(busIndex != -1){
-        		selectDate(busIndex);
-        		window.setScene(custSelectSession);
-        	}
-        });
-        
-        Button returnButton = new Button("Back");
-        returnButton.setMinHeight(50);
-        returnButton.setMinWidth(100);
-        returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
-        grid.add(returnButton, 3, 3);
-        returnButton.setOnAction(e -> {
-        	customerMenu();
-        	window.setScene(customerMenu);
-        });
-        custSelectBus = new Scene(grid, 500, 500);
-	}
-
-        
-	
 	public void showRegister(){
         GridPane grid2a = new GridPane();
         grid2a.setPadding(new Insets(30, 30, 30, 30));
@@ -425,115 +230,6 @@ public class SceneManager {
         
         registerMenu = new Scene(grid2a, 600, 250);
 	}
-        
-	public void handleSuccess(Stage window) {
-        Stage dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(window);
-        GridPane dialogVbox = new GridPane();
-        
-        dialogVbox.setPadding(new Insets(30, 30, 30, 30));
-        dialogVbox.setHgap(10);
-        dialogVbox.setVgap(5);
-        Text successful = new Text("You have successfully registered!");
-        successful.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
-        successful.setTextAlignment(TextAlignment.CENTER);
-        dialogVbox.add(successful, 0, 1);
-        
-        Button back = new Button("Return");
-        HBox hbBack = new HBox(15);
-        hbBack.setAlignment(Pos.BASELINE_CENTER);
-        back.setMinWidth(100);
-        back.setMinHeight(20);
-        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
-        dialogVbox.getChildren().add(hbBack);
-        dialogVbox.add(back, 0, 4);
-        back.setOnAction(e -> {
-        	showMainMenu();
-        	window.setScene(mainMenu);
-        	((Node)(e.getSource())).getScene().getWindow().hide();
-        });
-        GridPane.setHalignment(back, HPos.CENTER);
-        dialogVbox.setAlignment(Pos.CENTER);
-        
-        Scene dialogScene = new Scene(dialogVbox, 300, 100);
-        dialog.setScene(dialogScene);
-        dialog.show();
-    }
-	
-	public void handleFail(Stage window, Boolean checkUser, Boolean checkPassLength, Boolean checkPassword1, Boolean checkPhone) {
-        Stage dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(window);
-        GridPane dialogVbox = new GridPane();
-        
-        dialogVbox.setPadding(new Insets(30, 30, 30, 30));
-        dialogVbox.setHgap(10);
-        dialogVbox.setVgap(5);
-        Text fail = new Text("Incorrect Registration Entry!");
-        Text fail1 = new Text("Please amend the following errors:");
-        fail.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
-        fail.setTextAlignment(TextAlignment.CENTER);
-        fail1.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
-        fail1.setTextAlignment(TextAlignment.CENTER);
-        dialogVbox.add(fail, 0, 1);
-        dialogVbox.add(fail1, 0, 2);
-        
-        int i = 2;
-        
-        if (checkUser == false){
-        	Text user = new Text("-  UserName already exists");
-        	user.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
-        	user.setTextAlignment(TextAlignment.CENTER);
-        	user.setFill(Color.RED);
-            dialogVbox.add(user, 0, i+=1);
-        }
-        
-        if (checkPassLength == false){
-        	Text passlength = new Text("-  Password must be between 6-12 characters");
-        	passlength.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
-        	passlength.setTextAlignment(TextAlignment.CENTER);
-        	passlength.setFill(Color.RED);
-            dialogVbox.add(passlength, 0, i+=1);
-        }
-        else if (checkPassLength == true){
-        	if (checkPassword1 == false){
-        		Text passCopy = new Text("-  Password doesn't match");
-        		passCopy.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
-        		passCopy.setTextAlignment(TextAlignment.CENTER);
-        		passCopy.setFill(Color.RED);
-                dialogVbox.add(passCopy, 0, i+=1);
-        	}
-        }
-        
-        if (checkPhone == false){
-        	Text phone = new Text("-  Incorrect phone format");
-        	phone.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
-        	phone.setTextAlignment(TextAlignment.CENTER);
-        	phone.setFill(Color.RED);
-            dialogVbox.add(phone, 0, i+=1);
-        }
-        
-        Button back = new Button("Return");
-        HBox hbBack = new HBox(15);
-        hbBack.setAlignment(Pos.BASELINE_CENTER);
-        back.setMinWidth(100);
-        back.setMinHeight(20);
-        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
-        dialogVbox.getChildren().add(hbBack);
-        dialogVbox.add(back, 0, i+=1);
-        back.setOnAction(e -> {
-        	showMainMenu();
-        	window.setScene(mainMenu);
-        	((Node)(e.getSource())).getScene().getWindow().hide();
-        });
-        GridPane.setHalignment(back, HPos.CENTER);
-        dialogVbox.setAlignment(Pos.CENTER);
-        
-        Scene dialogScene = new Scene(dialogVbox, 300, 200);
-        dialog.setScene(dialogScene);
-        dialog.show();
-    }
 	
 	public void registerCustomer() {
         GridPane grid2 = new GridPane();
@@ -748,6 +444,14 @@ public class SceneManager {
         ownerRegister = new Scene(grid3, 300, 500);
 	}
 	
+	
+	/*
+	 * END METHODS FOR MAIN MENU
+	 */
+	
+	/*
+	 * CUSTOMER STUFF
+	 */
 	public void customerMenu(){
         GridPane grid3 = new GridPane();
     	grid3.setPadding(new Insets(30, 30, 30, 30));
@@ -821,6 +525,239 @@ public class SceneManager {
         
         customerMenu = new Scene(grid3, 200, 400);
 	}
+		//Customer Add Booking Stuff
+	public void selectBusiness(){
+		
+		
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(30, 30, 30, 30));
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        
+        Text header = new Text("Select a Business to Book");
+        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+        grid.add(header, 0, 1,2, 1);
+        
+        ListView<String> busList = new ListView<String>(); 
+        ObservableList<String>busItems = FXCollections.observableArrayList();
+        for(Business business : businesses){
+        	busItems.add(business.getBusName());
+        }
+        busList.setItems(busItems);
+        
+        busList.setPrefHeight(300);
+        busList.setPrefWidth(300);
+        
+        grid.add(busList, 2,2);
+        
+        Button selectButton = new Button("Select");
+        selectButton.setMinHeight(50);
+        selectButton.setMinWidth(100);
+        selectButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        grid.add(selectButton, 1, 3);
+        selectButton.setOnAction(e -> {
+        	int busIndex = busList.getSelectionModel().getSelectedIndex();
+        	if(busIndex != -1){
+        		selectDate(busIndex);
+        		window.setScene(custSelectSession);
+        	}
+        });
+        
+        Button returnButton = new Button("Back");
+        returnButton.setMinHeight(50);
+        returnButton.setMinWidth(100);
+        returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        grid.add(returnButton, 3, 3);
+        returnButton.setOnAction(e -> {
+        	customerMenu();
+        	window.setScene(customerMenu);
+        });
+        custSelectBus = new Scene(grid, 500, 500);
+	}
+	
+	public void selectDate(int busIndex){
+		
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(30, 30, 30, 30));
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        
+        Text header = new Text("Select a Date");
+        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+        grid.add(header, 2, 0);
+        
+        DatePicker datePicker = new DatePicker();
+        
+        /*
+         * code based on https://docs.oracle.com/javase/8/javafx/user-interface-tutorial/date-picker.htm
+         */
+        final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+            public DateCell call(final DatePicker datePicker) {
+                return new DateCell() {
+                    @Override public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        
+                        if (item.isBefore(LocalDate.now())) {
+                            setDisable(true);
+                            setStyle("-fx-background-color: #ffc0cb;");
+                        }
+                    }
+                };
+            }
+        };
+        datePicker.setDayCellFactory(dayCellFactory);
+        grid.add(datePicker, 2, 2);
+        
+        
+        
+        Button checkButton = new Button("Check");
+        checkButton.setMinHeight(50);
+        checkButton.setMinWidth(100);
+        checkButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        grid.add(checkButton, 1, 3);
+        checkButton.setOnAction(e -> {
+        	Business bus = null;
+        	for(Business myBus : bookings.keySet()){
+        		if(businesses.get(busIndex).getBusName().equals(myBus.getBusName()))
+        			bus = myBus;
+        	}
+        	
+        	selectTime(bus, datePicker.getValue());
+        	window.setScene(customerMenu);
+        });
+        
+        Button returnButton = new Button("Back");
+        returnButton.setMinHeight(50);
+        returnButton.setMinWidth(100);
+        returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        grid.add(returnButton, 3, 3);
+        returnButton.setOnAction(e -> {
+        	selectBusiness();
+        	window.setScene(custSelectBus);
+        });
+        
+        
+        custSelectSession = new Scene(grid, 500, 500);
+        
+	}
+		
+	public void selectTime(Business bus, LocalDate date){
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(30, 30, 30, 30));
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        
+        Text header = new Text("Select a Time");
+        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+        grid.add(header, 2, 0);
+        
+        TableView<Booking> table = new TableView<Booking>();
+        
+	}
+		//End Customer Add Booking Stuff
+	@SuppressWarnings("unchecked")
+	public void showBookingSummary() {
+		
+
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(30, 30, 30, 30));
+		grid.setAlignment(Pos.CENTER);
+		grid.setHgap(10);
+		grid.setVgap(10);
+
+
+		
+		TableView<Booking> table;
+		Text header = new Text("Your Summary");
+		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
+		grid.add(header, 0, 1, 2, 1);
+		
+		Button backToMenuButton = new Button("Go back to menu");
+		HBox hbBackToMenuButton = new HBox(10);
+		hbBackToMenuButton.setAlignment(Pos.BOTTOM_RIGHT);
+		backToMenuButton.minHeight(50);
+		backToMenuButton.minWidth(100);
+		backToMenuButton.setStyle("-fx-font: 22 verdana; -fx-base: #000555;");
+		hbBackToMenuButton.getChildren().add(backToMenuButton);
+		grid.add(hbBackToMenuButton, 1, 5);
+
+		backToMenuButton.setOnAction(e -> {
+			customerMenu();
+			window.setScene(customerMenu);
+		});
+
+		
+		//Business Column
+		TableColumn<Booking,Business> business =  new TableColumn<>("Business");
+		business.setMinWidth(200);
+		business.setCellValueFactory(new PropertyValueFactory<>("bookBus"));
+		
+		//Date Column
+		TableColumn<Booking,LocalDate> bookingDate =  new TableColumn<>("Date");
+		bookingDate.setMinWidth(200);
+		bookingDate.setCellValueFactory(new PropertyValueFactory<>("bookDate"));
+		
+		//Session start column
+		TableColumn<Booking,LocalTime> sessionStart =  new TableColumn<>("Session Start");
+		sessionStart.setMinWidth(200);
+		sessionStart.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+				
+		//Session ends column
+		TableColumn<Booking,LocalTime> sessionEnd =  new TableColumn<>("Session End");
+		sessionEnd.setMinWidth(200);
+		sessionEnd.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+		
+		//Employee
+		TableColumn<Booking, Employee> emp =  new TableColumn<>("Employee");
+		emp.setMinWidth(200);
+		emp.setCellValueFactory(new PropertyValueFactory<>("bookEmp"));
+		
+		emp = new TableColumn<>("Employee");
+		emp.setCellValueFactory(new PropertyValueFactory<>("bookEmp"));
+		// ======== setting the cell factory for the city column  
+		emp.setCellFactory(new Callback<TableColumn<Booking, Employee>,TableCell<Booking, Employee>>(){
+
+				@Override
+		        public TableCell<Booking, Employee> call(TableColumn<Booking, Employee> param) {
+
+		            TableCell<Booking, Employee> cityCell = new TableCell<Booking, Employee>(){
+		            	
+		            	protected void updateItem(Employee item, boolean empty) {
+		                    if (item != null) {
+		                        Label cityLabel = new Label(item.getName());
+		                        setGraphic(cityLabel);
+		                    }
+		                }                    
+		            };               
+
+		            return cityCell;                
+		        }
+
+		    });
+		
+		ObservableList<Booking> empList = getCustomerBookings((Customer) userInst,bookings);
+		if(empList.isEmpty() == false){
+			table = new TableView<>();
+			table.setItems(getCustomerBookings((Customer) userInst,bookings));
+			table.getColumns().addAll(business,bookingDate,sessionStart,sessionEnd,emp);
+		}else{
+			System.out.println("No bookings yet");
+		}
+
+	}
+	
+	
+	/*
+	 * END CUSTOMER STUFF
+	 */
+	
+	
+	/*
+	 * BUSINESS STUFF
+	 */
 	
 	public void businessMenu(){
         GridPane grid3 = new GridPane();
@@ -905,6 +842,130 @@ public class SceneManager {
         
         businessMenu = new Scene(grid3, 200, 400);
 	}
+	
+	/*
+	 * END BUSINESS STUFF
+	 */
+
+	
+ 	
+        
+	public void handleSuccess(Stage window) {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(window);
+        GridPane dialogVbox = new GridPane();
+        
+        dialogVbox.setPadding(new Insets(30, 30, 30, 30));
+        dialogVbox.setHgap(10);
+        dialogVbox.setVgap(5);
+        Text successful = new Text("You have successfully registered!");
+        successful.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        successful.setTextAlignment(TextAlignment.CENTER);
+        dialogVbox.add(successful, 0, 1);
+        
+        Button back = new Button("Return");
+        HBox hbBack = new HBox(15);
+        hbBack.setAlignment(Pos.BASELINE_CENTER);
+        back.setMinWidth(100);
+        back.setMinHeight(20);
+        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
+        dialogVbox.getChildren().add(hbBack);
+        dialogVbox.add(back, 0, 4);
+        back.setOnAction(e -> {
+        	showMainMenu();
+        	window.setScene(mainMenu);
+        	((Node)(e.getSource())).getScene().getWindow().hide();
+        });
+        GridPane.setHalignment(back, HPos.CENTER);
+        dialogVbox.setAlignment(Pos.CENTER);
+        
+        Scene dialogScene = new Scene(dialogVbox, 300, 100);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
+	
+	public void handleFail(Stage window, Boolean checkUser, Boolean checkPassLength, Boolean checkPassword1, Boolean checkPhone) {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(window);
+        GridPane dialogVbox = new GridPane();
+        
+        dialogVbox.setPadding(new Insets(30, 30, 30, 30));
+        dialogVbox.setHgap(10);
+        dialogVbox.setVgap(5);
+        Text fail = new Text("Incorrect Registration Entry!");
+        Text fail1 = new Text("Please amend the following errors:");
+        fail.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        fail.setTextAlignment(TextAlignment.CENTER);
+        fail1.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        fail1.setTextAlignment(TextAlignment.CENTER);
+        dialogVbox.add(fail, 0, 1);
+        dialogVbox.add(fail1, 0, 2);
+        
+        int i = 2;
+        
+        if (checkUser == false){
+        	Text user = new Text("-  UserName already exists");
+        	user.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	user.setTextAlignment(TextAlignment.CENTER);
+        	user.setFill(Color.RED);
+            dialogVbox.add(user, 0, i+=1);
+        }
+        
+        if (checkPassLength == false){
+        	Text passlength = new Text("-  Password must be between 6-12 characters");
+        	passlength.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	passlength.setTextAlignment(TextAlignment.CENTER);
+        	passlength.setFill(Color.RED);
+            dialogVbox.add(passlength, 0, i+=1);
+        }
+        else if (checkPassLength == true){
+        	if (checkPassword1 == false){
+        		Text passCopy = new Text("-  Password doesn't match");
+        		passCopy.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        		passCopy.setTextAlignment(TextAlignment.CENTER);
+        		passCopy.setFill(Color.RED);
+                dialogVbox.add(passCopy, 0, i+=1);
+        	}
+        }
+        
+        if (checkPhone == false){
+        	Text phone = new Text("-  Incorrect phone format");
+        	phone.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	phone.setTextAlignment(TextAlignment.CENTER);
+        	phone.setFill(Color.RED);
+            dialogVbox.add(phone, 0, i+=1);
+        }
+        
+        Button back = new Button("Return");
+        HBox hbBack = new HBox(15);
+        hbBack.setAlignment(Pos.BASELINE_CENTER);
+        back.setMinWidth(100);
+        back.setMinHeight(20);
+        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
+        dialogVbox.getChildren().add(hbBack);
+        dialogVbox.add(back, 0, i+=1);
+        back.setOnAction(e -> {
+        	showMainMenu();
+        	window.setScene(mainMenu);
+        	((Node)(e.getSource())).getScene().getWindow().hide();
+        });
+        GridPane.setHalignment(back, HPos.CENTER);
+        dialogVbox.setAlignment(Pos.CENTER);
+        
+        Scene dialogScene = new Scene(dialogVbox, 300, 200);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
+	
+	
+	
+	
+	
+	
+	
+	
 	public ObservableList<Booking> getCustomerBookings(Customer cust,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {
 		ObservableList<Booking> bookingsToBeViewed = FXCollections.observableArrayList();
 		
@@ -931,10 +992,5 @@ public class SceneManager {
 		return bookingsToBeViewed;
 	}
 	
-	public void show(){
-        window.setMinHeight(300);
-        window.setMinWidth(600);
-        window.setScene(mainMenu);
-        window.show();
-	}
+
 }

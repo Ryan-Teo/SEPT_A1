@@ -3,6 +3,7 @@ package scenes;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
 
@@ -15,6 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -24,6 +26,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -46,8 +49,9 @@ import users.User;
 
 public class SceneManager {
 	Stage window;
-	Scene mainMenu, customerRegister, ownerRegister, registerMenu, customerMenu, custSelectService,
-			custSelectBus, custSelectDate, custSelectTime, custSelectEmp, businessMenu, scene4, customerBookingSummary;
+	Scene mainMenu, customerRegister, ownerRegister, registerMenu, customerMenu, custSelectService, busAddEmpSc, busAddWorkTime,
+			custSelectBus, custSelectDate, custSelectTime, custSelectEmp, businessMenu, scene4, customerBookingSummary,
+			busSelectEmp;
 	ArrayList<Customer> customers;
 	ArrayList<Business> businesses;
 	ArrayList<Booking> bookings;
@@ -274,6 +278,7 @@ public class SceneManager {
         	});
         mainMenu = new Scene(grid, 600, 250);
 	}
+	
 	public void showRegister(){
         GridPane grid2a = new GridPane();
         grid2a.setPadding(new Insets(30, 30, 30, 30));
@@ -863,8 +868,8 @@ public class SceneManager {
 		//Check bus employee list
 		//Check their availability for the slots needed, use the no of slots for each service too
 		ArrayList<Booking> bookings = null;
-		
-//	bookings.add(new Booking());
+		//TODO
+		//bookings.add(new Booking());
 		
 		
 	}
@@ -900,6 +905,10 @@ public class SceneManager {
         busAddEmp.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
         hbBusAddEmp.getChildren().add(busAddEmp);
         grid3.add(hbBusAddEmp, 0, 1);
+        busAddEmp.setOnAction(e -> {
+        	addEmp((Business)userInst);
+        	window.setScene(busAddEmpSc);
+        });
         
     
         Button busWorkingTime = new Button("Add Working Time");
@@ -910,6 +919,12 @@ public class SceneManager {
         busWorkingTime.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
         hbBusWorkingTime.getChildren().add(busWorkingTime);
         grid3.add(hbBusWorkingTime, 0, 2);
+        busWorkingTime.setOnAction(e -> {
+        	selectEmp((Business)userInst);
+        	window.setScene(busSelectEmp);
+//        	addWorkTime();
+//        	window.setScene(busAddWorkTime);
+        });
         
         Button busAssignSesh = new Button("Assign Sessions");
         HBox hbBusAssignSesh = new HBox(10);
@@ -963,6 +978,128 @@ public class SceneManager {
         	});
         
         businessMenu = new Scene(grid3, 200, 400);
+	}
+	
+	public void addEmp(Business bus){
+        GridPane grid2 = new GridPane();
+    	grid2.setPadding(new Insets(30, 30, 30, 30));
+    	grid2.setAlignment(Pos.CENTER);
+    	grid2.setHgap(20);
+    	grid2.setVgap(20);
+    	
+        
+        Text registerTitle = new Text("Add new employee:");
+        registerTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+        grid2.add(registerTitle, 0, 1,2, 1);
+        
+        Label empName = new Label("Employee Name: ");
+        grid2.add(empName, 0, 2);
+
+        TextField empNameText = new TextField();
+        empNameText.setPromptText("employee name");
+        grid2.add(empNameText, 1, 2);
+            
+        Button register = new Button("Add!");
+        HBox hbRegister = new HBox(10);
+        hbRegister.setAlignment(Pos.BOTTOM_RIGHT);
+        register.setMinWidth(80);
+        register.setMinHeight(40);
+        register.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
+        hbRegister.getChildren().add(register);
+        grid2.add(hbRegister, 1, 8);
+        
+        register.setOnAction(e -> {
+        	String empNameString = empNameText.getText();
+        	//TODO
+        	//check if empNameString is empty?
+        	bus.addNewEmp(empNameString);
+
+    		businessMenu();
+    		window.setScene(businessMenu);
+        	
+        });
+            
+        Button back = new Button("Back");
+        HBox hbBack = new HBox(10);
+        hbBack.setAlignment(Pos.TOP_RIGHT);
+        back.setMinWidth(50);
+        back.setMinHeight(20);
+        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
+        hbBack.getChildren().add(back);
+        grid2.add(hbBack, 1, 0);
+        back.setOnAction(e -> {
+    		businessMenu();
+    		window.setScene(businessMenu);
+        });
+        
+        busAddEmpSc = new Scene(grid2, 300, 500);
+	}
+	
+	
+	public void selectEmp(Business bus){
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(30, 30, 30, 30));
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        
+        Text header = new Text("Select an Employee");
+        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+        grid.add(header, 2, 0);
+        
+        ArrayList<Employee> emps = bus.getEmps();
+        System.out.println(emps.size());
+        ArrayList<String> empNames = new ArrayList<String>();
+        for(Employee emp : emps){
+        	empNames.add(emp.getName());
+        }
+        
+        for(String name : empNames){
+        	System.out.println(name);
+        }
+
+        ObservableList<String> empItems = FXCollections.observableArrayList(empNames);
+        
+        ChoiceBox<String> cb = new ChoiceBox<String>();
+        cb.setItems(empItems);
+        cb.setValue(empItems.get(0));
+        cb.setTooltip(new Tooltip("Select employee"));
+        grid.add(cb, 2, 2);
+        
+        
+        Button checkButton = new Button("Check");
+        checkButton.setMinHeight(50);
+        checkButton.setMinWidth(100);
+        checkButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        grid.add(checkButton, 1, 3);
+        checkButton.setOnAction(e -> {
+        	String empName = (String)cb.getSelectionModel().getSelectedItem();
+        	System.out.println(empName);
+        	//TODO
+//        	selectTime(busIndex ,bus, datePicker.getValue() , service);
+        	window.setScene(custSelectTime);
+        });
+        
+        Button back = new Button("Back");
+        HBox hbBack = new HBox(10);
+        hbBack.setAlignment(Pos.TOP_RIGHT);
+        back.setMinWidth(50);
+        back.setMinHeight(20);
+        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
+        hbBack.getChildren().add(back);
+        grid.add(hbBack, 1, 0);
+        back.setOnAction(e -> {
+    		businessMenu();
+    		window.setScene(businessMenu);
+        });
+        
+        
+        busSelectEmp = new Scene(grid, 500, 500);
+	}
+	
+	public void addWorkTime(){
+		//SELECT EMPLOYEE
+		//add to employees hm HashMap<LocalDate, HashMap<LocalTime, Boolean>>
 	}
 	
 	/*

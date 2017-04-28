@@ -19,10 +19,9 @@ public class Main extends Application{
 	Account acct = new Account();
 	FileIO FIO = new FileIO();
 	
-	Helper help = new Helper();//Remove
 	ArrayList<Customer> customers = FIO.loadCust();
 	ArrayList<Business> businesses = FIO.loadBus();
-	ArrayList<Booking> bookings = FIO.loadBook(help, businesses);
+	ArrayList<Booking> bookings = FIO.loadBook(businesses);
 	
 	
 	

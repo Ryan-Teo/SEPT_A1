@@ -14,7 +14,6 @@ public class Booking implements Serializable{
 	private Customer bookCust;
 	private Business bookBus;
 	private Employee bookEmp;
-	private boolean isBooked = false;
 
 	public Booking(LocalDate bookDate, LocalTime bookStart, LocalTime bookEnd, Customer bookCust, Business bookBus, Employee bookEmp){
 		this.bookDate = bookDate;
@@ -56,17 +55,7 @@ public class Booking implements Serializable{
 	public void setCust(Customer cust){
 		this.bookCust = cust;
 	}
-	
-	public boolean getBookStat(){
-		return isBooked;
-	}
-	
-	public void unbooked(){
-		isBooked = false;
-	}
-	public void booked(){
-		isBooked = true;
-	}
+
 
 //	Why do we need setters? 
 //	Set start time on a particular time slot

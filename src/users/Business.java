@@ -12,8 +12,8 @@ public class Business extends User {
 	private String busName;
 	private ArrayList<Employee> emp = new ArrayList<Employee>();
 	private LocalTime openTime, closeTime; //hardcoded
-	private int timeSlotInMins = 30;
-	
+	private int timeSlotInMins = 30; //Default 30 min slots
+	private HashMap<String, Integer> services = new HashMap<String, Integer>();
 	
 	public Business(String busName, String ownerName, String address, String phone, String username, String password){
 		super(ownerName,username,password,address,phone);
@@ -21,12 +21,13 @@ public class Business extends User {
 		
 		String start = "09:00" , end = "17:00";
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-		System.out.println("Bus added++++++++++++++++");
 		
 		openTime = LocalTime.parse(start, dtf);
 		closeTime = LocalTime.parse(end, dtf);
-		System.out.println(openTime);
-		System.out.println(closeTime);
+		
+		services.put("General",1);
+		services.put("General 2", 2); //HARDCODED REMOVE
+		services.put("General 3", 3);
 	}
 	
 	//return business name
@@ -79,6 +80,48 @@ public class Business extends User {
 		Employee new_emp = new Employee(empID,name,this);
 		emp.add(new_emp);
 	}
+	
+	//Get HM of Services and how many slots each service will take
+	public HashMap<String, Integer> getServices(){
+		return services;
+	}
+	
+	//Adding a service to a business
+	public void addService(String serviceName, int noOfTimeSlots){
+		if(services.containsKey(serviceName)){
+			System.err.println("Add Service : Service already exists"); //LOG
+		}
+		else if(noOfTimeSlots<1){ //Minimum 1 slot
+			System.err.println("Each service has to take up at least one time slot"); //LOG
+		}
+		else{
+			services.put(serviceName, noOfTimeSlots); //LOG
+		}
+	}
+	
+	//Updating a service a business has
+	public void updateService(String serviceName, int noOfTimeSlots){
+		if(services.containsKey(serviceName)){
+			services.put(serviceName, noOfTimeSlots); //LOG
+		}
+		else if(noOfTimeSlots<1){ //Minimum 1 slot
+			System.err.println("Each service has to take up at least one time slot"); //LOG
+		}
+		else{
+			System.err.println("Update Service : Service does not exist"); //LOG
+		}
+	}
+	
+	//Removing service from business
+	public void removeService(String serviceName){
+		if(services.containsKey(serviceName)){
+			services.remove(serviceName); //LOG
+		}
+		else{
+			System.err.println("Remove Service : Service does not exist"); //LOG
+		}
+	}
+	
 	
 	//Add working time for employee or Assign employee working time 
 	public void addWorkingTime(Employee emp,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings,Scanner scan){

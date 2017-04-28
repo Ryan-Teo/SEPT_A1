@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
+import org.apache.log4j.BasicConfigurator;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -14,10 +16,12 @@ import users.User;
 public class Main extends Application{
 	
 //	Stage window;
-	Scene mainMenu, customerRegister, registerMenu, customerMenu, scene4;
+	Scene mainMenu, customerRegister, registerMenu, customerMenu, scenes4;
 	User userInst = null;
 	Account acct = new Account();
 	FileIO FIO = new FileIO();
+	
+	
 	
 	Helper help = new Helper();//Remove
 	ArrayList<Customer> customers = FIO.loadCust();
@@ -28,7 +32,7 @@ public class Main extends Application{
 	
 	
 	public static void main(String args[]) throws IOException{ //Handle exceptions
-	
+		BasicConfigurator.configure();
 		launch(args);
 	}
 	
@@ -39,6 +43,7 @@ public class Main extends Application{
 
     	// load main menu at the start
     	manager.showMainMenu();
+    	
     	manager.show();
 
 

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
 
+import com.sun.istack.internal.logging.Logger;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -45,6 +47,8 @@ import users.Employee;
 import users.User;
 
 public class SceneManager {
+	
+	final static Logger logger = Logger.getLogger(SceneManager.class);
 	Stage window;
 	Scene mainMenu, customerRegister, ownerRegister, registerMenu, customerMenu, 
 			custSelectBus, custSelectSession, businessMenu, scene4, customerBookingSummary;
@@ -70,6 +74,7 @@ public class SceneManager {
 	public void mainLogIn(ArrayList<Customer> customers, ArrayList<Business> businesses, String username,
 			String password) {
 		userInst = acct.login(customers, businesses, username, password);
+		logger.info("Login is successful");
 	}
 	public void mainRegisterBusiness(ArrayList<Business>businesses, String name, String username, 
 			String busName, String password1, String password2, String phone, String address){
@@ -178,7 +183,7 @@ public class SceneManager {
 			table.setItems(getCustomerBookings((Customer) userInst,bookings));
 			table.getColumns().addAll(business,bookingDate,sessionStart,sessionEnd,emp);
 		}else{
-			System.out.println("No bookings yet");
+			logger.info("No bookings yet");
 		}
 		
 		Button backToMenuButton = new Button("Go back to menu");
@@ -251,10 +256,12 @@ public class SceneManager {
         	String passwordString = passwordInput.getText();
         	mainLogIn(customers, businesses, userNameString, passwordString);
         	if(userInst instanceof Customer){
+        		logger.info("initializing customer menu");
         		customerMenu();
         		window.setScene(customerMenu);
         	}
         	else if(userInst instanceof Business){
+        		logger.info("initializing business menu");
         		businessMenu();
         		window.setScene(businessMenu);
         	}
@@ -307,6 +314,7 @@ public class SceneManager {
         hbcustInstButton.getChildren().add(custInstButton);
         grid2a.add(hbcustInstButton, 0, 2);
         custInstButton.setOnAction(e -> {
+        	logger.info("registering as a customer");
         	registerCustomer();
         	window.setScene(customerRegister);
         });
@@ -321,6 +329,7 @@ public class SceneManager {
         grid2a.add(hbOwnerInstButton, 1, 2);
         ownerInstButton.setOnAction(e -> {
         		//meant to show the business menu
+        		logger.info("registering as a business owner");
         		registerOwner();
         		window.setScene(ownerRegister);
         	});
@@ -407,9 +416,11 @@ public class SceneManager {
         	Boolean checkPhone = acct.checkPhone(phoneString);
         	Boolean check = mainRegisterCust(customers, fullNameString, newUserNameString, newPasswordString, newPasswordString2, phoneString, addressString);
         	if (check){
+        		logger.info("Customer registration is successful");
         		handleSuccess(window);
         	}
         	else{
+        		logger.info("Customer registration is not successful");
         		handleFail(window, checkUser, checkPassLength, checkPassword1, checkPhone);
         	}
         	
@@ -517,6 +528,7 @@ public class SceneManager {
         	Boolean check = mainRegisterCust(customers, fullNameString, newUserNameString, newPasswordString, newPasswordString2, phoneString, addressString);
         	
         	if (check){
+        		logger.info("Business registration is successful");
         		handleSuccess(window);
         	}
         	showMainMenu();
@@ -570,6 +582,7 @@ public class SceneManager {
         hbCustAdd.getChildren().add(custAdd);
         grid3.add(hbCustAdd, 0, 1);
         custAdd.setOnAction(e -> {
+        	logger.info("Selecting a business");
         	selectBusiness();
         	window.setScene(custSelectBus);
         });
@@ -584,6 +597,7 @@ public class SceneManager {
         hbCustCurrent.getChildren().add(custCurrent);
         grid3.add(hbCustCurrent, 0, 2);
         custCurrent.setOnAction(e -> {
+        	logger.info("Showing customer's booking summary");
           	showBookingSummary();
         	window.setScene(customerBookingSummary);
         });
@@ -616,6 +630,7 @@ public class SceneManager {
         hbCustLogOut.getChildren().add(custLogOut);
         grid3.add(hbCustLogOut, 0, 5);
         custLogOut.setOnAction(e -> {
+        	logger.info("Logged out");
         	showMainMenu();
         	window.setScene(mainMenu);
         	userInst = null;
@@ -657,6 +672,7 @@ public class SceneManager {
         selectButton.setOnAction(e -> {
         	int busIndex = busList.getSelectionModel().getSelectedIndex();
         	if(busIndex != -1){
+        		logger.info("Selecting dates");
         		selectDate(busIndex);
         		window.setScene(custSelectSession);
         	}
@@ -708,7 +724,7 @@ public class SceneManager {
         datePicker.setDayCellFactory(dayCellFactory);
         grid.add(datePicker, 2, 2);
         
-        
+        //===================================================================================================================
         
         Button checkButton = new Button("Check");
         checkButton.setMinHeight(50);

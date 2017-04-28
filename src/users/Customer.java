@@ -6,10 +6,14 @@ import java.util.InputMismatchException;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
 
+import org.apache.log4j.Logger;
+
 import system.Booking;
+import system.FileIO;
 
 public class Customer extends User{
 	private static final long serialVersionUID = 3L;
+	final static Logger logger = Logger.getLogger(FileIO.class);
 
 
 	public Customer(String name, String username, String password, String address, String phone){
@@ -43,42 +47,43 @@ public class Customer extends User{
 		}
 		System.out.println("---------------------------------------------------");
 		try{
-		System.out.println("Please enter the business ID you would like to look at: ");
-		businessID = scan.nextInt()-1;
-		scan.nextLine(); //CONSUME
-		busInst = businesses.get(businessID);
+			
+			System.out.println("Please enter the business ID you would like to look at: ");
+			businessID = scan.nextInt()-1;
+			scan.nextLine(); //CONSUME
+			busInst = businesses.get(businessID);
 		
-		for(Business key : bookings.keySet()){
-			if(key.getBusName().equals(busInst.getBusName())){
-				LinkedHashMap<LocalDate, Booking[]> businessSched = bookings.get(key);
-				for(LocalDate myDate : businessSched.keySet()){		//For each date
-					System.out.println("----------------------------------");
-					System.out.printf("%1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
-				
-					Booking[] myBooking = businessSched.get(myDate);
-					for(int i = 0 ; i< myBooking.length; i++){	//For all bookings on each day
-						if(myBooking[i].getBookStat() == false){
-					    System.out.println("-----------------------------------------");
-						System.out.println("|	Session time : "+myBooking[i].getStartTime()+" - "+myBooking[i].getEndTime()+"	|");
-						System.out.println("|	Employee assigned : " + myBooking[i].getBookEmp().getName()+"	|");
-						System.out.println("-----------------------------------------");
-						System.out.println();
+			for(Business key : bookings.keySet()){
+				if(key.getBusName().equals(busInst.getBusName())){
+					LinkedHashMap<LocalDate, Booking[]> businessSched = bookings.get(key);
+					for(LocalDate myDate : businessSched.keySet()){		//For each date
+						System.out.println("----------------------------------");
+						System.out.printf("%1$s %2$tB %2$td, %2$tA \n", "Date:", myDate);
 					
+						Booking[] myBooking = businessSched.get(myDate);
+						for(int i = 0 ; i< myBooking.length; i++){	//For all bookings on each day
+							if(myBooking[i].getBookStat() == false){
+						    System.out.println("-----------------------------------------");
+							System.out.println("|	Session time : "+myBooking[i].getStartTime()+" - "+myBooking[i].getEndTime()+"	|");
+							System.out.println("|	Employee assigned : " + myBooking[i].getBookEmp().getName()+"	|");
+							System.out.println("-----------------------------------------");
+							System.out.println();
+						
+							}
+						}
+						counter++;
+						if(counter == seven_days){
+							break;
+						
 						}
 					}
-					counter++;
-					if(counter == seven_days){
-						break;
-					
-					}
-				}
 				}
 			}
 		}catch(IndexOutOfBoundsException e){
-			System.out.println("Invalid Input - Returning to menu");
+			logger.error("Invalid Input - Returning to Menu");
 		}catch(InputMismatchException e){
 			scan.nextLine();
-			System.out.println("Invalid Input - Returning to Menu");
+			logger.error("Invalid Input - Returning to Menu, err: ");
 		}
 	}
 
@@ -135,7 +140,7 @@ public class Customer extends User{
 					if(daySessions[i].getStartTime().equals(sessionStart)){
 						if(daySessions[i].getBookStat()){
 							//Slot already booked
-							System.out.println("-- Sorry This Slot Is Taken --");
+							logger.info("Sorry this slot is taken");
 							bookingSuccess = false;
 						}
 						else{
@@ -143,7 +148,7 @@ public class Customer extends User{
 //							bookings.get(busInst).get(date)[i].booked();
 							daySessions[i].setCust(this);
 							daySessions[i].booked();
-							System.out.println("-- Booking Successful! --");
+							logger.info("Booking is successful");
 							bookingSuccess = true;
 						}
 					}
@@ -225,10 +230,10 @@ public class Customer extends User{
 			}while(!bookingSuccess);
 		}catch(IndexOutOfBoundsException e){
 			scan.nextLine();
-			System.out.println("Invalid Input - Returning to menu");
+			logger.error("Invalid Input - Returning to menu");
 		}catch(InputMismatchException e){
 			scan.nextLine();
-			System.out.println("Returning to Menu");
+			logger.error("Returning to Menu");
 		}
 	}
 
@@ -285,7 +290,7 @@ public class Customer extends User{
 								myBooking[i].unbooked();
 								myBooking[i].setCust(null);
 								isCancelSuccess = true;
-								System.out.println("--Cancel is successful--");
+								logger.info("Cancel is successful");
 							}
 						}		
 					}
@@ -307,7 +312,7 @@ public class Customer extends User{
 				isCancelSuccess = true;
 			}
 			else{
-				System.out.println("Invalid Option");
+				logger.error("Invalid Option");
 				do{
 					System.out.println("Return to main menu? (y/n)");
 					response = scan.nextLine();
@@ -317,7 +322,7 @@ public class Customer extends User{
 					}else if(response.equals("n")){
 						isInputValid = true;
 					}else{
-						System.out.println("Invalid input");
+						logger.error("Invalid input");
 					}
 				}while(isInputValid == false);	
 			}

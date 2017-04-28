@@ -12,18 +12,21 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.StringTokenizer;
-
+import org.apache.log4j.Logger;
 import users.Business;
 import users.Customer;
 import users.Employee;
 
+
 public class FileIO {
+	private static Logger logger = Logger.getLogger(FileIO.class);
+	
 	public ArrayList<Customer> loadCust(){
 		ArrayList<Customer> customers = new ArrayList<Customer>(); //Use for error checking
 		String line, name, username, password, address, phone;
 		try {
+			logger.info("Loading customer data from text file is succesful");
 			Scanner sc = new Scanner(new File("customers.txt"));
 			while (sc.hasNext()){
 				line = sc.nextLine();
@@ -37,8 +40,8 @@ public class FileIO {
 			}
 			sc.close();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			System.out.println("-- POPULATING CUSTOMERS --");
+			logger.info("No Exsisting Costumers, creating dummies");
+//			System.out.println("-- POPULATING CUSTOMERS --");
 			customers.add(new Customer("Harry", "harryCust", "password", "utomorulz@sept.com", "0400000000"));
 			customers.add(new Customer("Ryan", "ryanCust", "password", "ryan@sept.com", "0411111111"));
 			customers.add(new Customer("Anton", "antonCust", "password", "anton@sept.com", "0422222222"));
@@ -49,14 +52,18 @@ public class FileIO {
 		return customers;
 	}
 	
+	//Check with Ryan
 	public void saveCust(ArrayList<Customer> customers){
 		String name, username, password, address, phone;
 		PrintWriter pw = null;
 		try {
+			logger.info("Saving customer data is successful");
 			pw = new PrintWriter (new BufferedWriter (new FileWriter ("customers.txt")));
 		} catch (IOException e) {
+			//?
 			System.err.println("-customers.txt has been created-");
 		}
+		
 		for (int i=0; i<customers.size(); i++){
 			Customer customer = customers.get(i);			
 			name = customer.getName();
@@ -75,6 +82,7 @@ public class FileIO {
 		String line, busName, name, username, password, address, phone;
 		
 		try {
+			logger.info("Loading business data from text file is successful");
 			Scanner scBus = new Scanner(new File("business.txt"));
 			while (scBus.hasNext()){
 				line = scBus.nextLine();
@@ -89,7 +97,7 @@ public class FileIO {
 			}
 			scBus.close();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			logger.info("No Exsisting Business, creating dummies");
 			System.out.println("-- POPULATING BUSINESSES --");
 			businesses.add(new Business("Sal's Hair Salon", "Harry", "1 Alumbra St", "0400000000", "harryOwner", "password"));
 			businesses.add(new Business("East Medical Centre", "Ryan", "10 Car St", "0411111111", "ryanOwner", "password"));
@@ -106,14 +114,17 @@ public class FileIO {
 
 		ArrayList<Employee> emps = new ArrayList<Employee>();
 		try {
+			logger.info("Loading Employees data");
 			FileInputStream inFile = new FileInputStream("employees");
 			ObjectInputStream in = new ObjectInputStream(inFile);
 			emps = (ArrayList<Employee>) in.readObject();
 			in.close();
 			inFile.close();
 		} catch (IOException e) {
+			logger.info("No Exsisting Costumers, creating dummies");
 			System.out.println("-No existing employees-");
 		} catch (ClassNotFoundException e) {
+			logger.info("No Exsisting Costumers, creating dummies");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -136,6 +147,7 @@ public class FileIO {
 		String busName, name, username, password, address, phone;
 		PrintWriter pwBus = null;
 		try {
+			logger.info("Saving Business data to business.txt");
 			pwBus = new PrintWriter (new BufferedWriter (new FileWriter ("business.txt")));
 		} catch (IOException e) {
 			System.err.println("-business.txt has been created-");
@@ -171,17 +183,20 @@ public class FileIO {
 	}
 	
 
+	@SuppressWarnings("unchecked")
 	public LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> loadBook(Helper help, ArrayList<Business> businesses){
 		//deal with exception here
 		//part 2 : check against businesses array, init days for new businesses
 		LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = new LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>>(); //Check for null when called
 		try {
+			logger.info("Load booking from bookings.txt");
 			FileInputStream inFile = new FileInputStream("bookings.txt");
 			ObjectInputStream in = new ObjectInputStream(inFile);
 			bookings = (LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>>) in.readObject();			
 			in.close();
 			inFile.close();
 		} catch (Exception e) {
+			logger.info("No Exsisting booking, creating dummies");
 			System.out.println(e.getMessage());
 			System.out.println("-- POPULATING BOOKINGS --");
 			for(Business busInst : businesses){
@@ -194,6 +209,8 @@ public class FileIO {
 	
 	public void saveBook(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings){
 		try {
+			
+			logger.info("Saving bookings to bookings.txt");
 	        FileOutputStream outFile = new FileOutputStream("bookings.txt");
 	        ObjectOutputStream out = new ObjectOutputStream(outFile);
 			out.reset();
@@ -201,15 +218,8 @@ public class FileIO {
 	        out.close();
 	        outFile.close();
 	     }catch(Exception e) {
-	    	 System.out.println(e.getMessage());
-	    	 e.printStackTrace();
+	    	 logger.error("Unable to save bookings to bookings.txt, err :" + e.getMessage());
 	     }
 	}
-
-	
-//WHAT IS THIS?
-//	public static <T> T parseObjectFromString(String s, Class<T> clazz) throws Exception {
-//	    return clazz.getConstructor(new Class[] {String.class }).newInstance(s);
-//	}
 
 }

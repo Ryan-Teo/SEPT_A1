@@ -22,7 +22,11 @@ public class Main extends Application{
 	Helper help = new Helper();//Remove
 	ArrayList<Customer> customers = FIO.loadCust();
 	ArrayList<Business> businesses = FIO.loadBus();
-	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = FIO.loadBook(help, businesses); //Loading existing bookings	
+	ArrayList<Booking> bookings = FIO.loadBook(help, businesses);
+	
+	
+	
+//	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = FIO.loadBook(help, businesses); //Loading existing bookings	
 	
 	
 	

@@ -50,12 +50,12 @@ public class SceneManager {
 			custSelectBus, custSelectDate, custSelectTime, custSelectEmp, businessMenu, scene4, customerBookingSummary;
 	ArrayList<Customer> customers;
 	ArrayList<Business> businesses;
-	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings;
+	ArrayList<Booking> bookings;
 	User userInst = null;
 	Account acct;
 
 	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses, 
-			Account account,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings, 
+			Account account, ArrayList<Booking> bookings, 
 			Stage primaryStage) {
 		this.customers = customers;
 		this.businesses = businesses;
@@ -685,11 +685,7 @@ public class SceneManager {
         header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
         grid.add(header, 0, 1,2, 1);
         
-        Business bus = null;
-    	for(Business myBus : bookings.keySet()){
-    		if(businesses.get(busIndex).getBusName().equals(myBus.getBusName()))
-    			bus = myBus;
-    	}
+        Business bus = businesses.get(busIndex);
         
         
         ListView<String> serviceList = new ListView<String>(); 
@@ -770,11 +766,7 @@ public class SceneManager {
         checkButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
         grid.add(checkButton, 1, 3);
         checkButton.setOnAction(e -> {
-        	Business bus = null;
-        	for(Business myBus : bookings.keySet()){
-        		if(businesses.get(busIndex).getBusName().equals(myBus.getBusName()))
-        			bus = myBus;
-        	}
+            Business bus = businesses.get(busIndex);
         	
         	selectTime(busIndex ,bus, datePicker.getValue() , service);
         	window.setScene(custSelectTime);
@@ -870,6 +862,11 @@ public class SceneManager {
 	public void selectEmployee(LocalTime time){ //add interval needed for specific whatever... services? sure
 		//Check bus employee list
 		//Check their availability for the slots needed, use the no of slots for each service too
+		ArrayList<Booking> bookings = null;
+		
+//	bookings.add(new Booking());
+		
+		
 	}
 	
 		//End Customer Add Booking Stuff
@@ -1085,30 +1082,39 @@ public class SceneManager {
     }
 	
 	
-	public ObservableList<Booking> getCustomerBookings(Customer cust,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {
+	public ObservableList<Booking> getCustomerBookings(Customer cust, ArrayList<Booking> bookings) {
 		ObservableList<Booking> bookingsToBeViewed = FXCollections.observableArrayList();
 		
 		int counter = 0;
-		for(Business myBus : bookings.keySet()){	//For each business
-			LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
-			for(LocalDate myDate : myDay.keySet()){		//For each date
-				Booking[] myBooking = myDay.get(myDate);
-				for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
-					if(myBooking[i].getBookStat()){
-						if(myBooking[i].getBookCust().getUsername().equals(cust.getUsername())){
-							System.out.println("Test");
-							bookingsToBeViewed.add(myBooking[i]);
-							counter++;
-						}
-					}
-				}		
+		for(Booking myBook : bookings){
+			if(myBook.getBookCust().getUsername().equals(cust.getUsername())){
+				bookingsToBeViewed.add(myBook);
+				counter++;
 			}
 		}
+
 		if(counter == 0){
 			System.out.printf("\n-- You have no current bookings! --\n\n");
 		}
 		
 		return bookingsToBeViewed;
+		
+//		//Was for old hashmap
+//		for(Business myBus : bookings.keySet()){	//For each business
+//			LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
+//			for(LocalDate myDate : myDay.keySet()){		//For each date
+//				Booking[] myBooking = myDay.get(myDate);
+//				for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
+//					if(myBooking[i].getBookStat()){
+//						if(myBooking[i].getBookCust().getUsername().equals(cust.getUsername())){
+//							System.out.println("Test");
+//							bookingsToBeViewed.add(myBooking[i]);
+//							counter++;
+//						}
+//					}
+//				}		
+//			}
+//		}
 	}
 	
 

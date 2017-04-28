@@ -46,6 +46,7 @@ public class FileIO {
 			customers.add(new Customer("Grace", "graceCust", "password", "grace@sept.com", "0493020302"));
 			//no existing customers, file will be created
 		}
+		saveCust(customers);
 		return customers;
 	}
 	
@@ -128,7 +129,7 @@ public class FileIO {
 			}
 		}
 		
-		
+		saveBus(businesses);
 		return businesses;
 	}
 	
@@ -171,28 +172,26 @@ public class FileIO {
 	}
 	
 
-	public LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> loadBook(Helper help, ArrayList<Business> businesses){
+	@SuppressWarnings("unchecked")
+	public ArrayList<Booking> loadBook(Helper help, ArrayList<Business> businesses){
 		//deal with exception here
-		//part 2 : check against businesses array, init days for new businesses
-		LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = new LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>>(); //Check for null when called
+		//part 2 : check against businesses array, init days for new businesses (defunct)
+		ArrayList<Booking> bookings = new ArrayList<Booking>(); //Check for null when called
 		try {
 			FileInputStream inFile = new FileInputStream("bookings.txt");
 			ObjectInputStream in = new ObjectInputStream(inFile);
-			bookings = (LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>>) in.readObject();			
+			bookings = (ArrayList<Booking>) in.readObject();			
 			in.close();
 			inFile.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-			System.out.println("-- POPULATING BOOKINGS --");
-			for(Business busInst : businesses){
-				bookings.put(busInst, help.initDaySlots(busInst));
-			}
-			//no existing customers, file will be created
+			System.out.println("-- NO BOOKINGS EXIST --"); //LOG
 		}
+		saveBook(bookings);
 		return bookings;
 	}
 	
-	public void saveBook(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings){
+	public void saveBook(ArrayList<Booking> bookings){
 		try {
 	        FileOutputStream outFile = new FileOutputStream("bookings.txt");
 	        ObjectOutputStream out = new ObjectOutputStream(outFile);

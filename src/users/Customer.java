@@ -232,99 +232,15 @@ public class Customer extends User{
 		}
 	}
 
-	public void cancelBooking(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings, Scanner scan){
-		int bookingID = 0;
-		int counter = 0;
-		String response = null;
-		boolean isCancelSuccess = false;
-		boolean isInputValid = false;
-		ArrayList<Booking> custBookings = new ArrayList<Booking>();
-		for(Business myBus : bookings.keySet()){	//For each business
-			LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
-			for(LocalDate myDate : myDay.keySet()){		//For each date
-				Booking[] myBooking = myDay.get(myDate);
-				for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
-					if(myBooking[i].getBookStat()){
-						if(myBooking[i].getBookCust().getUsername().equals(this.username)){
-							System.out.println();
-							System.out.println("----------------"+"["+ " Booking No : "+ (counter+1) + "]"+"----------------");
-							System.out.println("|	Business Name : " + myBus.getBusName()+"	|");
-							System.out.printf("%1$s %2$tB %2$td, %2$tA ", "|	Date: ", myDate);
-							System.out.println("		|");
-							System.out.println("|	Session time : "+myBooking[i].getStartTime()+" - "+myBooking[i].getEndTime()+"		|");
-							System.out.println("|	Employee assigned : " + myBooking[i].getBookEmp().getName()+"		|");
-							System.out.println("-------------------------------------------------");
-							custBookings.add(myBooking[i]);
-							System.out.println();
-							counter++;
-						}
-					}
-				}		
-			}
+	public boolean cancelBooking(ArrayList<Booking> bookings, Booking toCancel){
+		for(int i = 0; i < bookings.size(); i++){
+			if(bookings.get(i).equals(toCancel)){
+				bookings.remove(i);
+				//also set the employee to boolean false not in those sessions
+				return true;
+			}	
 		}
-		do{
-			try{
-				if(custBookings.size() > 0){
-				System.out.println("Which booking do you want to cancel? (Press any non-numeral key to cancel)");
-				bookingID = scan.nextInt()-1;
-				scan.nextLine();
-	
-				}
-			}catch(InputMismatchException e){
-				scan.nextLine();
-				bookingID = -1;
-			}
-			
-			if( bookingID >= 0 && bookingID <= custBookings.size()-1 ){
-				for(Business myBus : bookings.keySet()){	//For each business
-					LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);	//For each business LinkedHashMap
-					for(LocalDate myDate : myDay.keySet()){		//For each date
-						Booking[] myBooking = myDay.get(myDate);
-						for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
-							if(myBooking[i].equals(custBookings.get(bookingID))){
-								myBooking[i].unbooked();
-								myBooking[i].setCust(null);
-								isCancelSuccess = true;
-								System.out.println("--Cancel is successful--");
-							}
-						}		
-					}
-				}
-				
-			}
-			else if(custBookings.size() == 0){
-				System.out.println("-----------------------------------");
-				System.out.println("There are no Bookings to Cancel");
-				System.out.println("Returning to Menu");
-				System.out.println("-----------------------------------");
-				isCancelSuccess = true;
-				
-			}
-			else if(bookingID == -1){
-				System.out.println("-----------------------------------");
-				System.out.println("Returning to menu");
-				System.out.println("-----------------------------------");
-				isCancelSuccess = true;
-			}
-			else{
-				System.out.println("Invalid Option");
-				do{
-					System.out.println("Return to main menu? (y/n)");
-					response = scan.nextLine();
-					if(response.equals("y")){
-						isCancelSuccess = true;
-						isInputValid = true;
-					}else if(response.equals("n")){
-						isInputValid = true;
-					}else{
-						System.out.println("Invalid input");
-					}
-				}while(isInputValid == false);	
-			}
-			
-		}while(isCancelSuccess == false);
-		
-		
+		return false;
 	}
 				
 				

@@ -25,7 +25,7 @@ public class Business extends User {
 		openTime = LocalTime.parse(start, dtf);
 		closeTime = LocalTime.parse(end, dtf);
 		
-		services.put("General",1);
+		services.put("General", 1);
 		services.put("General 2", 2); //HARDCODED REMOVE
 		services.put("General 3", 3);
 	}

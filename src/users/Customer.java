@@ -17,7 +17,7 @@ public class Customer extends User{
 	public Customer(String name, String username, String password, String address, String phone){
 		super(name,username,password,address,phone);
 	}
-	
+
 	@Override
 	public ObservableList<Booking> viewBookingSummary(ArrayList<Booking> bookings) {	
 		

@@ -12,7 +12,7 @@ public class Business extends User {
 
 	private static final long serialVersionUID = 2L;
 	private String busName;
-	private ArrayList<Employee> emp = new ArrayList<Employee>();
+	private ArrayList<Employee> emps = new ArrayList<Employee>();
 	private LocalTime openTime, closeTime; //hardcoded
 	private long timeSlotInMins = 30; //Default 30 min slots
 	private HashMap<String, Integer> services = new HashMap<String, Integer>();
@@ -26,7 +26,6 @@ public class Business extends User {
 		
 		openTime = LocalTime.parse(start, dtf);
 		closeTime = LocalTime.parse(end, dtf);
-		
 		services.put("General", 1);
 		services.put("General 2", 2); //HARDCODED REMOVE
 		services.put("General 3", 3);
@@ -73,14 +72,8 @@ public class Business extends User {
 	}
 	
 	//return list of employees
-	public ArrayList<Employee> getEmp() {
-		return emp;
-	}
-	
-	//Adding a new employee into the business
-	public void addNewEmployee(String empID, String name){
-		Employee new_emp = new Employee(empID,name,this);
-		emp.add(new_emp);
+	public ArrayList<Employee> getEmps() {
+		return emps;
 	}
 	
 	//Get HM of Services and how many slots each service will take
@@ -179,7 +172,7 @@ public class Business extends User {
 		}
 }
 	
-	public boolean assignEmpToSession(Employee emp, LocalDate date ,LocalTime sessionStart,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings){
+	public boolean assignEmpToSession(Employee emp, LocalDate date ,LocalTime sessionStart, ArrayList<Booking> bookings){
 		
 		//Time format for day and hour
 				LinkedHashMap<LocalDate, Booking[]> busSchedule = bookings.get(this);
@@ -243,42 +236,16 @@ public class Business extends User {
 	}
 	
 	public void addEmp(Employee myEmp){
-		emp.add(myEmp);
+		emps.add(myEmp);
 	}
 	
 	//Adding a new employee into the business
-	public void addNewEmployee(Scanner scan){
-		/*
-		 * 		TAKE INPUT IN HERE 
-		 */
-		String empID, name;
-		Boolean empAdded = false;
-		System.out.println("-Type \"exit\" at anytime to return to main menu-");
-		do{
-			System.out.printf("Please enter employee name : ");
-			name = scan.nextLine();
-			if (name.equals("exit")){
-				return;
-			}
-			//Make sure emp id is unique
-			empID = String.format("emp%03d", emp.size());
-			Employee new_emp = new Employee(empID,name,this);
-			emp.add(new_emp);
-			System.out.println("-Employee Added-");
-			System.out.println("Name : " + name);
-			System.out.println("Employee ID : " + empID);
-			System.out.println("#######################");
-			empAdded = true;
-		}while(!empAdded);
-
-	}
-	
-	public void viewEmployees(){
-		System.out.printf("-%s's Employees-\n",busName);
-		for(Employee myEmp : emp){
-			System.out.printf("Name : %s | ID : %s\n", myEmp.getName(), myEmp.getEmpID());
-		}
-		System.out.println("########################");
+	public void addNewEmp(String empName){
+		String empID;
+		//Make sure emp id is unique
+		empID = String.format("emp%03d", emps.size());
+		Employee new_emp = new Employee(empID,empName,this);
+		emps.add(new_emp); //LOG
 	}
 
 	@Override

@@ -474,25 +474,6 @@ public class SceneManager {
         	window.setScene(customerBookingSummary);
         });
         
-//        Button custSession = new Button("View Available Sessions");
-//        HBox hbCustSession = new HBox(10);
-//        hbCustSession.setAlignment(Pos.CENTER);
-//        custSession.setMinWidth(150);
-//        custSession.setMinHeight(25);
-//        custSession.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
-//        hbCustSession.getChildren().add(custSession);
-//        grid3.add(hbCustSession, 0, 3);
-//        
-        
-//        Button custCancel = new Button("Cancel Bookings");
-//        HBox hbCustCancel = new HBox(10);
-//        hbCustCancel.setAlignment(Pos.CENTER);
-//        custCancel.setMinWidth(150);
-//        custCancel.setMinHeight(25);
-//        custCancel.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
-//        hbCustCancel.getChildren().add(custCancel);
-//        grid3.add(hbCustCancel, 0, 4);
-        
         Button custLogOut = new Button("Logout");
         HBox hbCustLogOut = new HBox(10);
         hbCustLogOut.setAlignment(Pos.CENTER);
@@ -632,7 +613,7 @@ public class SceneManager {
                     @Override public void updateItem(LocalDate item, boolean empty) {
                         super.updateItem(item, empty);
                         
-                        if (item.isBefore(LocalDate.now())) {
+                        if (item.isBefore(LocalDate.now())||item.isAfter(LocalDate.now().plusDays(31))) {
                             setDisable(true);
                             setStyle("-fx-background-color: #ffc0cb;");
                         }
@@ -688,7 +669,7 @@ public class SceneManager {
         
     	//Show times here based on bus opening, closing hour and time slots
     	LocalTime openTime, closeTime;
-    	int timeSlot;
+    	long timeSlot;
     	System.out.println(bus);
     	System.out.println(bus.getOpenTime());
     	openTime = bus.getOpenTime();
@@ -752,7 +733,13 @@ public class SceneManager {
 		//Check their availability for the slots needed, use the no of slots for each service too
 		ArrayList<Booking> bookings = null;
 		
-//	bookings.add(new Booking());
+		/*
+		 * Methods to save a booking
+		 * 
+		 * boolean cust.bookSession(LocalDate date, LocalTime sessionStart, LocalTime sessionEnd, Customer cust, Business busInst ,Employee emp, ArrayList<Booking> bookings);
+		 * FIO.saveBook(bookings);
+		 * 
+		 */
 		
 		
 	}
@@ -775,7 +762,7 @@ public class SceneManager {
 		
 		
 		TableView<Booking> table = new TableView<Booking>();
-		ObservableList<Booking> bookItems = getCustomerBookings((Customer)userInst, bookings);
+		ObservableList<Booking> bookItems = userInst.viewBookingSummary(bookings);
 		
 		//Business Column
 		TableColumn<Booking,Business> business =  new TableColumn<>("Business");
@@ -1047,21 +1034,4 @@ public class SceneManager {
         dialog.setScene(dialogScene);
         dialog.show();
     }
-	
-	
-
-	public ObservableList<Booking> getCustomerBookings(Customer cust, ArrayList<Booking> bookings) {
-		ObservableList<Booking> bookingsToBeViewed = FXCollections.observableArrayList();
-		
-		for(int i = 0; i < bookings.size(); i++){
-			if(bookings.get(i).getBookCust().getUsername().equals(cust.getUsername())){
-				bookingsToBeViewed.add(bookings.get(i));
-			}
-		}
-
-		
-		return bookingsToBeViewed;
-	}
-	
-
 }

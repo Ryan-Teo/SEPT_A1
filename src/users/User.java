@@ -1,8 +1,11 @@
 package users;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import javafx.collections.ObservableList;
 import system.Booking;
 
 public abstract class User implements Serializable{
@@ -21,8 +24,9 @@ public abstract class User implements Serializable{
 	}
 	
 	//Show all number of bookings made by user
-	public abstract void viewBookingSummary(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings);
+	public abstract ObservableList<Booking> viewBookingSummary(ArrayList<Booking> bookings);
 	
+	public abstract boolean bookSession(LocalDate date, LocalTime sessionStart, LocalTime sessionEnd, Customer cust, Business busInst ,Employee emp, ArrayList<Booking> bookings);
 	
 	public String getName() {
 		return name;

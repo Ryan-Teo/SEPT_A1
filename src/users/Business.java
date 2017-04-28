@@ -4,6 +4,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import system.Booking;
 
 public class Business extends User {
@@ -12,7 +14,7 @@ public class Business extends User {
 	private String busName;
 	private ArrayList<Employee> emp = new ArrayList<Employee>();
 	private LocalTime openTime, closeTime; //hardcoded
-	private int timeSlotInMins = 30; //Default 30 min slots
+	private long timeSlotInMins = 30; //Default 30 min slots
 	private HashMap<String, Integer> services = new HashMap<String, Integer>();
 	
 	public Business(String busName, String ownerName, String address, String phone, String username, String password){
@@ -61,7 +63,7 @@ public class Business extends User {
 	}
 	
 	//Get length of each time slot in minutes
-	public int getTimeSlotInMins(){
+	public long getTimeSlotInMins(){
 		return timeSlotInMins;
 	}
 	
@@ -205,34 +207,14 @@ public class Business extends User {
 
 	//View all bookings for a business
 	@Override
-	public void viewBookingSummary(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {	
-		int counter = 0;
-		for(Business myBus : bookings.keySet()){	//For each business
-			if(myBus.busName.equals(this.busName)){
-				LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);
-				for(LocalDate myDate : myDay.keySet()){		//For each date
-					Booking[] myBooking = myDay.get(myDate);
-					for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
-						if(myBooking[i].getBookStat()){
-							System.out.println();
-							System.out.println("----------------"+"["+ " Booking No : "+ (counter+1) + "]"+"----------------");
-							System.out.println("|	Customer Name : " + myBooking[i].getBookCust().name +"	|");
-							System.out.printf("%1$s %2$tB %2$td, %2$tA ", "|	Date: ", myDate);
-							System.out.println("		|");
-							System.out.println("|	Session time : "+myBooking[i].getStartTime()+" - "+myBooking[i].getEndTime()+"		|");
-							System.out.println("|	Employee assigned : " + myBooking[i].getBookEmp().getName()+"		|");
-							System.out.println("-------------------------------------------------");
-							System.out.println();
-							counter++;
-						}
-					}		
-				}
+	public ObservableList<Booking> viewBookingSummary(ArrayList<Booking>bookings) {	
+		ObservableList<Booking> bookingsToBeViewed = FXCollections.observableArrayList();
+		for(int i = 0; i < bookings.size(); i++){
+			if(bookings.get(i).getBookBus().getBusName().equals(this.getBusName())){
+				bookingsToBeViewed.add(bookings.get(i));
 			}
-			
 		}
-		if(counter == 0){
-			System.out.printf("\n-- You have no current bookings! --\n\n");
-		}
+		return bookingsToBeViewed;
 	}
 	
 	//Adding booking on behalf of customer
@@ -297,6 +279,13 @@ public class Business extends User {
 			System.out.printf("Name : %s | ID : %s\n", myEmp.getName(), myEmp.getEmpID());
 		}
 		System.out.println("########################");
+	}
+
+	@Override
+	public boolean bookSession(LocalDate date, LocalTime sessionStart, LocalTime sessionEnd, Customer cust,
+			Business busInst, Employee emp, ArrayList<Booking> bookings) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	//view business weekly schedule 

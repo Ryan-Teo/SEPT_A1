@@ -851,6 +851,10 @@ public class SceneManager {
 	 */
 	
 	
+	
+	
+	
+	
 	/*
 	 * BUSINESS STUFF
 	 */
@@ -891,8 +895,6 @@ public class SceneManager {
         busWorkingTime.setOnAction(e -> {
         	selectEmp((Business)userInst);
         	window.setScene(busSelectEmp);
-//        	addWorkTime();
-//        	window.setScene(busAddWorkTime);
         });
         
         Button busAssignSesh = new Button("Assign Sessions");
@@ -1011,7 +1013,8 @@ public class SceneManager {
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
-        
+        //TODO
+        //CHECK HERE IF BUS DOES NOT HAVE ANY EMPLOYEES
         Text header = new Text("Select an Employee");
         header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
         grid.add(header, 2, 0);
@@ -1042,11 +1045,10 @@ public class SceneManager {
         checkButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
         grid.add(checkButton, 1, 3);
         checkButton.setOnAction(e -> {
-        	String empName = (String)cb.getSelectionModel().getSelectedItem();
-        	System.out.println(empName);
-        	//TODO
-//        	selectTime(busIndex ,bus, datePicker.getValue() , service);
-        	window.setScene(custSelectTime);
+        	Employee myEmp = emps.get(cb.getSelectionModel().getSelectedIndex());
+        	System.out.println(myEmp.getName());
+        	addWorkTime(myEmp , bus);
+        	window.setScene(busAddWorkTime);
         });
         
         Button back = new Button("Back");
@@ -1066,9 +1068,64 @@ public class SceneManager {
         busSelectEmp = new Scene(grid, 500, 500);
 	}
 	
-	public void addWorkTime(){
-		//SELECT EMPLOYEE
+	public void addWorkTime(Employee emp, Business bus){
 		//add to employees hm HashMap<LocalDate, HashMap<LocalTime, Boolean>>
+		//Weekly?
+		//select time or user input?
+		GridPane grid2 = new GridPane();
+    	grid2.setPadding(new Insets(30, 30, 30, 30));
+    	grid2.setAlignment(Pos.CENTER);
+    	grid2.setHgap(20);
+    	grid2.setVgap(20);
+    	
+        
+        Text registerTitle = new Text("Add working time for employee | " + emp.getName());
+        registerTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+        grid2.add(registerTitle, 0, 1,2, 1);
+        
+        Label startTime = new Label("Start time : ");
+        grid2.add(startTime, 0, 2);
+
+        TextField startTimeText = new TextField();
+        startTimeText.setPromptText("HHMM");
+        grid2.add(startTimeText, 1, 2);
+        //TODO 
+        //CHECK FORMAT OF INPUT "HHMM"
+            
+        Button register = new Button("Add!");
+        HBox hbRegister = new HBox(10);
+        hbRegister.setAlignment(Pos.BOTTOM_RIGHT);
+        register.setMinWidth(80);
+        register.setMinHeight(40);
+        register.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
+        hbRegister.getChildren().add(register);
+        grid2.add(hbRegister, 1, 8);
+        
+        register.setOnAction(e -> {
+        	String empNameString = empNameText.getText();
+        	//TODO
+        	//check if empNameString is empty?
+        	bus.addNewEmp(empNameString);
+
+    		businessMenu();
+    		window.setScene(businessMenu);
+        	
+        });
+            
+        Button back = new Button("Back");
+        HBox hbBack = new HBox(10);
+        hbBack.setAlignment(Pos.TOP_RIGHT);
+        back.setMinWidth(50);
+        back.setMinHeight(20);
+        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
+        hbBack.getChildren().add(back);
+        grid2.add(hbBack, 1, 0);
+        back.setOnAction(e -> {
+    		businessMenu();
+    		window.setScene(businessMenu);
+        });
+        
+        busAddEmpSc = new Scene(grid2, 300, 500);
 	}
 	
 	/*

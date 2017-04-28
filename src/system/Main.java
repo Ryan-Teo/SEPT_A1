@@ -23,12 +23,7 @@ public class Main extends Application{
 	ArrayList<Business> businesses = FIO.loadBus();
 	ArrayList<Booking> bookings = FIO.loadBook(businesses);
 	
-	
-	
 //	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = FIO.loadBook(help, businesses); //Loading existing bookings	
-	
-	
-	
 	
 	public static void main(String args[]) throws IOException{ //Handle exceptions
 	
@@ -44,10 +39,6 @@ public class Main extends Application{
     	manager.showMainMenu();
     	manager.show();
 
-
-
-		FIO.saveBook(bookings);	// Saving all bookings
-		
 
 //		System.exit(0);
         

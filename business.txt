@@ -7,3 +7,7 @@ Netherlands|Nathan|40 Oak St|0455555555|nathanOwner|password
 Blinding Smiles|Grace|209 Yellow St|0466666666|graceOwner|password
 Beds R Us|Paulo|245 Hunny St|0477777777|pauloOwner|password
 Personally Fit|Jayden|90 Twin St|0488888888|jaydenOwner|password
+<<<<<<< HEAD
+=======
+Antqwe|svsdfjqiwe|qwe123asd|123456|qwe123qwe|04654654654
+>>>>>>> 155bba539ccc2440b24af9baefbddb5b647b1dbd

@@ -4,11 +4,15 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 import users.Business;
 import users.Customer;
 import users.User;
 
 public class Account {
+	
+	Logger logger = Logger.getLogger(Account.class);
 	
 	FileIO FIO = new FileIO();
 	
@@ -39,7 +43,7 @@ public class Account {
 		}
 		if(usernameCheck == false || passCheck == false){
 			//Please change this to a pop up box
-			System.out.println("-- Incorrect Username/Password --");
+			logger.error("Incorrect Username/Password");
 			try{
 				Thread.sleep(1500);
 			}catch(Exception e){
@@ -97,26 +101,27 @@ public class Account {
 	}
 	public boolean registerBusiness(String name, String username, String busName, String password1, String password2, String phone, String address, ArrayList<Business> businesses){
 		if(checkLength(username, 6, 12)){
-			System.out.println("fail name length");
+			logger.error("fail name length");
 			return false;
 		}
 		else if(checkBusName(username, businesses)){
-			System.out.println("fail username check");
+			logger.error("fail username check");
 			return false;
 		}
 		else if (checkBusBusName(busName, businesses)){
-			System.out.println("fail business name");
+			logger.error("fail business name");
 			return false;
 		}
 		else if(!checkPass(password1, password2)){
-			System.out.println("fail password");
+			logger.error("fail password");
 			return false;
 		}
 		else if(!checkPhone(phone)){
-			System.out.println("fail phone");
+			logger.error("fail phone");
 			return false;
 		}
 		else{
+			logger.info("Business registration is successful");
 			businesses.add(new Business(name, username, busName, password1, address, phone));
 			FIO.saveBus(businesses);
 			return true;
@@ -124,22 +129,23 @@ public class Account {
 	}
 	public boolean registerCustomer(String name, String username, String password1, String password2, String phone, String address, ArrayList<Customer> customers){
 		if(checkLength(username, 6, 12)){
-			System.out.println("fail name length");
+			logger.error("fail name length");
 			return false;
 		}
 		else if(checkCustName(username, customers)){
-			System.out.println("fail username check");
+			logger.error("fail username check");
 			return false;
 		}
 		else if(!checkPass(password1, password2)){
-			System.out.println("fail password");
+			logger.error("fail password");
 			return false;
 		}
 		else if(!checkPhone(phone)){
-			System.out.println("fail phone");
+			logger.error("fail phone");
 			return false;
 		}
 		else{
+			logger.info("Customer registration is successful");
 			customers.add(new Customer(name, username, password1, address, phone));
 			FIO.saveCust(customers);
 			return true;

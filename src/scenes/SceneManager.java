@@ -63,6 +63,10 @@ public class SceneManager {
 	static BusinessMenu busScreen;
 	/*
 	 * After movement, Scenemanager should have the following methods:
+	 * 
+	 * -show()
+	 * -getScreens()
+	 * -getMenus()
 	 * -getMenus()
 	 * -mainLogIn()
 	 * -mainRegisterBusiness()
@@ -72,6 +76,7 @@ public class SceneManager {
 	 * 
 	 * The rest have been moved to their respective classes
 	 */
+	
 	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses, 
 			Account account, ArrayList<Booking> bookings, 
 			Stage primaryStage) {

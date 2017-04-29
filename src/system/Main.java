@@ -36,8 +36,7 @@ public class Main extends Application{
 		SceneManager manager = new SceneManager(customers, businesses, acct,bookings, primaryStage);
 
     	// load main menu at the start
-    	manager.showMainMenu();
-    	manager.show();
+    	manager.getMenus();
 
 
 //		System.exit(0);

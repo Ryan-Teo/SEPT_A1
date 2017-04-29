@@ -2,12 +2,16 @@ package scenes;
 
 import java.util.ArrayList;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
@@ -18,6 +22,7 @@ import system.Account;
 import system.Booking;
 import users.Business;
 import users.Customer;
+import users.Employee;
 
 public class BusinessMenu extends SceneManager{
 
@@ -175,125 +180,125 @@ public class BusinessMenu extends SceneManager{
 	}
 	
 	
-//	public void selectEmp(Business bus){
-//		GridPane grid = new GridPane();
-//		grid.setPadding(new Insets(30, 30, 30, 30));
-//        grid.setAlignment(Pos.CENTER);
-//        grid.setHgap(10);
-//        grid.setVgap(10);
-//        //TODO
-//        //CHECK HERE IF BUS DOES NOT HAVE ANY EMPLOYEES
-//        Text header = new Text("Select an Employee");
-//        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
-//        grid.add(header, 2, 0);
-//        
-//        ArrayList<Employee> emps = bus.getEmps();
-//        System.out.println(emps.size());
-//        ArrayList<String> empNames = new ArrayList<String>();
-//        for(Employee emp : emps){
-//        	empNames.add(emp.getName());
-//        }
-//        
-//        for(String name : empNames){
-//        	System.out.println(name);
-//        }
-//
-//        ObservableList<String> empItems = FXCollections.observableArrayList(empNames);
-//        
-//        ChoiceBox<String> cb = new ChoiceBox<String>();
-//        cb.setItems(empItems);
-//        cb.setValue(empItems.get(0));
-//        cb.setTooltip(new Tooltip("Select employee"));
-//        grid.add(cb, 2, 2);
-//        
-//        
-//        Button checkButton = new Button("Check");
-//        checkButton.setMinHeight(50);
-//        checkButton.setMinWidth(100);
-//        checkButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
-//        grid.add(checkButton, 1, 3);
-//        checkButton.setOnAction(e -> {
-//        	Employee myEmp = emps.get(cb.getSelectionModel().getSelectedIndex());
-//        	System.out.println(myEmp.getName());
-//        	addWorkTime(myEmp , bus);
-//        	window.setScene(busAddWorkTime);
-//        });
-//        
-//        Button back = new Button("Back");
-//        HBox hbBack = new HBox(10);
-//        hbBack.setAlignment(Pos.TOP_RIGHT);
-//        back.setMinWidth(50);
-//        back.setMinHeight(20);
-//        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
-//        hbBack.getChildren().add(back);
-//        grid.add(hbBack, 1, 0);
-//        back.setOnAction(e -> {
-//    		businessMenu();
-//    		window.setScene(businessMenu);
-//        });
-//        
-//        
-//        busSelectEmp = new Scene(grid, 500, 500);
-//	}
+	public void selectEmp(Business bus){
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(30, 30, 30, 30));
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        //TODO
+        //CHECK HERE IF BUS DOES NOT HAVE ANY EMPLOYEES
+        Text header = new Text("Select an Employee");
+        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+        grid.add(header, 2, 0);
+        
+        ArrayList<Employee> emps = bus.getEmps();
+        System.out.println(emps.size());
+        ArrayList<String> empNames = new ArrayList<String>();
+        for(Employee emp : emps){
+        	empNames.add(emp.getName());
+        }
+        
+        for(String name : empNames){
+        	System.out.println(name);
+        }
+
+        ObservableList<String> empItems = FXCollections.observableArrayList(empNames);
+        
+        ChoiceBox<String> cb = new ChoiceBox<String>();
+        cb.setItems(empItems);
+        cb.setValue(empItems.get(0));
+        cb.setTooltip(new Tooltip("Select employee"));
+        grid.add(cb, 2, 2);
+        
+        
+        Button checkButton = new Button("Check");
+        checkButton.setMinHeight(50);
+        checkButton.setMinWidth(100);
+        checkButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        grid.add(checkButton, 1, 3);
+        checkButton.setOnAction(e -> {
+        	Employee myEmp = emps.get(cb.getSelectionModel().getSelectedIndex());
+        	System.out.println(myEmp.getName());
+        	addWorkTime(myEmp , bus);
+        	window.setScene(busAddWorkTime);
+        });
+        
+        Button back = new Button("Back");
+        HBox hbBack = new HBox(10);
+        hbBack.setAlignment(Pos.TOP_RIGHT);
+        back.setMinWidth(50);
+        back.setMinHeight(20);
+        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
+        hbBack.getChildren().add(back);
+        grid.add(hbBack, 1, 0);
+        back.setOnAction(e -> {
+    		businessMenu();
+    		window.setScene(businessMenu);
+        });
+        
+        
+        busSelectEmp = new Scene(grid, 500, 500);
+	}
 	
-//	public void addWorkTime(Employee emp, Business bus){
-//		//add to employees hm HashMap<LocalDate, HashMap<LocalTime, Boolean>>
-//		//Weekly?
-//		//select time or user input?
-//		GridPane grid2 = new GridPane();
-//    	grid2.setPadding(new Insets(30, 30, 30, 30));
-//    	grid2.setAlignment(Pos.CENTER);
-//    	grid2.setHgap(20);
-//    	grid2.setVgap(20);
-//    	
-//        
-//        Text registerTitle = new Text("Add working time for employee | " + emp.getName());
-//        registerTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
-//        grid2.add(registerTitle, 0, 1,2, 1);
-//        
-//        Label startTime = new Label("Start time : ");
-//        grid2.add(startTime, 0, 2);
-//
-//        TextField startTimeText = new TextField();
-//        startTimeText.setPromptText("HHMM");
-//        grid2.add(startTimeText, 1, 2);
-//        //TODO 
-//        //CHECK FORMAT OF INPUT "HHMM"
-//            
-//        Button register = new Button("Add!");
-//        HBox hbRegister = new HBox(10);
-//        hbRegister.setAlignment(Pos.BOTTOM_RIGHT);
-//        register.setMinWidth(80);
-//        register.setMinHeight(40);
-//        register.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
-//        hbRegister.getChildren().add(register);
-//        grid2.add(hbRegister, 1, 8);
-//        
-//        register.setOnAction(e -> {
+	public void addWorkTime(Employee emp, Business bus){
+		//add to employees hm HashMap<LocalDate, HashMap<LocalTime, Boolean>>
+		//Weekly?
+		//select time or user input?
+		GridPane grid2 = new GridPane();
+    	grid2.setPadding(new Insets(30, 30, 30, 30));
+    	grid2.setAlignment(Pos.CENTER);
+    	grid2.setHgap(20);
+    	grid2.setVgap(20);
+    	
+        
+        Text registerTitle = new Text("Add working time for employee | " + emp.getName());
+        registerTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+        grid2.add(registerTitle, 0, 1,2, 1);
+        
+        Label startTime = new Label("Start time : ");
+        grid2.add(startTime, 0, 2);
+
+        TextField startTimeText = new TextField();
+        startTimeText.setPromptText("HHMM");
+        grid2.add(startTimeText, 1, 2);
+        //TODO 
+        //CHECK FORMAT OF INPUT "HHMM"
+            
+        Button register = new Button("Add!");
+        HBox hbRegister = new HBox(10);
+        hbRegister.setAlignment(Pos.BOTTOM_RIGHT);
+        register.setMinWidth(80);
+        register.setMinHeight(40);
+        register.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
+        hbRegister.getChildren().add(register);
+        grid2.add(hbRegister, 1, 8);
+        
+        register.setOnAction(e -> {
 //        	String empNameString = empNameText.getText();
-//        	//TODO
-//        	//check if empNameString is empty?
+        	//TODO
+        	//check if empNameString is empty?
 //        	bus.addNewEmp(empNameString);
-//
-//    		businessMenu();
-//    		window.setScene(businessMenu);
-//        	
-//        });
-//            
-//        Button back = new Button("Back");
-//        HBox hbBack = new HBox(10);
-//        hbBack.setAlignment(Pos.TOP_RIGHT);
-//        back.setMinWidth(50);
-//        back.setMinHeight(20);
-//        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
-//        hbBack.getChildren().add(back);
-//        grid2.add(hbBack, 1, 0);
-//        back.setOnAction(e -> {
-//    		businessMenu();
-//    		window.setScene(businessMenu);
-//        });
-//        
-//        busAddEmpSc = new Scene(grid2, 300, 500);
-//	}
+
+    		businessMenu();
+    		window.setScene(businessMenu);
+        	
+        });
+            
+        Button back = new Button("Back");
+        HBox hbBack = new HBox(10);
+        hbBack.setAlignment(Pos.TOP_RIGHT);
+        back.setMinWidth(50);
+        back.setMinHeight(20);
+        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
+        hbBack.getChildren().add(back);
+        grid2.add(hbBack, 1, 0);
+        back.setOnAction(e -> {
+    		businessMenu();
+    		window.setScene(businessMenu);
+        });
+        
+        busAddEmpSc = new Scene(grid2, 300, 500);
+	}
 
 }

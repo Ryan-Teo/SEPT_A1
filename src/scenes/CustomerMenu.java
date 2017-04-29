@@ -28,14 +28,15 @@ import system.Booking;
 import users.Business;
 import users.Customer;
 import users.Employee;
+import users.User;
 
 public class CustomerMenu extends SceneManager{
-	
 	
 	public CustomerMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
 			ArrayList<Booking> bookings, Stage primaryStage) {
 		super(customers, businesses, account, bookings, primaryStage);
 		// TODO Auto-generated constructor stub
+
 	}
 	
 	public void customerMenu(){
@@ -44,7 +45,7 @@ public class CustomerMenu extends SceneManager{
     	grid3.setAlignment(Pos.CENTER);
     	grid3.setHgap(10);
     	grid3.setVgap(10);
-        
+
     	Text custTitle = new Text("Welcome --" + userInst.getName() + "--");
     	custTitle.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
         grid3.add(custTitle, 0, 0, 1, 1);
@@ -87,7 +88,7 @@ public class CustomerMenu extends SceneManager{
         custLogOut.setOnAction(e -> {
         	menuScreen.showMainMenu();
         	window.setScene(mainMenu);
-        	userInst = null;
+        	this.userInst = null;
         	});
         
         customerMenu = new Scene(grid3, 200, 400);

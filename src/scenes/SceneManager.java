@@ -48,19 +48,19 @@ import users.Employee;
 import users.User;
 
 public class SceneManager {
-	Stage window;
-	Scene mainMenu, customerRegister, ownerRegister, registerMenu, customerMenu, custSelectService, busAddEmpSc, busAddWorkTime,
+	static Stage window;
+	static Scene mainMenu, customerRegister, ownerRegister, registerMenu, customerMenu, custSelectService, busAddEmpSc, busAddWorkTime,
 			custSelectBus, custSelectDate, custSelectTime, custSelectEmp, businessMenu, scene4, customerBookingSummary,
 			busSelectEmp;
-	ArrayList<Customer> customers;
-	ArrayList<Business> businesses;
-	ArrayList<Booking> bookings;
-	User userInst = null;
+	static ArrayList<Customer> customers;
+	static ArrayList<Business> businesses;
+	static ArrayList<Booking> bookings;
+	static User userInst = null;
 	Account acct;
 	FileIO FIO = new FileIO();
-	MainMenu menuScreen;
-	CustomerMenu custScreen;
-	BusinessMenu busScreen;
+	static MainMenu menuScreen;
+	static CustomerMenu custScreen;
+	static BusinessMenu busScreen;
 	/*
 	 * After movement, Scenemanager should have the following methods:
 	 * -getMenus()
@@ -82,17 +82,28 @@ public class SceneManager {
 		window = primaryStage;
 		
 	}
-
-	public void getMenus(){
+	
+	public void show(){
+        window.setMinHeight(300);
+        window.setMinWidth(600);
+        window.setScene(mainMenu);
+        window.show();
+	}
+	public void getScreens(){
+		custScreen = new CustomerMenu(customers, businesses, acct, bookings, window);
+		busScreen = new BusinessMenu(customers, businesses, acct, bookings, window);
 		menuScreen = new MainMenu(customers, businesses, acct, bookings, window);
-		menuScreen.getScreens();
+	}
+	public void getMenus(){
+		getScreens();
 		menuScreen.showMainMenu();
-		menuScreen.show();
+		show();
 	}
  
 	public void mainLogIn(ArrayList<Customer> customers, ArrayList<Business> businesses, String username,
 			String password) {
 		userInst = acct.login(customers, businesses, username, password);
+
 	}
 	public boolean mainRegisterBusiness(ArrayList<Business>businesses, String name, String username, 
 			String busName, String password1, String password2, String phone, String address){

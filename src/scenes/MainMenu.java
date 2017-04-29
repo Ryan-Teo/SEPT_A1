@@ -19,27 +19,18 @@ import system.Account;
 import system.Booking;
 import users.Business;
 import users.Customer;
+import users.User;
 
 public class MainMenu extends SceneManager{
 
+	
+	
 	public MainMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
 			ArrayList<Booking> bookings, Stage primaryStage) {
 		super(customers, businesses, account, bookings, primaryStage);
 		// TODO Auto-generated constructor stub
 	}
-	
-	public void getScreens(){
-		custScreen = new CustomerMenu(customers, businesses, acct, bookings, window);
-		busScreen = new BusinessMenu(customers, businesses, acct, bookings, window);
-	}
-	
-	public void show(){
-        window.setMinHeight(300);
-        window.setMinWidth(600);
-        window.setScene(mainMenu);
-        window.show();
-	}
-	
+			
 	public void showMainMenu(){
     	GridPane grid = new GridPane();
     	grid.setPadding(new Insets(30, 30, 30, 30));
@@ -86,6 +77,7 @@ public class MainMenu extends SceneManager{
         		busScreen.businessMenu();
         		window.setScene(businessMenu);
         	}
+
         });
 
         Button registerButton = new Button("Click Here to Register");

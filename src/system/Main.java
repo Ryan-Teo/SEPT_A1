@@ -13,9 +13,6 @@ import users.User;
 
 public class Main extends Application{
 	
-//	Stage window;
-	Scene mainMenu, customerRegister, registerMenu, customerMenu, scene4;
-	User userInst = null;
 	Account acct = new Account();
 	FileIO FIO = new FileIO();
 	

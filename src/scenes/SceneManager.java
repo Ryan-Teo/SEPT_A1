@@ -4,11 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Scanner;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -1085,7 +1082,7 @@ public class SceneManager {
     }
 	
 	
-	public ObservableList<Booking> getCustomerBookings(Customer cust,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {
+	public ObservableList<Booking> getCustomerBookings(Customer cust, LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {
 		ObservableList<Booking> bookingsToBeViewed = FXCollections.observableArrayList();
 		
 		int counter = 0;

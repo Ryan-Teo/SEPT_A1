@@ -11,17 +11,17 @@ public class Booking implements Serializable{
 	private static final long serialVersionUID = 5L;
 	private LocalDate bookDate;
 	private LocalTime startTime, endTime;
-	private Customer bookCust;
-	private Business bookBus;
-	private Employee bookEmp;
+	private String bookCust;
+	private String bookBus;
+	private String bookEmp;
 
 	public Booking(LocalDate bookDate, LocalTime bookStart, LocalTime bookEnd, Customer bookCust, Business bookBus, Employee bookEmp){
 		this.bookDate = bookDate;
 		this.startTime = bookStart;
 		this.endTime= bookEnd;
-		this.bookCust = bookCust;
-		this.bookBus = bookBus;
-		this.bookEmp = bookEmp;
+		this.bookCust = bookCust.getUsername();
+		this.bookBus = bookBus.getBusName();
+		this.bookEmp = bookEmp.getName();
 	}
 	
 	public LocalDate getBookDate() {
@@ -36,24 +36,24 @@ public class Booking implements Serializable{
 		return endTime;
 	}
 	
-	public Customer getBookCust() {
+	public String getBookCust() {
 		return bookCust;
 	}
 	
-	public Business getBookBus() {
+	public String getBookBus() {
 		return bookBus;
 	}
 	
-	public Employee getBookEmp() {
+	public String getBookEmp() {
 		return bookEmp;
 	}
 
 	public void setEmployee(Employee emp){
-		this.bookEmp = emp;
+		this.bookEmp = emp.getName();
 	}
 	
 	public void setCust(Customer cust){
-		this.bookCust = cust;
+		this.bookCust = cust.getUsername();
 	}
 
 

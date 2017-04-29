@@ -36,6 +36,7 @@ public class Employee implements Serializable {
 		return schedule;
 	}
 	
+	//this method currently does not work, since all the values in the schedule hashmap are currently set to null
 	public boolean checkSchedule(LocalDate date, LocalTime startTime, LocalTime endTime, long steps){
 		LocalTime checkTime = startTime;
 		

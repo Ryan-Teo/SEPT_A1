@@ -12,7 +12,6 @@ public abstract class User implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	String name, username, password, address, phone;
-	Booking [] booking;
 	
 	//constructor
 	User(String name, String username, String password, String address, String phone){
@@ -46,10 +45,6 @@ public abstract class User implements Serializable{
 
 	public String getPhone() {
 		return phone;
-	}
-
-	public Booking[] getBooking() {
-		return booking;
 	}
 
 }

@@ -24,7 +24,7 @@ public class Customer extends User{
 		ObservableList<Booking> bookingsToBeViewed = FXCollections.observableArrayList();
 		
 		for(int i = 0; i < bookings.size(); i++){
-			if(bookings.get(i).getBookCust().getUsername().equals(this.getUsername())){
+			if(bookings.get(i).getBookCust().equals(this.getUsername())){
 				bookingsToBeViewed.add(bookings.get(i));
 			}
 		}
@@ -33,8 +33,9 @@ public class Customer extends User{
 	
 	@Override
 	public boolean bookSession(LocalDate date, LocalTime sessionStart, LocalTime sessionEnd, Customer cust, Business busInst ,Employee emp, ArrayList<Booking> bookings){
-				
-		if(emp.checkSchedule(date, sessionStart, sessionEnd, busInst.getTimeSlotInMins())){
+		
+		if(true){ //condition only used for dummy code
+//		if(emp.checkSchedule(date, sessionStart, sessionEnd, busInst.getTimeSlotInMins())){
 			Booking newBook = new Booking(date, sessionStart, sessionEnd, cust, busInst, emp);
 			bookings.add(newBook);
 			return true;

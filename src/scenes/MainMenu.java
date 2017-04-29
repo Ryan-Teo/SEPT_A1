@@ -1,5 +1,7 @@
 package scenes;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import javafx.geometry.Insets;
@@ -19,6 +21,7 @@ import system.Account;
 import system.Booking;
 import users.Business;
 import users.Customer;
+import users.Employee;
 import users.User;
 
 public class MainMenu extends SceneManager{
@@ -70,6 +73,21 @@ public class MainMenu extends SceneManager{
         	String passwordString = passwordInput.getText();
         	mainLogIn(customers, businesses, userNameString, passwordString);
         	if(userInst instanceof Customer){
+        		
+        		/*
+        		 * creating a dummy booking
+        		 */
+        		LocalDate date = LocalDate.now();
+        		LocalTime sessionStart = LocalTime.now();
+        		LocalTime sessionEnd = sessionStart.plusMinutes(30);
+        		Business busInst = businesses.get(0);
+        		Employee emp = new Employee("abc", "Bob", busInst);
+        		userInst.bookSession(date, sessionStart, sessionEnd, (Customer)userInst, busInst ,emp, bookings);
+        		System.out.println("saved a dummy");
+        		FIO.saveBook(bookings);
+        		/*
+        		 * end creating a dummy booking
+        		 */
         		custScreen.customerMenu();
         		window.setScene(customerMenu);
         	}

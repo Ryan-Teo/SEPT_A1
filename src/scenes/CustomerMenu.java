@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -369,7 +370,7 @@ public class CustomerMenu extends SceneManager{
 		ObservableList<Booking> bookItems = userInst.viewBookingSummary(bookings);
 		
 		//Business Column
-		TableColumn<Booking,Business> business =  new TableColumn<>("Business");
+		TableColumn<Booking,String> business =  new TableColumn<>("Business");
 		business.setMinWidth(50);
 		business.setCellValueFactory(new PropertyValueFactory<>("bookBus"));
 		
@@ -389,13 +390,14 @@ public class CustomerMenu extends SceneManager{
 		sessionEnd.setCellValueFactory(new PropertyValueFactory<>("endTime"));
 		
 		//Employee
-		TableColumn<Booking, Employee> emp =  new TableColumn<>("Employee");
+		TableColumn<Booking, String> emp =  new TableColumn<>("Employee");
 		emp.setMinWidth(50);
 		emp.setCellValueFactory(new PropertyValueFactory<>("bookEmp"));
 		
 		
 		table.setItems(bookItems);
 		table.getColumns().addAll(business, bookingDate, sessionStart, sessionEnd, emp);
+		table.setPlaceholder(new Label("You Currently Have no Bookings"));
 		
 		grid.add(table, 3, 3);
 		
@@ -411,7 +413,10 @@ public class CustomerMenu extends SceneManager{
 				Booking bookInst = table.getSelectionModel().getSelectedItem();
 				if(((Customer) userInst).cancelBooking(bookings, bookInst))
 					FIO.saveBook(bookings);
+				showBookingSummary();
+				window.setScene(customerBookingSummary);
 			}
+
 		});
 		
 		Button backToMenuButton = new Button("Go back to menu");

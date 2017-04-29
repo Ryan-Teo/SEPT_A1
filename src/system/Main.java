@@ -13,19 +13,14 @@ import users.User;
 
 public class Main extends Application{
 	
-//	Stage window;
-	Scene mainMenu, customerRegister, registerMenu, customerMenu, scene4;
-	User userInst = null;
 	Account acct = new Account();
 	FileIO FIO = new FileIO();
 	
-	Helper help = new Helper();//Remove
 	ArrayList<Customer> customers = FIO.loadCust();
 	ArrayList<Business> businesses = FIO.loadBus();
-	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = FIO.loadBook(help, businesses); //Loading existing bookings	
+	ArrayList<Booking> bookings = FIO.loadBook(businesses);
 	
-	
-	
+//	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = FIO.loadBook(help, businesses); //Loading existing bookings	
 	
 	public static void main(String args[]) throws IOException{ //Handle exceptions
 	
@@ -38,13 +33,8 @@ public class Main extends Application{
 		SceneManager manager = new SceneManager(customers, businesses, acct,bookings, primaryStage);
 
     	// load main menu at the start
-    	manager.showMainMenu();
-    	manager.show();
+    	manager.getMenus();
 
-
-
-		FIO.saveBook(bookings);	// Saving all bookings
-		
 
 //		System.exit(0);
         

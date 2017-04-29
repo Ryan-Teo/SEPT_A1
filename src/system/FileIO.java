@@ -46,6 +46,7 @@ public class FileIO {
 			customers.add(new Customer("Grace", "graceCust", "password", "grace@sept.com", "0493020302"));
 			//no existing customers, file will be created
 		}
+		saveCust(customers);
 		return customers;
 	}
 	
@@ -112,7 +113,7 @@ public class FileIO {
 			in.close();
 			inFile.close();
 		} catch (IOException e) {
-			System.out.println("-No existing employees-");
+			System.out.println("-No existing employees-"); //LOG
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -128,7 +129,7 @@ public class FileIO {
 			}
 		}
 		
-		
+		saveBus(businesses); //LOG
 		return businesses;
 	}
 	
@@ -138,7 +139,7 @@ public class FileIO {
 		try {
 			pwBus = new PrintWriter (new BufferedWriter (new FileWriter ("business.txt")));
 		} catch (IOException e) {
-			System.err.println("-business.txt has been created-");
+			System.err.println("-business.txt has been created-"); //LOG
 		}
 		for (int i=0; i<businesses.size(); i++){
 			Business business = businesses.get(i);			
@@ -158,7 +159,7 @@ public class FileIO {
 	        ObjectOutputStream out = new ObjectOutputStream(outFile);
 			out.reset();
 			for(Business busInst : businesses){
-				for(Employee emp : busInst.getEmp()){
+				for(Employee emp : busInst.getEmps()){
 					emps.add(emp);
 				}
 			}
@@ -166,35 +167,33 @@ public class FileIO {
 	        out.close();
 	        outFile.close();
 	     }catch(IOException e) {
-	    	 System.err.println("-employees file has been created-");
+	    	 System.err.println("-employees file has been created-"); //LOG
 	     }
 	}
 	
 
-	public LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> loadBook(Helper help, ArrayList<Business> businesses){
+	@SuppressWarnings("unchecked")
+	public ArrayList<Booking> loadBook(ArrayList<Business> businesses){
 		//deal with exception here
-		//part 2 : check against businesses array, init days for new businesses
-		LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = new LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>>(); //Check for null when called
+		//part 2 : check against businesses array, init days for new businesses (defunct)
+		ArrayList<Booking> bookings = new ArrayList<Booking>(); //Check for null when called
 		try {
-			FileInputStream inFile = new FileInputStream("bookings.txt");
+			FileInputStream inFile = new FileInputStream("bookings");
 			ObjectInputStream in = new ObjectInputStream(inFile);
-			bookings = (LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>>) in.readObject();			
+			bookings = (ArrayList<Booking>) in.readObject();			
 			in.close();
 			inFile.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-			System.out.println("-- POPULATING BOOKINGS --");
-			for(Business busInst : businesses){
-				bookings.put(busInst, help.initDaySlots(busInst));
-			}
-			//no existing customers, file will be created
+			System.out.println("-- NO BOOKINGS EXIST --"); //LOG
 		}
+		saveBook(bookings); //LOG
 		return bookings;
 	}
 	
-	public void saveBook(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings){
+	public void saveBook(ArrayList<Booking> bookings){
 		try {
-	        FileOutputStream outFile = new FileOutputStream("bookings.txt");
+	        FileOutputStream outFile = new FileOutputStream("bookings");
 	        ObjectOutputStream out = new ObjectOutputStream(outFile);
 			out.reset();
 	        out.writeObject(bookings);

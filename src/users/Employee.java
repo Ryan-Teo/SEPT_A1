@@ -2,6 +2,7 @@ package users;
 import java.io.Serializable;
 import java.util.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Employee implements Serializable {
 
@@ -9,7 +10,7 @@ public class Employee implements Serializable {
 	private String empID;	
 	private String name;
 	private Business employer;
-	private HashMap<LocalDate, ArrayList<Boolean>> schedule;
+	private HashMap<LocalDate, HashMap<LocalTime, Boolean>> schedule;
 	
 	public Employee(String empID, String name, Business employer){
 		this.empID = empID;
@@ -29,9 +30,27 @@ public class Employee implements Serializable {
 		return employer;
 	}
 	
-	public HashMap<LocalDate, ArrayList<Boolean>> getSchedule(){
+	public HashMap<LocalDate, HashMap<LocalTime, Boolean>> getSchedule(){
 		//Init enough slots for each employee working time
+		//TODO
 		return schedule;
 	}
-
+	
+	//this method currently does not work, since all the values in the schedule hashmap are currently set to null
+	public boolean checkSchedule(LocalDate date, LocalTime startTime, LocalTime endTime, long steps){
+		LocalTime checkTime = startTime;
+		
+		HashMap<LocalTime, Boolean>day = schedule.get(date);
+		do{
+			if(!day.get(checkTime)) //may need to get rid of ! depending on how it was implemented, me not know lel
+				return false;
+			else
+				checkTime = checkTime.plusMinutes(steps);
+		}while(checkTime.isBefore(endTime));
+		
+		
+		
+		return true;
+		
+	}
 }

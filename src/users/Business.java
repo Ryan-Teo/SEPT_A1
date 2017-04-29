@@ -4,15 +4,17 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import system.Booking;
 
 public class Business extends User {
 
 	private static final long serialVersionUID = 2L;
 	private String busName;
-	private ArrayList<Employee> emp = new ArrayList<Employee>();
+	private ArrayList<Employee> emps = new ArrayList<Employee>();
 	private LocalTime openTime, closeTime; //hardcoded
-	private int timeSlotInMins = 30; //Default 30 min slots
+	private long timeSlotInMins = 30; //Default 30 min slots
 	private HashMap<String, Integer> services = new HashMap<String, Integer>();
 	
 	public Business(String busName, String ownerName, String address, String phone, String username, String password){
@@ -24,8 +26,7 @@ public class Business extends User {
 		
 		openTime = LocalTime.parse(start, dtf);
 		closeTime = LocalTime.parse(end, dtf);
-		
-		services.put("General",1);
+		services.put("General", 1);
 		services.put("General 2", 2); //HARDCODED REMOVE
 		services.put("General 3", 3);
 	}
@@ -61,7 +62,7 @@ public class Business extends User {
 	}
 	
 	//Get length of each time slot in minutes
-	public int getTimeSlotInMins(){
+	public long getTimeSlotInMins(){
 		return timeSlotInMins;
 	}
 	
@@ -71,14 +72,8 @@ public class Business extends User {
 	}
 	
 	//return list of employees
-	public ArrayList<Employee> getEmp() {
-		return emp;
-	}
-	
-	//Adding a new employee into the business
-	public void addNewEmployee(String empID, String name){
-		Employee new_emp = new Employee(empID,name,this);
-		emp.add(new_emp);
+	public ArrayList<Employee> getEmps() {
+		return emps;
 	}
 	
 	//Get HM of Services and how many slots each service will take
@@ -123,116 +118,96 @@ public class Business extends User {
 	}
 	
 	
-	//Add working time for employee or Assign employee working time 
-	public void addWorkingTime(Employee emp,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings,Scanner scan){
-		//Display all sessions with the specified date
-		//List out all of the sessions, and then pair with their index
-		
-		LocalDate dateSelected = null;
-		LocalTime timeSelected = null;
-		boolean addWorkingTimeSuccess = false;
-		try{
-			LinkedHashMap<LocalDate, Booking[]> busBookings = bookings.get(this);
-			do{
-				int i=0;
-				for(LocalDate myDate : busBookings.keySet()){
-					System.out.printf("%4s %2$tB %2$td, %2$tA \n", i+1, myDate);
-					i++;
-					if(i==7){
-						break;
-					}
-				}
-				int dateOption;
-				int timeOption;
-				do{
-					System.out.printf("Please pick your day (or any non-numeral key to cancel): ");
-					dateOption = scan.nextInt()-1;
-					scan.nextLine();
-				}while(!(dateOption>=0 && dateOption<=6));
-				int j=0;
-				for(LocalDate myDate : busBookings.keySet()){
-					if(j==dateOption){
-						dateSelected = myDate;
-						break;
-					}
-					j++;
-				}
-				Booking[] daySlots = busBookings.get(dateSelected);
-				for(int k=0 ; k<daySlots.length; k++){
-					System.out.println("Slot " + (k+1) + " : Time ["+daySlots[k].getStartTime()+" - "+daySlots[k].getEndTime()+"]");
-					System.out.printf("\tEmployee assigned to this session is : %s\n", daySlots[k].getBookEmp().getName());
-				}
-				
-				do{
-					System.out.printf("Please pick your time slot: ");
-					timeOption = scan.nextInt()-1;
-					scan.nextLine();
-				}while(!(timeOption>=0 && timeOption<daySlots.length));
-				timeSelected = daySlots[timeOption].getStartTime();
-				addWorkingTimeSuccess = assignEmpToSession(emp, dateSelected, timeSelected,bookings);
-			}while(!addWorkingTimeSuccess);
-		}catch(IndexOutOfBoundsException e){
-			scan.nextLine();
-			System.out.println("Invalid Input - Returning to menu");
-		}
-}
+//	//Add working time for employee or Assign employee working time 
+//	public void addWorkingTime(Employee emp,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings,Scanner scan){
+//		//Display all sessions with the specified date
+//		//List out all of the sessions, and then pair with their index
+//		
+//		LocalDate dateSelected = null;
+//		LocalTime timeSelected = null;
+//		boolean addWorkingTimeSuccess = false;
+//		try{
+//			LinkedHashMap<LocalDate, Booking[]> busBookings = bookings.get(this);
+//			do{
+//				int i=0;
+//				for(LocalDate myDate : busBookings.keySet()){
+//					System.out.printf("%4s %2$tB %2$td, %2$tA \n", i+1, myDate);
+//					i++;
+//					if(i==7){
+//						break;
+//					}
+//				}
+//				int dateOption;
+//				int timeOption;
+//				do{
+//					System.out.printf("Please pick your day (or any non-numeral key to cancel): ");
+//					dateOption = scan.nextInt()-1;
+//					scan.nextLine();
+//				}while(!(dateOption>=0 && dateOption<=6));
+//				int j=0;
+//				for(LocalDate myDate : busBookings.keySet()){
+//					if(j==dateOption){
+//						dateSelected = myDate;
+//						break;
+//					}
+//					j++;
+//				}
+//				Booking[] daySlots = busBookings.get(dateSelected);
+//				for(int k=0 ; k<daySlots.length; k++){
+//					System.out.println("Slot " + (k+1) + " : Time ["+daySlots[k].getStartTime()+" - "+daySlots[k].getEndTime()+"]");
+//					System.out.printf("\tEmployee assigned to this session is : %s\n", daySlots[k].getBookEmp().getName());
+//				}
+//				
+//				do{
+//					System.out.printf("Please pick your time slot: ");
+//					timeOption = scan.nextInt()-1;
+//					scan.nextLine();
+//				}while(!(timeOption>=0 && timeOption<daySlots.length));
+//				timeSelected = daySlots[timeOption].getStartTime();
+//				addWorkingTimeSuccess = assignEmpToSession(emp, dateSelected, timeSelected,bookings);
+//			}while(!addWorkingTimeSuccess);
+//		}catch(IndexOutOfBoundsException e){
+//			scan.nextLine();
+//			System.out.println("Invalid Input - Returning to menu");
+//		}
+//}
 	
-	public boolean assignEmpToSession(Employee emp, LocalDate date ,LocalTime sessionStart,LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings){
-		
-		//Time format for day and hour
-				LinkedHashMap<LocalDate, Booking[]> busSchedule = bookings.get(this);
-				Booking[] daySessions;
-				boolean assignEmpSuccess = false;
-				
-				//Iterate through schedule of the business and find the specified date
-				for(LocalDate dayInst : busSchedule.keySet()){ //For each day
-					//when found,
-					if(date.equals(dayInst)){
-						//Iterate through all the sessions on that day and find a specific session time
-						daySessions = busSchedule.get(dayInst);
-						for(int i=0; i<daySessions.length ; i++){
-							if(daySessions[i].getStartTime().equals(sessionStart)){
-									daySessions[i].setEmployee(emp);
-									daySessions[i].booked();
-									System.out.println("-- Booking Successful! --");
-									assignEmpSuccess = true;
-							}
-						}
-					}
-				}
-				return assignEmpSuccess;
-	}
+//	public boolean assignEmpToSession(Employee emp, LocalDate date ,LocalTime sessionStart, ArrayList<Booking> bookings){
+//		
+//		//Time format for day and hour
+//				LinkedHashMap<LocalDate, Booking[]> busSchedule = bookings.get(this);
+//				Booking[] daySessions;
+//				boolean assignEmpSuccess = false;
+//				
+//				//Iterate through schedule of the business and find the specified date
+//				for(LocalDate dayInst : busSchedule.keySet()){ //For each day
+//					//when found,
+//					if(date.equals(dayInst)){
+//						//Iterate through all the sessions on that day and find a specific session time
+//						daySessions = busSchedule.get(dayInst);
+//						for(int i=0; i<daySessions.length ; i++){
+//							if(daySessions[i].getStartTime().equals(sessionStart)){
+//									daySessions[i].setEmployee(emp);
+//									daySessions[i].booked();
+//									System.out.println("-- Booking Successful! --");
+//									assignEmpSuccess = true;
+//							}
+//						}
+//					}
+//				}
+//				return assignEmpSuccess;
+//	}
 
 	//View all bookings for a business
 	@Override
-	public void viewBookingSummary(LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings) {	
-		int counter = 0;
-		for(Business myBus : bookings.keySet()){	//For each business
-			if(myBus.busName.equals(this.busName)){
-				LinkedHashMap<LocalDate, Booking[]> myDay = bookings.get(myBus);
-				for(LocalDate myDate : myDay.keySet()){		//For each date
-					Booking[] myBooking = myDay.get(myDate);
-					for(int i=0 ; i < myBooking.length; i++){	//For all bookings on each day
-						if(myBooking[i].getBookStat()){
-							System.out.println();
-							System.out.println("----------------"+"["+ " Booking No : "+ (counter+1) + "]"+"----------------");
-							System.out.println("|	Customer Name : " + myBooking[i].getBookCust().name +"	|");
-							System.out.printf("%1$s %2$tB %2$td, %2$tA ", "|	Date: ", myDate);
-							System.out.println("		|");
-							System.out.println("|	Session time : "+myBooking[i].getStartTime()+" - "+myBooking[i].getEndTime()+"		|");
-							System.out.println("|	Employee assigned : " + myBooking[i].getBookEmp().getName()+"		|");
-							System.out.println("-------------------------------------------------");
-							System.out.println();
-							counter++;
-						}
-					}		
-				}
+	public ObservableList<Booking> viewBookingSummary(ArrayList<Booking>bookings) {	
+		ObservableList<Booking> bookingsToBeViewed = FXCollections.observableArrayList();
+		for(int i = 0; i < bookings.size(); i++){
+			if(bookings.get(i).getBookBus().equals(this.getBusName())){
+				bookingsToBeViewed.add(bookings.get(i));
 			}
-			
 		}
-		if(counter == 0){
-			System.out.printf("\n-- You have no current bookings! --\n\n");
-		}
+		return bookingsToBeViewed;
 	}
 	
 	//Adding booking on behalf of customer
@@ -261,42 +236,23 @@ public class Business extends User {
 	}
 	
 	public void addEmp(Employee myEmp){
-		emp.add(myEmp);
+		emps.add(myEmp);
 	}
 	
 	//Adding a new employee into the business
-	public void addNewEmployee(Scanner scan){
-		/*
-		 * 		TAKE INPUT IN HERE 
-		 */
-		String empID, name;
-		Boolean empAdded = false;
-		System.out.println("-Type \"exit\" at anytime to return to main menu-");
-		do{
-			System.out.printf("Please enter employee name : ");
-			name = scan.nextLine();
-			if (name.equals("exit")){
-				return;
-			}
-			//Make sure emp id is unique
-			empID = String.format("emp%03d", emp.size());
-			Employee new_emp = new Employee(empID,name,this);
-			emp.add(new_emp);
-			System.out.println("-Employee Added-");
-			System.out.println("Name : " + name);
-			System.out.println("Employee ID : " + empID);
-			System.out.println("#######################");
-			empAdded = true;
-		}while(!empAdded);
-
+	public void addNewEmp(String empName){
+		String empID;
+		//Make sure emp id is unique
+		empID = String.format("emp%03d", emps.size());
+		Employee new_emp = new Employee(empID,empName,this);
+		emps.add(new_emp); //LOG
 	}
-	
-	public void viewEmployees(){
-		System.out.printf("-%s's Employees-\n",busName);
-		for(Employee myEmp : emp){
-			System.out.printf("Name : %s | ID : %s\n", myEmp.getName(), myEmp.getEmpID());
-		}
-		System.out.println("########################");
+
+	@Override
+	public boolean bookSession(LocalDate date, LocalTime sessionStart, LocalTime sessionEnd, Customer cust,
+			Business busInst, Employee emp, ArrayList<Booking> bookings) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	//view business weekly schedule 

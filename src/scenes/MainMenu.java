@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -26,7 +28,7 @@ import users.User;
 
 public class MainMenu extends SceneManager{
 
-	
+	Logger logger = Logger.getLogger(MainMenu.class);
 	
 	public MainMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
 			ArrayList<Booking> bookings, Stage primaryStage) {
@@ -88,10 +90,12 @@ public class MainMenu extends SceneManager{
         		/*
         		 * end creating a dummy booking
         		 */
+        		logger.info("Initializing customer menu");
         		custScreen.customerMenu();
         		window.setScene(customerMenu);
         	}
         	else if(userInst instanceof Business){
+        		logger.info("Initializing business menu");
         		busScreen.businessMenu();
         		window.setScene(businessMenu);
         	}
@@ -114,6 +118,7 @@ public class MainMenu extends SceneManager{
 	}
 	
 	public void showRegister(){
+		logger.info("Initializing sign up page");
         GridPane grid2a = new GridPane();
         grid2a.setPadding(new Insets(30, 30, 30, 30));
         grid2a.setAlignment(Pos.CENTER);
@@ -169,6 +174,7 @@ public class MainMenu extends SceneManager{
 	}
 	
 	public void registerCustomer() {
+		logger.info("Initializing customer sign up page");
         GridPane grid2 = new GridPane();
     	grid2.setPadding(new Insets(30, 30, 30, 30));
     	grid2.setAlignment(Pos.CENTER);
@@ -274,6 +280,7 @@ public class MainMenu extends SceneManager{
 	}
 	
 	public void registerOwner() {
+		logger.info("Initializing business sign up page");
         GridPane grid3 = new GridPane();
     	grid3.setPadding(new Insets(30, 30, 30, 30));
     	grid3.setAlignment(Pos.CENTER);

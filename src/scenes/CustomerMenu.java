@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -33,6 +35,8 @@ import users.User;
 
 public class CustomerMenu extends SceneManager{
 	
+	Logger logger = Logger.getLogger(SceneManager.class);
+	
 	public CustomerMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
 			ArrayList<Booking> bookings, Stage primaryStage) {
 		super(customers, businesses, account, bookings, primaryStage);
@@ -60,6 +64,7 @@ public class CustomerMenu extends SceneManager{
         hbCustAdd.getChildren().add(custAdd);
         grid3.add(hbCustAdd, 0, 1);
         custAdd.setOnAction(e -> {
+        	logger.info("Customer picks add booking option");
         	selectBusiness();
         	window.setScene(custSelectBus);
         });
@@ -74,6 +79,7 @@ public class CustomerMenu extends SceneManager{
         hbCustCurrent.getChildren().add(custCurrent);
         grid3.add(hbCustCurrent, 0, 2);
         custCurrent.setOnAction(e -> {
+        	logger.info("Customer picks show booking summary option");
           	showBookingSummary();
         	window.setScene(customerBookingSummary);
         });
@@ -87,6 +93,7 @@ public class CustomerMenu extends SceneManager{
         hbCustLogOut.getChildren().add(custLogOut);
         grid3.add(hbCustLogOut, 0, 3);
         custLogOut.setOnAction(e -> {
+        	logger.info("Customer picks logging out option");
         	menuScreen.showMainMenu();
         	window.setScene(mainMenu);
         	this.userInst = null;
@@ -96,6 +103,7 @@ public class CustomerMenu extends SceneManager{
 	}
 		//Customer Add Booking Stuff
 	public void selectBusiness(){
+		logger.info("Entering business selection phase");
 				
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(30, 30, 30, 30));
@@ -125,7 +133,9 @@ public class CustomerMenu extends SceneManager{
         selectButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
         grid.add(selectButton, 1, 3);
         selectButton.setOnAction(e -> {
+        
         	int busIndex = busList.getSelectionModel().getSelectedIndex();
+        	logger.info("Business option no:" + busIndex +" is selected");
         	if(busIndex != -1){
         		selectService(busIndex);
         		window.setScene(custSelectService);
@@ -138,6 +148,7 @@ public class CustomerMenu extends SceneManager{
         returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
         grid.add(returnButton, 3, 3);
         returnButton.setOnAction(e -> {
+        	logger.info("Back to customer menu");
         	customerMenu();
         	window.setScene(customerMenu);
         });
@@ -145,6 +156,7 @@ public class CustomerMenu extends SceneManager{
 	}
 	
 	public void selectService(int busIndex){
+		logger.info("Entering service selection phase");
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(30, 30, 30, 30));
         grid.setAlignment(Pos.CENTER);
@@ -177,6 +189,7 @@ public class CustomerMenu extends SceneManager{
         grid.add(selectButton, 1, 3);
         selectButton.setOnAction(e -> {
     		String service = serviceList.getSelectionModel().getSelectedItem();
+    		logger.info("'"+ service +"'" + " service is selected");
     		selectDate(busIndex, service);
     		window.setScene(custSelectDate);
         });
@@ -187,6 +200,7 @@ public class CustomerMenu extends SceneManager{
         returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
         grid.add(returnButton, 3, 3);
         returnButton.setOnAction(e -> {
+        	logger.info("Back to business selection phase ");
         	selectBusiness();
         	window.setScene(custSelectBus);
         });
@@ -196,6 +210,7 @@ public class CustomerMenu extends SceneManager{
 	
 	public void selectDate(int busIndex, String service){
 		
+		logger.info("Entering date selection phase");
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(30, 30, 30, 30));
         grid.setAlignment(Pos.CENTER);
@@ -238,7 +253,7 @@ public class CustomerMenu extends SceneManager{
         grid.add(checkButton, 1, 3);
         checkButton.setOnAction(e -> {
             Business bus = businesses.get(busIndex);
-        	
+            logger.info("Date : " + datePicker.getValue() + "is selected");
         	selectTime(busIndex ,bus, datePicker.getValue() , service);
         	window.setScene(custSelectTime);
         });
@@ -249,6 +264,7 @@ public class CustomerMenu extends SceneManager{
         returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
         grid.add(returnButton, 3, 3);
         returnButton.setOnAction(e -> {
+        	logger.info("back to service selection phase");
     		selectService(busIndex);
     		window.setScene(custSelectService);
         });
@@ -353,7 +369,6 @@ public class CustomerMenu extends SceneManager{
 	
 	@SuppressWarnings("unchecked")
 	public void showBookingSummary() {
-		
 
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(30, 30, 30, 30));
@@ -413,6 +428,7 @@ public class CustomerMenu extends SceneManager{
 				Booking bookInst = table.getSelectionModel().getSelectedItem();
 				if(((Customer) userInst).cancelBooking(bookings, bookInst))
 					FIO.saveBook(bookings);
+				logger.info("A booking has been cancelled, summary is updated");
 				showBookingSummary();
 				window.setScene(customerBookingSummary);
 			}
@@ -429,6 +445,7 @@ public class CustomerMenu extends SceneManager{
 		grid.add(hbBackToMenuButton, 3, 5);
 
 		backToMenuButton.setOnAction(e -> {
+			logger.info("Back to customer menu");
 			customerMenu();
 			window.setScene(customerMenu);
 		});

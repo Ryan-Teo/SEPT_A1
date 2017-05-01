@@ -150,31 +150,31 @@ public class Employee implements Serializable {
 		int i = 0;
 		do{
 			LocalDate thisDate = currentDate.plusDays(i);
-			if(thisDate.getDayOfWeek().equals(DayOfWeek.MONDAY)){
+			if(times.get("monStart")!= null && thisDate.getDayOfWeek().equals(DayOfWeek.MONDAY)){
 				startTime = times.get("monStart");
 				endTime = times.get("monEnd");
 			}
-			else if(thisDate.getDayOfWeek().equals(DayOfWeek.TUESDAY)){
+			else if(times.get("tuesStart")!= null &&thisDate.getDayOfWeek().equals(DayOfWeek.TUESDAY)){
 				startTime = times.get("tueStart");
 				endTime = times.get("tueEnd");
 			}
-			else if(thisDate.getDayOfWeek().equals(DayOfWeek.WEDNESDAY)){
+			else if(times.get("wedStart")!= null && thisDate.getDayOfWeek().equals(DayOfWeek.WEDNESDAY)){
 				startTime = times.get("wedStart");
 				endTime = times.get("wedEnd");
 			}
-			else if(thisDate.getDayOfWeek().equals(DayOfWeek.THURSDAY)){
+			else if(times.get("thurStart")!= null &&thisDate.getDayOfWeek().equals(DayOfWeek.THURSDAY)){
 				startTime = times.get("thurStart");
 				endTime = times.get("thurEnd");
 			}
-			else if(thisDate.getDayOfWeek().equals(DayOfWeek.FRIDAY)){
+			else if(times.get("friStart")!= null && thisDate.getDayOfWeek().equals(DayOfWeek.FRIDAY)){
 				startTime = times.get("friStart");
 				endTime = times.get("friEnd");
 			}
-			else if(thisDate.getDayOfWeek().equals(DayOfWeek.SATURDAY)){
+			else if(times.get("satStart")!= null &&thisDate.getDayOfWeek().equals(DayOfWeek.SATURDAY)){
 				startTime = times.get("satStart");
 				endTime = times.get("satEnd");
 			}
-			else if(thisDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)){
+			else if(times.get("sunStart")!= null &&thisDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)){
 				startTime = times.get("sunStart");
 				endTime = times.get("sunEnd");
 			}

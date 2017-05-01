@@ -162,10 +162,19 @@ public class BusinessMenu extends SceneManager{
         	String empNameString = empNameText.getText();
         	//TODO
         	//check if empNameString is empty?
-        	bus.addNewEmp(empNameString);
-        	FIO.saveBus(businesses);
-    		businessMenu();
-    		window.setScene(businessMenu);
+        	if(empNameString.length() > 0){
+	        	bus.addNewEmp(empNameString);
+	        	FIO.saveBus(businesses);
+	    		businessMenu();
+	    		window.setScene(businessMenu);
+        	}
+        	
+        	else{
+        		String msg = "Please enter employee name!";
+        		handleGenericFail(window, msg);
+        		addEmp((Business)userInst);
+        		window.setScene(busAddEmpSc);
+        	}
         });
             
         Button back = new Button("Back");
@@ -287,179 +296,195 @@ public class BusinessMenu extends SceneManager{
         endText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
         grid2.add(endText, 3, 2);
         
-        CheckBox mondayCB = new CheckBox();
-        grid2.add(mondayCB, 0,3);
-        mondayCB.setMaxWidth(50);
+        ArrayList<LocalTime> times = new ArrayList<LocalTime>() ;
+        LocalTime checkTime = bus.getOpenTime();
+        int timeInMin = bus.getTimeSlotInMins();
+        int i = 0;
+        while(checkTime.plusMinutes(i*timeInMin).isBefore(bus.getCloseTime())){
+        	times.add(checkTime.plusMinutes(i*timeInMin));
+        	i++;
+        }
         
-        CheckBox tuesdayCB = new CheckBox();
-        grid2.add(tuesdayCB, 0,4);
-        tuesdayCB.setMaxWidth(50);
+        ObservableList<LocalTime> timeChoices = FXCollections.observableArrayList(times);
         
-        CheckBox wednesdayCB = new CheckBox();
-        grid2.add(wednesdayCB, 0,5);
-        wednesdayCB.setMaxWidth(50);
+//MONDAY
         
-        CheckBox thursdayCB = new CheckBox();
-        grid2.add(thursdayCB, 0,6);
-        thursdayCB.setMaxWidth(50);
-        
-        CheckBox fridayCB = new CheckBox();
-        grid2.add(fridayCB, 0,7);
-        fridayCB.setMaxWidth(50);
-        
-        CheckBox saturdayCB = new CheckBox();
-        grid2.add(saturdayCB, 0,8);
-        saturdayCB.setMaxWidth(50);
-        
-        CheckBox sundayCB = new CheckBox();
-        grid2.add(sundayCB, 0,9);
-        sundayCB.setMaxWidth(50);
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-//Monday
-        
+        CheckBox cbMonday = new CheckBox();
+        cbMonday.setMaxWidth(50);
+        grid2.add(cbMonday, 0, 3);
         Text mondayText = new Text("Monday");
         mondayText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
         grid2.add(mondayText, 1, 3);
-//        Label monStartTime = new Label("Start time : ");
-//        grid2.add(monStartTime, 1, 3);
-        ChoiceBox monStartTimeText = new ChoiceBox();
-//        monStartTimeText.setPromptText("HH:mm");
-        grid2.add(monStartTimeText, 2, 3);
-        monStartTimeText.setMaxWidth(100);
-        monStartTimeText.setMinWidth(100);
+        
+        ChoiceBox<LocalTime> monStart = new ChoiceBox<LocalTime>();
+        monStart.setMaxWidth(100);
+        monStart.setMinWidth(100);
+        monStart.setItems(timeChoices);
+        monStart.setValue(timeChoices.get(0));
+        monStart.setTooltip(new Tooltip("Select"));
+        grid2.add(monStart, 2, 3);
+        
+        ChoiceBox<LocalTime> monEnd = new ChoiceBox<LocalTime>();
+        monEnd.setMaxWidth(100);
+        monEnd.setMinWidth(100);
+        monEnd.setItems(timeChoices);
+        monEnd.setValue(timeChoices.get(0));
+        monEnd.setTooltip(new Tooltip("Select"));
+        grid2.add(monEnd, 3, 3);
         
         
-//        Label monEndTime = new Label("End time : ");
-//        grid2.add(monEndTime, 3, 2);
-        ChoiceBox monEndTimeText = new ChoiceBox();
-//        monEndTimeText.setPromptText("HH:mm");
-        grid2.add(monEndTimeText, 3, 3);
-        monEndTimeText.setMaxWidth(100);
-        monEndTimeText.setMinWidth(100);
+// TUESDAY
         
-        //Tuesday
+        CheckBox cbTuesday = new CheckBox();
+        cbTuesday.setMaxWidth(50);
+        grid2.add(cbTuesday, 0, 4);
         Text tuesdayText = new Text("Tuesday");
         tuesdayText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
         grid2.add(tuesdayText, 1, 4);
-//        Label tueStartTime = new Label("Start time : ");
-//        grid2.add(tueStartTime, 1, 3);
-        ChoiceBox tueStartTimeText = new ChoiceBox();
-//        tueStartTimeText.setPromptText("HH:mm");
-        grid2.add(tueStartTimeText, 2, 4);
-        tueStartTimeText.setMaxWidth(100);
         
-//        Label tueEndTime = new Label("End time : ");
-//        grid2.add(tueEndTime, 3, 3);
-        ChoiceBox tueEndTimeText = new ChoiceBox();
-//        tueEndTimeText.setPromptText("HH:mm");
-        grid2.add(tueEndTimeText, 3, 4);
-        tueEndTimeText.setMaxWidth(100);
+        ChoiceBox<LocalTime> tueStart = new ChoiceBox<LocalTime>();
+        tueStart.setMaxWidth(100);
+        tueStart.setMinWidth(100);
+        tueStart.setItems(timeChoices);
+        tueStart.setValue(timeChoices.get(0));
+        tueStart.setTooltip(new Tooltip("Select"));
+        grid2.add(tueStart, 2, 4);
         
-        //Wednesday
+        ChoiceBox<LocalTime> tueEnd = new ChoiceBox<LocalTime>();
+        tueEnd.setMaxWidth(100);
+        tueEnd.setMinWidth(100);
+        tueEnd.setItems(timeChoices);
+        tueEnd.setValue(timeChoices.get(0));
+        tueEnd.setTooltip(new Tooltip("Select"));
+        grid2.add(tueEnd, 3, 4);
+        
+// WEDNESDAY        
+        
+        CheckBox cbWednesday = new CheckBox();
+        cbWednesday.setMaxWidth(50);
+        grid2.add(cbWednesday, 0, 5);
         Text wednesdayText = new Text("Wednesday");
         wednesdayText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
         grid2.add(wednesdayText, 1, 5);
-//        Label wedStartTime = new Label("Start time : ");
-//        grid2.add(wedStartTime, 1, 4);
-        ChoiceBox wedStartTimeText = new ChoiceBox();
-//        wedStartTimeText.setPromptText("HH:mm");
-        grid2.add(wedStartTimeText, 2, 5);
-        wedStartTimeText.setMaxWidth(100);
         
-//        Label wedEndTime = new Label("End time : ");
-//        grid2.add(wedEndTime, 3, 4);
-        ChoiceBox wedEndTimeText = new ChoiceBox();
-//        wedEndTimeText.setPromptText("HH:mm");
-        grid2.add(wedEndTimeText, 3, 5);
-        wedEndTimeText.setMaxWidth(100);
+        ChoiceBox<LocalTime> wedStart = new ChoiceBox<LocalTime>();
+        wedStart.setMaxWidth(100);
+        wedStart.setMinWidth(100);
+        wedStart.setItems(timeChoices);
+        wedStart.setValue(timeChoices.get(0));
+        wedStart.setTooltip(new Tooltip("Select"));
+        grid2.add(wedStart, 2, 5);
         
-        //Thursday
+        ChoiceBox<LocalTime> wedEnd = new ChoiceBox<LocalTime>();
+        wedEnd.setMaxWidth(100);
+        wedEnd.setMinWidth(100);
+        wedEnd.setItems(timeChoices);
+        wedEnd.setValue(timeChoices.get(0));
+        wedEnd.setTooltip(new Tooltip("Select"));
+        grid2.add(wedEnd, 3, 5);
+        
+// THURSDAY        
+        
+        CheckBox cbThursday = new CheckBox();
+        cbThursday.setMaxWidth(50);
+        grid2.add(cbThursday, 0, 6);
         Text thursdayText = new Text("Thursday");
         thursdayText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
         grid2.add(thursdayText, 1, 6);
-//        Label thurStartTime = new Label("Start time : ");
-//        grid2.add(thurStartTime, 1, 5);
-        ChoiceBox thurStartTimeText = new ChoiceBox();
-//        thurStartTimeText.setPromptText("HH:mm");
-        grid2.add(thurStartTimeText, 2, 6);
-        thurStartTimeText.setMaxWidth(100);
         
-//        Label thurEndTime = new Label("End time : ");
-//        grid2.add(thurEndTime, 3, 5);
-        ChoiceBox thurEndTimeText = new ChoiceBox();
-//        thurEndTimeText.setPromptText("HH:mm");
-        grid2.add(thurEndTimeText, 3, 6);
-        thurEndTimeText.setMaxWidth(100);
+        ChoiceBox<LocalTime> thurStart = new ChoiceBox<LocalTime>();
+        thurStart.setMaxWidth(100);
+        thurStart.setMinWidth(100);
+        thurStart.setItems(timeChoices);
+        thurStart.setValue(timeChoices.get(0));
+        thurStart.setTooltip(new Tooltip("Select"));
+        grid2.add(thurStart, 2, 6);
         
-        //Friday
+        ChoiceBox<LocalTime> thurEnd = new ChoiceBox<LocalTime>();
+        thurEnd.setMaxWidth(100);
+        thurEnd.setMinWidth(100);
+        thurEnd.setItems(timeChoices);
+        thurEnd.setValue(timeChoices.get(0));
+        thurEnd.setTooltip(new Tooltip("Select"));
+        grid2.add(thurEnd, 3, 6);
+        
+// FRIDAY
+        
+        CheckBox cbFriday = new CheckBox();
+        cbFriday.setMaxWidth(50);
+        grid2.add(cbFriday, 0, 7);
         Text fridayText = new Text("Friday");
         fridayText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
         grid2.add(fridayText, 1, 7);
-//        Label friStartTime = new Label("Start time : ");
-//        grid2.add(friStartTime, 1, 6);
-        ChoiceBox friStartTimeText = new ChoiceBox();
-//        friStartTimeText.setPromptText("HH:mm");
-        grid2.add(friStartTimeText, 2, 7);
-        friStartTimeText.setMaxWidth(100);
         
-//        Label friEndTime = new Label("End time : ");
-//        grid2.add(friEndTime, 3, 6);
-        ChoiceBox friEndTimeText = new ChoiceBox();
-//        friEndTimeText.setPromptText("HH:mm");
-        grid2.add(friEndTimeText, 3, 7);
-        friEndTimeText.setMaxWidth(100);
+        ChoiceBox<LocalTime> friStart = new ChoiceBox<LocalTime>();
+        friStart.setMaxWidth(100);
+        friStart.setMinWidth(100);
+        friStart.setItems(timeChoices);
+        friStart.setValue(timeChoices.get(0));
+        friStart.setTooltip(new Tooltip("Select"));
+        grid2.add(friStart, 2, 7);
         
-        //Saturday
+        ChoiceBox<LocalTime> friEnd = new ChoiceBox<LocalTime>();
+        friEnd.setMaxWidth(100);
+        friEnd.setMinWidth(100);
+        friEnd.setItems(timeChoices);
+        friEnd.setValue(timeChoices.get(0));
+        friEnd.setTooltip(new Tooltip("Select"));
+        grid2.add(friEnd, 3, 7);
+        
+//SATURDAY
+        
+        CheckBox cbSaturday = new CheckBox();
+        cbSaturday.setMaxWidth(50);
+        grid2.add(cbSaturday, 0, 8);
         Text saturdayText = new Text("Saturday");
         saturdayText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
         grid2.add(saturdayText, 1, 8);
-//        Label satStartTime = new Label("Start time : ");
-//        grid2.add(satStartTime, 1, 7);
-        ChoiceBox satStartTimeText = new ChoiceBox();
-//        satStartTimeText.setPromptText("HH:mm");
-        grid2.add(satStartTimeText, 2, 8);
-        satStartTimeText.setMaxWidth(100);
         
-//        Label satEndTime = new Label("End time : ");
-//        grid2.add(satEndTime, 3, 7);
-        ChoiceBox satEndTimeText = new ChoiceBox();
-//        satEndTimeText.setPromptText("HH:mm");
-        grid2.add(satEndTimeText, 3, 8);
-        satEndTimeText.setMaxWidth(100);
-
-        //Sunday
+        ChoiceBox<LocalTime> satStart = new ChoiceBox<LocalTime>();
+        satStart.setMaxWidth(100);
+        satStart.setMinWidth(100);
+        satStart.setItems(timeChoices);
+        satStart.setValue(timeChoices.get(0));
+        satStart.setTooltip(new Tooltip("Select"));
+        grid2.add(satStart, 2, 8);
+        
+        ChoiceBox<LocalTime> satEnd = new ChoiceBox<LocalTime>();
+        satEnd.setMaxWidth(100);
+        satEnd.setMinWidth(100);
+        satEnd.setItems(timeChoices);
+        satEnd.setValue(timeChoices.get(0));
+        satEnd.setTooltip(new Tooltip("Select"));
+        grid2.add(satEnd, 3, 8);
+        
+//SUNDAY
+        
+        CheckBox cbSunday = new CheckBox();
+        cbSunday.setMaxWidth(50);
+        grid2.add(cbSunday, 0, 9);
         Text sundayText = new Text("Sunday");
         sundayText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
         grid2.add(sundayText, 1, 9);
-//        Label sunStartTime = new Label("Start time : ");
-//        grid2.add(sunStartTime, 1, 8);
-        ChoiceBox sunStartTimeText = new ChoiceBox();
-//        sunStartTimeText.setPromptText("HH:mm");
-        grid2.add(sunStartTimeText, 2, 9);
-        sunStartTimeText.setMaxWidth(100);
         
-//        Label sunEndTime = new Label("End time : ");
-//        grid2.add(sunEndTime, 3, 8);
-        ChoiceBox sunEndTimeText = new ChoiceBox();
-//        sunEndTimeText.setPromptText("HH:mm");
-        grid2.add(sunEndTimeText, 3, 9);
-        sunEndTimeText.setMaxWidth(100);
-        //TODO 
-        //CHECK FORMAT OF INPUT "HHMM"
-            
+        ChoiceBox<LocalTime> sunStart = new ChoiceBox<LocalTime>();
+        sunStart.setMaxWidth(100);
+        sunStart.setMinWidth(100);
+        sunStart.setItems(timeChoices);
+        sunStart.setValue(timeChoices.get(0));
+        sunStart.setTooltip(new Tooltip("Select"));
+        grid2.add(sunStart, 2, 9);
+        
+        ChoiceBox<LocalTime> sunEnd = new ChoiceBox<LocalTime>();
+        sunEnd.setMaxWidth(100);
+        sunEnd.setMinWidth(100);
+        sunEnd.setItems(timeChoices);
+        sunEnd.setValue(timeChoices.get(0));
+        sunEnd.setTooltip(new Tooltip("Select"));
+        grid2.add(sunEnd, 3, 9);
+        
+        
+       
         Button register = new Button("Add");
         HBox hbRegister = new HBox(10);
         hbRegister.setAlignment(Pos.BOTTOM_RIGHT);
@@ -469,65 +494,58 @@ public class BusinessMenu extends SceneManager{
         hbRegister.getChildren().add(register);
         grid2.add(hbRegister, 3, 10);
 
-        
         register.setOnAction(e -> {
-//        	LocalTime monStart, monEnd, tueStart, tueEnd, wedStart, wedEnd, thurStart, thurEnd, 
-//        				friStart, friEnd, satStart, satEnd, sunStart, sunEnd;
-//        	HashMap<String,LocalTime> times = new HashMap<String,LocalTime>();
-//    		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-//        	String monStartTimeStr = monStartTimeText.getText();
-//        	String monEndTimeStr = monEndTimeText.getText();
-//        	String tueStartTimeStr = tueStartTimeText.getText();
-//        	String tueEndTimeStr = tueEndTimeText.getText();
-//        	String wedStartTimeStr = wedStartTimeText.getText();
-//        	String wedEndTimeStr = wedEndTimeText.getText();
-//        	String thurStartTimeStr = thurStartTimeText.getText();
-//        	String thurEndTimeStr = thurEndTimeText.getText();
-//        	String friStartTimeStr = friStartTimeText.getText();
-//        	String friEndTimeStr = friEndTimeText.getText();
-//        	String satStartTimeStr = satStartTimeText.getText();
-//        	String satEndTimeStr = satEndTimeText.getText();
-//        	String sunStartTimeStr = sunStartTimeText.getText();
-//        	String sunEndTimeStr = sunEndTimeText.getText();
-//    		monStart = LocalTime.parse(monStartTimeStr, dtf);
-//    		monEnd = LocalTime.parse(monEndTimeStr, dtf);
-//    		tueStart = LocalTime.parse(tueStartTimeStr, dtf);
-//    		tueEnd = LocalTime.parse(tueEndTimeStr, dtf);
-//    		wedStart = LocalTime.parse(wedStartTimeStr, dtf);
-//    		wedEnd = LocalTime.parse(wedEndTimeStr, dtf);
-//    		thurStart = LocalTime.parse(thurStartTimeStr, dtf);
-//    		thurEnd = LocalTime.parse(thurEndTimeStr, dtf);
-//    		friStart = LocalTime.parse(friStartTimeStr, dtf);
-//    		friEnd = LocalTime.parse(friEndTimeStr, dtf);
-//    		satStart = LocalTime.parse(satStartTimeStr, dtf);
-//    		satEnd = LocalTime.parse(satEndTimeStr, dtf);
-//    		sunStart = LocalTime.parse(sunStartTimeStr, dtf);
-//    		sunEnd = LocalTime.parse(sunEndTimeStr, dtf);
-//    		times.put("monStart", monStart);
-//    		times.put("monEnd", monEnd);
-//    		times.put("tueStart", tueStart);
-//    		times.put("tueEnd", tueEnd);
-//    		times.put("wedStart", wedStart);
-//    		times.put("wedEnd", wedEnd);
-//    		times.put("thurStart", thurStart);
-//    		times.put("thurEnd", thurEnd);
-//    		times.put("friStart", friStart);
-//    		times.put("friEnd", friEnd);
-//    		times.put("satStart", satStart);
-//    		times.put("satEnd", satEnd);
-//    		times.put("sunStart", sunStart);
-//    		times.put("sunEnd", sunEnd);
-//        	
-//    		emp.updateSchedule(times);
-//        	
-//        	//TODO
-//    		//CHECK INPUTS FOR WRONG/EMPTY strings
+        	HashMap<String,LocalTime> newTimes = new HashMap<String,LocalTime>();
+    		
+        	if(monStart.getSelectionModel().getSelectedItem().isBefore(monEnd.getSelectionModel().getSelectedItem()) && cbMonday.isSelected()){
+	  
+	    		newTimes.put("monStart", monStart.getSelectionModel().getSelectedItem());
+	    		newTimes.put("monEnd", monEnd.getSelectionModel().getSelectedItem());
+	    		System.out.println("THE MONDAY START IS: " + newTimes.get("monStart"));
+        	}
+        	if(tueStart.getSelectionModel().getSelectedItem().isBefore(tueEnd.getSelectionModel().getSelectedItem()) && cbTuesday.isSelected()){
+	    		newTimes.put("tueStart", tueStart.getSelectionModel().getSelectedItem());
+	    		newTimes.put("tueEnd", tueEnd.getSelectionModel().getSelectedItem());
+	    		System.out.println("THE TUesdat START IS: " + newTimes.get("tueStart"));
+        	}
+    		if(wedStart.getSelectionModel().getSelectedItem().isBefore(wedEnd.getSelectionModel().getSelectedItem()) && cbWednesday.isSelected()){
+	        	newTimes.put("wedStart", wedStart.getSelectionModel().getSelectedItem());
+	    		newTimes.put("wedEnd", wedEnd.getSelectionModel().getSelectedItem());
+    		}
+    		
+    		if(thurStart.getSelectionModel().getSelectedItem().isBefore(thurEnd.getSelectionModel().getSelectedItem()) && cbThursday.isSelected()){
+	    		newTimes.put("thurStart", thurStart.getSelectionModel().getSelectedItem());
+	    		newTimes.put("thurEnd", thurEnd.getSelectionModel().getSelectedItem());
+    		}
+    		
+    		if(friStart.getSelectionModel().getSelectedItem().isBefore(friEnd.getSelectionModel().getSelectedItem()) && cbFriday.isSelected()){
+	    		newTimes.put("friStart", friStart.getSelectionModel().getSelectedItem());
+	    		newTimes.put("friEnd", friEnd.getSelectionModel().getSelectedItem());
+    		}
+    		
+    		if(satStart.getSelectionModel().getSelectedItem().isBefore(satEnd.getSelectionModel().getSelectedItem()) && cbSaturday.isSelected()){
+	    		newTimes.put("satStart", satStart.getSelectionModel().getSelectedItem());
+	    		newTimes.put("satEnd", satEnd.getSelectionModel().getSelectedItem());
+    		}
+    		
+    		if(sunStart.getSelectionModel().getSelectedItem().isBefore(sunEnd.getSelectionModel().getSelectedItem()) && cbSunday.isSelected()){
+
+	    		newTimes.put("sunStart", sunStart.getSelectionModel().getSelectedItem());
+	    		newTimes.put("sunEnd", sunEnd.getSelectionModel().getSelectedItem());
+	        	
+    		}
+    		
+    		emp.updateSchedule(newTimes);
+        	
+        	//TODO
+    		//CHECK INPUTS FOR WRONG/EMPTY strings
 
         	FIO.saveBus(businesses);
     		businessMenu();
     		window.setScene(businessMenu);
         	
         });
+
             
         Button back = new Button("Back");
         HBox hbBack = new HBox(10);

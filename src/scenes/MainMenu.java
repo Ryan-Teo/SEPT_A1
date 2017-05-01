@@ -75,21 +75,6 @@ public class MainMenu extends SceneManager{
         	String passwordString = passwordInput.getText();
         	mainLogIn(customers, businesses, userNameString, passwordString);
         	if(userInst instanceof Customer){
-        		
-        		/*
-        		 * creating a dummy booking
-        		 */
-        		LocalDate date = LocalDate.now();
-        		LocalTime sessionStart = LocalTime.now();
-        		LocalTime sessionEnd = sessionStart.plusMinutes(30);
-        		Business busInst = businesses.get(0);
-        		Employee emp = new Employee("abc", "Bob", busInst);
-        		userInst.bookSession(date, sessionStart, sessionEnd, (Customer)userInst, busInst ,emp, bookings);
-        		logger.info("saved a dummy");
-        		FIO.saveBook(bookings);
-        		/*
-        		 * end creating a dummy booking
-        		 */
         		logger.info("Initializing customer menu");
         		custScreen.customerMenu();
         		window.setScene(customerMenu);
@@ -100,7 +85,8 @@ public class MainMenu extends SceneManager{
         		window.setScene(businessMenu);
         	}
         	else{
-        		handleSignInFail(window);
+        		String msg = "Incorrect username/password!";
+        		handleGenericFail(window, msg);
         	}
 
         });

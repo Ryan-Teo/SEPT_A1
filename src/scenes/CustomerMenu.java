@@ -133,8 +133,19 @@ public class CustomerMenu extends SceneManager{
         	int busIndex = busList.getSelectionModel().getSelectedIndex();
         	logger.info("Business option no:" + busIndex +" is selected");
         	if(busIndex != -1){
-        		selectService(busIndex);
-        		window.setScene(custSelectService);
+                Business bus = businesses.get(busIndex);
+                if(bus.getEmps().size()==0){
+                	//LOG
+                	//NO EMPLOYEES AVAILABLE
+                	String msg = "There are no current employees";
+                	handleGenericFail(window, msg);
+                	selectBusiness();
+                	window.setScene(custSelectBus);
+                }
+                else{
+            		selectService(bus);
+            		window.setScene(custSelectService);
+                }
         	}
         });
         
@@ -153,7 +164,7 @@ public class CustomerMenu extends SceneManager{
         custSelectBus = new Scene(grid, 600, 500);
 	}
 	
-	public void selectService(int busIndex){
+	public void selectService(Business bus){
 		logger.info("Entering service selection phase");
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(30, 30, 30, 30));
@@ -164,8 +175,6 @@ public class CustomerMenu extends SceneManager{
         Text header = new Text("Select service:");
         header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
         grid.add(header, 0, 1,2, 1);
-        
-        Business bus = businesses.get(busIndex);
         
         
         ListView<String> serviceList = new ListView<String>(); 
@@ -188,7 +197,7 @@ public class CustomerMenu extends SceneManager{
         selectButton.setOnAction(e -> {
     		String service = serviceList.getSelectionModel().getSelectedItem();
     		logger.info("'"+ service +"'" + " service is selected");
-    		selectDate(busIndex, service);
+    		selectDate(bus, service);
     		window.setScene(custSelectDate);
         });
         
@@ -206,7 +215,7 @@ public class CustomerMenu extends SceneManager{
 		custSelectService = new Scene(grid, 600, 500);
 	}
 	
-	public void selectDate(int busIndex, String service){
+	public void selectDate(Business bus, String service){
 		
 		logger.info("Entering date selection phase");
 		GridPane grid = new GridPane();
@@ -249,9 +258,8 @@ public class CustomerMenu extends SceneManager{
         checkButton.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
         grid.add(checkButton, 3, 3);
         checkButton.setOnAction(e -> {
-            Business bus = businesses.get(busIndex);
             logger.info("Date : " + datePicker.getValue() + "is selected");
-        	selectTime(busIndex ,bus, datePicker.getValue() , service);
+        	selectTime(bus, datePicker.getValue() , service);
         	window.setScene(custSelectTime);
         });
         
@@ -262,7 +270,7 @@ public class CustomerMenu extends SceneManager{
         grid.add(returnButton, 0, 3);
         returnButton.setOnAction(e -> {
         	logger.info("back to service selection phase");
-    		selectService(busIndex);
+    		selectService(bus);
     		window.setScene(custSelectService);
         });
         
@@ -271,7 +279,7 @@ public class CustomerMenu extends SceneManager{
         
 	}
 		
-	public void selectTime(int busIndex, Business bus, LocalDate date, String service){
+	public void selectTime(Business bus, LocalDate date, String service){
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(30, 30, 30, 30));
         grid.setAlignment(Pos.CENTER);
@@ -301,7 +309,16 @@ public class CustomerMenu extends SceneManager{
     	ArrayList<LocalTime> timeSlots = new ArrayList<LocalTime>();
     	int i = 0;
     	do{
-    		timeSlots.add(openTime.plusMinutes(i*timeSlot));
+    		for(Employee emp : bus.getEmps()){
+    			if(emp.empFree(date, openTime.plusMinutes(i*timeSlot), service)){
+    				if(timeSlots.contains(openTime.plusMinutes(i*timeSlot))){
+    					//DO NOTHING
+    				}
+    				else{
+        	    		timeSlots.add(openTime.plusMinutes(i*timeSlot));
+    				}
+    			}
+    		}
     		i++;
     	}while(!openTime.plusMinutes(i*timeSlot+noOfTimeSlots*timeSlot).isAfter(closeTime));
     	
@@ -325,7 +342,7 @@ public class CustomerMenu extends SceneManager{
         	int timeIndex = timeList.getSelectionModel().getSelectedIndex();
         	if(timeIndex != -1){
         		LocalTime selectedTime = timeSlots.get(timeIndex);
-        		selectEmployee(busIndex, bus, service, date, selectedTime); //add interval needed for specific services
+        		selectEmployee(bus, service, date, selectedTime); //add interval needed for specific services
         		window.setScene(custSelectEmp);
         		
         	}
@@ -337,7 +354,7 @@ public class CustomerMenu extends SceneManager{
         returnButton.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
         grid.add(returnButton, 0, 3);
         returnButton.setOnAction(e -> {
-    		selectDate(busIndex, service);
+    		selectDate(bus, service);
     		window.setScene(custSelectDate);
         });
         
@@ -345,7 +362,7 @@ public class CustomerMenu extends SceneManager{
         
 	}
 	
-	public void selectEmployee(int busIndex, Business bus, String service, LocalDate date, LocalTime startTime){ //add interval needed for specific whatever... services? sure
+	public void selectEmployee(Business bus, String service, LocalDate date, LocalTime startTime){ //add interval needed for specific whatever... services? sure
 		//Check bus employee list
 		//Check their availability for the slots needed, use the no of slots for each service too
 		//TODO
@@ -365,6 +382,20 @@ public class CustomerMenu extends SceneManager{
         		emps.add(emp);
         	}
         }
+
+        if(emps.isEmpty()){
+        	//LOG
+        	//NO EMPLOYEES AVAILABLE AT THIS TIME
+        	String msg = "No employees available at this time!";
+        	handleGenericFail(window, msg);
+        	selectBusiness();
+        	window.setScene(custSelectBus);
+    	}
+        else{
+        	
+        	//TODO
+        }
+        
         
         Label empName = new Label("Employee Name: ");
         grid.add(empName, 0, 2);
@@ -377,6 +408,7 @@ public class CustomerMenu extends SceneManager{
         
         ChoiceBox<String> cb = new ChoiceBox<String>();
         cb.setItems(empItems);
+        cb.setValue("Select an employee");
         cb.setValue(empItems.get(0));
         cb.setTooltip(new Tooltip("Select employee"));
         grid.add(cb, 1, 2);
@@ -389,7 +421,8 @@ public class CustomerMenu extends SceneManager{
         selectButton.setOnAction(e -> {
         	Employee myEmp = emps.get(cb.getSelectionModel().getSelectedIndex());
         	int bookingLen = bus.getServices().get(service)*bus.getTimeSlotInMins();
-        	bookings.add(new Booking(date, startTime, startTime.plusMinutes(bookingLen), (Customer)userInst ,bus, myEmp));
+        	bookings.add(new Booking(date, startTime, startTime.plusMinutes(bookingLen), (Customer)userInst ,bus, myEmp, service));
+        	System.out.println("Booking Made!"); //REMOVE
         	myEmp.bookEmp(date, startTime, service);
         	FIO.saveBus(businesses);
         	FIO.saveBook(bookings);
@@ -406,7 +439,7 @@ public class CustomerMenu extends SceneManager{
         returnButton.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
         grid.add(returnButton, 0, 3);
         returnButton.setOnAction(e -> {
-        	selectTime(busIndex ,bus, date , service);
+        	selectTime(bus, date , service);
         	window.setScene(custSelectTime);
         });
         
@@ -435,7 +468,7 @@ public class CustomerMenu extends SceneManager{
 		//Business Column
 		TableColumn<Booking,String> business =  new TableColumn<>("Business");
 		business.setMinWidth(50);
-		business.setCellValueFactory(new PropertyValueFactory<>("bookBus"));
+		business.setCellValueFactory(new PropertyValueFactory<>("strBus"));
 		
 		//Date Column
 		TableColumn<Booking,LocalDate> bookingDate =  new TableColumn<>("Date");
@@ -455,7 +488,7 @@ public class CustomerMenu extends SceneManager{
 		//Employee
 		TableColumn<Booking, String> emp =  new TableColumn<>("Employee");
 		emp.setMinWidth(50);
-		emp.setCellValueFactory(new PropertyValueFactory<>("bookEmp"));
+		emp.setCellValueFactory(new PropertyValueFactory<>("strEmp"));
 		
 		
 		table.setItems(bookItems);
@@ -474,9 +507,26 @@ public class CustomerMenu extends SceneManager{
 			
 			if(table.getSelectionModel().getSelectedIndex() != -1){
 				Booking bookInst = table.getSelectionModel().getSelectedItem();
-				if(((Customer) userInst).cancelBooking(bookings, bookInst))
+				Employee empInst;
+				
+				for(int i = 0; i < businesses.size(); i++){
+					if(bookInst.getBookBus().equals(businesses.get(i).getBusName())){
+						ArrayList<Employee>emps = businesses.get(i).getEmps();
+						for(int j = 0; j < emps.size(); j++){
+							if(bookInst.getBookEmp().equals(emps.get(i).getName())){
+								empInst = emps.get(i);
+							}
+						}
+					}
+						
+				}
+				
+				if(((Customer) userInst).cancelBooking(bookings, bookInst)){
+					
 					FIO.saveBook(bookings);
-				logger.info("Booking has been cancelled, summary is updated");
+				}
+				logger.info("A booking has been cancelled, summary is updated");
+
 				showBookingSummary();
 				window.setScene(customerBookingSummary);
 			}

@@ -236,7 +236,7 @@ public class SceneManager {
         dialog.show();
     }
 
-	public void handleSignInFail(Stage window) {
+	public void handleGenericFail(Stage window, String msg) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(window);
@@ -245,7 +245,7 @@ public class SceneManager {
         dialogVbox.setPadding(new Insets(30, 30, 30, 30));
         dialogVbox.setHgap(10);
         dialogVbox.setVgap(5);
-        Text fail = new Text("Incorrect Username/Password!");
+        Text fail = new Text(msg);
         fail.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
         fail.setFill(Color.RED);
         fail.setTextAlignment(TextAlignment.CENTER);

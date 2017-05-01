@@ -37,22 +37,49 @@ public class Employee implements Serializable {
 		return schedule;
 	}
 	
+	private LocalTime getStartTime(LocalDate date){
+		LocalTime thisTime = LocalTime.MAX;
+		for(LocalTime myTime : schedule.get(date).keySet()){
+			if(myTime.isBefore(thisTime)){
+				thisTime = myTime;
+			}
+		}
+		return thisTime;
+	}
+	
+	private LocalTime getEndTime(LocalDate date){
+		LocalTime thisTime = LocalTime.MIN;
+		for(LocalTime myTime : schedule.get(date).keySet()){
+			if(myTime.isAfter(thisTime)){
+				thisTime = myTime;
+			}
+		}
+		return thisTime.plusMinutes(employer.getTimeSlotInMins());
+	}
+	
 	public boolean empFree(LocalDate date, LocalTime startTime, String service){
-		boolean freeCheck = true;
+		boolean freeCheck = false;
         int slotsNeeded = employer.getServices().get(service);
         int slotsInMins = employer.getTimeSlotInMins();
         LocalTime endTime = startTime.plusMinutes(slotsNeeded * slotsInMins);
         HashMap<LocalTime, Boolean> daySchedule = schedule.get(date);
-        System.out.println(daySchedule.keySet());
+        if(endTime.isAfter(getEndTime(date))){
+        	return false;
+        }
+        if(startTime.isBefore(getStartTime(date))){
+        	return false;
+        }
         for(LocalTime thisTime : daySchedule.keySet()){
 	    	int i = 0;
 	    	do{
 	    		if(startTime.plusMinutes(i*slotsInMins).equals(thisTime)){
 	        		if(daySchedule.get(thisTime).equals(true)){
+	        			System.out.println(name + " is NOT free at " + thisTime);
 	        			return false;
 	        		}
 	        		else{
 	        			System.out.println(name + " is free at " + thisTime);
+	        			freeCheck = true;
 	        		}
 	        	}
 	    		i++;
@@ -87,6 +114,32 @@ public class Employee implements Serializable {
         }
 	}
 	
+	public void unbookEmp(LocalDate date, LocalTime startTime, String service){
+        int slotsNeeded = employer.getServices().get(service);
+        int slotsInMins = employer.getTimeSlotInMins();
+        LocalTime endTime = startTime.plusMinutes(slotsNeeded * slotsInMins);
+        HashMap<LocalTime, Boolean> daySchedule = schedule.get(date);
+        for(LocalTime thisTime : daySchedule.keySet()){
+	    	int i = 0;
+	    	do{
+	    		if(startTime.plusMinutes(i*slotsInMins).equals(thisTime)){
+	        		if(daySchedule.get(thisTime).equals(true)){
+	        			//ALREADY BOOKED
+	        			//FREE EMP
+	        			daySchedule.put(thisTime, false);
+	        			System.out.println(name + " has been freed at " + thisTime);
+	        		}
+	        		else{
+	        			//NOT BOOKED
+	        			//DO NOTHING
+	        			System.err.println("CODE SHOULD NOT REACH HERE : 001");
+	        		}
+	        	}
+	    		i++;
+	    	}while(startTime.plusMinutes(i*slotsInMins).isBefore(endTime));
+        }
+	}
+	
 	
 	public void updateSchedule(HashMap<String,LocalTime> times){
 		int days = 31, slotsInMins = employer.getTimeSlotInMins();
@@ -97,31 +150,31 @@ public class Employee implements Serializable {
 		int i = 0;
 		do{
 			LocalDate thisDate = currentDate.plusDays(i);
-			if(thisDate.getDayOfWeek().equals(DayOfWeek.MONDAY)){
+			if(times.get("monStart")!= null && thisDate.getDayOfWeek().equals(DayOfWeek.MONDAY)){
 				startTime = times.get("monStart");
 				endTime = times.get("monEnd");
 			}
-			else if(thisDate.getDayOfWeek().equals(DayOfWeek.TUESDAY)){
+			else if(times.get("tuesStart")!= null &&thisDate.getDayOfWeek().equals(DayOfWeek.TUESDAY)){
 				startTime = times.get("tueStart");
 				endTime = times.get("tueEnd");
 			}
-			else if(thisDate.getDayOfWeek().equals(DayOfWeek.WEDNESDAY)){
+			else if(times.get("wedStart")!= null && thisDate.getDayOfWeek().equals(DayOfWeek.WEDNESDAY)){
 				startTime = times.get("wedStart");
 				endTime = times.get("wedEnd");
 			}
-			else if(thisDate.getDayOfWeek().equals(DayOfWeek.THURSDAY)){
+			else if(times.get("thurStart")!= null &&thisDate.getDayOfWeek().equals(DayOfWeek.THURSDAY)){
 				startTime = times.get("thurStart");
 				endTime = times.get("thurEnd");
 			}
-			else if(thisDate.getDayOfWeek().equals(DayOfWeek.FRIDAY)){
+			else if(times.get("friStart")!= null && thisDate.getDayOfWeek().equals(DayOfWeek.FRIDAY)){
 				startTime = times.get("friStart");
 				endTime = times.get("friEnd");
 			}
-			else if(thisDate.getDayOfWeek().equals(DayOfWeek.SATURDAY)){
+			else if(times.get("satStart")!= null &&thisDate.getDayOfWeek().equals(DayOfWeek.SATURDAY)){
 				startTime = times.get("satStart");
 				endTime = times.get("satEnd");
 			}
-			else if(thisDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)){
+			else if(times.get("sunStart")!= null &&thisDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)){
 				startTime = times.get("sunStart");
 				endTime = times.get("sunEnd");
 			}
@@ -132,7 +185,7 @@ public class Employee implements Serializable {
 	    		//FALSE == UNBOOKED
 	    		//TRUE == BOOKED
 	    		j++;
-	    	}while(!startTime.plusMinutes(j*slotsInMins).isAfter(endTime));
+	    	}while(startTime.plusMinutes(j*slotsInMins).isBefore(endTime));
 	    	System.out.println(thisDate);
 	    	schedule.put(thisDate,daySchedule);
 			

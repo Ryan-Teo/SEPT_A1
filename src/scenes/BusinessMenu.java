@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -22,6 +23,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import system.Account;
 import system.Booking;
@@ -256,9 +258,10 @@ public class BusinessMenu extends SceneManager{
     	grid2.setHgap(10);
     	grid2.setVgap(10);
     	
-//    	ColumnConstraints col2 = new ColumnConstraints();
-//        col2.setPercentWidth(20);
-    	
+    	ColumnConstraints col1 = new ColumnConstraints();
+        col1.setPercentWidth(20);
+    	ColumnConstraints col2 = new ColumnConstraints();
+      col2.setPercentWidth(20);
 
     	LocalDate currentDate = LocalDate.now();
 		currentDate.getDayOfWeek();
@@ -267,132 +270,192 @@ public class BusinessMenu extends SceneManager{
         registerTitle.setFont(Font.font("Rockwell", FontWeight.NORMAL, 30));
         grid2.add(registerTitle, 0, 1,6, 1);
         
-        //Monday
+//        Text selectText = new Text("SELECT");
+//        selectText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+//        grid2.add(selectText, 0, 2);
         
-        Text mondayText = new Text("MONDAY");
+        Text dayText = new Text("DAY");
+        dayText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+        grid2.add(dayText, 1, 2);
+        
+        Text startText = new Text("START");
+        startText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+        
+        grid2.add(startText, 2, 2);
+        
+        Text endText = new Text("END");
+        endText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+        grid2.add(endText, 3, 2);
+        
+        CheckBox mondayCB = new CheckBox();
+        grid2.add(mondayCB, 0,3);
+        mondayCB.setMaxWidth(50);
+        
+        CheckBox tuesdayCB = new CheckBox();
+        grid2.add(tuesdayCB, 0,4);
+        tuesdayCB.setMaxWidth(50);
+        
+        CheckBox wednesdayCB = new CheckBox();
+        grid2.add(wednesdayCB, 0,5);
+        wednesdayCB.setMaxWidth(50);
+        
+        CheckBox thursdayCB = new CheckBox();
+        grid2.add(thursdayCB, 0,6);
+        thursdayCB.setMaxWidth(50);
+        
+        CheckBox fridayCB = new CheckBox();
+        grid2.add(fridayCB, 0,7);
+        fridayCB.setMaxWidth(50);
+        
+        CheckBox saturdayCB = new CheckBox();
+        grid2.add(saturdayCB, 0,8);
+        saturdayCB.setMaxWidth(50);
+        
+        CheckBox sundayCB = new CheckBox();
+        grid2.add(sundayCB, 0,9);
+        sundayCB.setMaxWidth(50);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+//Monday
+        
+        Text mondayText = new Text("Monday");
         mondayText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
-        grid2.add(mondayText, 0, 2);
-        Label monStartTime = new Label("Start time : ");
-        grid2.add(monStartTime, 1, 2);
-        TextField monStartTimeText = new TextField();
-        monStartTimeText.setPromptText("HH:mm");
-        grid2.add(monStartTimeText, 2, 2);
+        grid2.add(mondayText, 1, 3);
+//        Label monStartTime = new Label("Start time : ");
+//        grid2.add(monStartTime, 1, 3);
+        ChoiceBox monStartTimeText = new ChoiceBox();
+//        monStartTimeText.setPromptText("HH:mm");
+        grid2.add(monStartTimeText, 2, 3);
         monStartTimeText.setMaxWidth(100);
-        monStartTimeText.setAlignment(Pos.BASELINE_LEFT);
+        monStartTimeText.setMinWidth(100);
         
-        Label monEndTime = new Label("End time : ");
-        grid2.add(monEndTime, 3, 2);
-        TextField monEndTimeText = new TextField();
-        monEndTimeText.setPromptText("HH:mm");
-        grid2.add(monEndTimeText, 4, 2);
+        
+//        Label monEndTime = new Label("End time : ");
+//        grid2.add(monEndTime, 3, 2);
+        ChoiceBox monEndTimeText = new ChoiceBox();
+//        monEndTimeText.setPromptText("HH:mm");
+        grid2.add(monEndTimeText, 3, 3);
         monEndTimeText.setMaxWidth(100);
+        monEndTimeText.setMinWidth(100);
         
         //Tuesday
-        Text tuesdayText = new Text("TUESDAY");
+        Text tuesdayText = new Text("Tuesday");
         tuesdayText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
-        grid2.add(tuesdayText, 0, 3);
-        Label tueStartTime = new Label("Start time : ");
-        grid2.add(tueStartTime, 1, 3);
-        TextField tueStartTimeText = new TextField();
-        tueStartTimeText.setPromptText("HH:mm");
-        grid2.add(tueStartTimeText, 2, 3);
+        grid2.add(tuesdayText, 1, 4);
+//        Label tueStartTime = new Label("Start time : ");
+//        grid2.add(tueStartTime, 1, 3);
+        ChoiceBox tueStartTimeText = new ChoiceBox();
+//        tueStartTimeText.setPromptText("HH:mm");
+        grid2.add(tueStartTimeText, 2, 4);
         tueStartTimeText.setMaxWidth(100);
         
-        Label tueEndTime = new Label("End time : ");
-        grid2.add(tueEndTime, 3, 3);
-        TextField tueEndTimeText = new TextField();
-        tueEndTimeText.setPromptText("HH:mm");
-        grid2.add(tueEndTimeText, 4, 3);
+//        Label tueEndTime = new Label("End time : ");
+//        grid2.add(tueEndTime, 3, 3);
+        ChoiceBox tueEndTimeText = new ChoiceBox();
+//        tueEndTimeText.setPromptText("HH:mm");
+        grid2.add(tueEndTimeText, 3, 4);
         tueEndTimeText.setMaxWidth(100);
         
         //Wednesday
-        Text wednesdayText = new Text("WEDNESDAY");
+        Text wednesdayText = new Text("Wednesday");
         wednesdayText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
-        grid2.add(wednesdayText, 0, 4);
-        Label wedStartTime = new Label("Start time : ");
-        grid2.add(wedStartTime, 1, 4);
-        TextField wedStartTimeText = new TextField();
-        wedStartTimeText.setPromptText("HH:mm");
-        grid2.add(wedStartTimeText, 2, 4);
+        grid2.add(wednesdayText, 1, 5);
+//        Label wedStartTime = new Label("Start time : ");
+//        grid2.add(wedStartTime, 1, 4);
+        ChoiceBox wedStartTimeText = new ChoiceBox();
+//        wedStartTimeText.setPromptText("HH:mm");
+        grid2.add(wedStartTimeText, 2, 5);
         wedStartTimeText.setMaxWidth(100);
         
-        Label wedEndTime = new Label("End time : ");
-        grid2.add(wedEndTime, 3, 4);
-        TextField wedEndTimeText = new TextField();
-        wedEndTimeText.setPromptText("HH:mm");
-        grid2.add(wedEndTimeText, 4, 4);
+//        Label wedEndTime = new Label("End time : ");
+//        grid2.add(wedEndTime, 3, 4);
+        ChoiceBox wedEndTimeText = new ChoiceBox();
+//        wedEndTimeText.setPromptText("HH:mm");
+        grid2.add(wedEndTimeText, 3, 5);
         wedEndTimeText.setMaxWidth(100);
         
         //Thursday
-        Text thursdayText = new Text("THURSDAY");
+        Text thursdayText = new Text("Thursday");
         thursdayText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
-        grid2.add(thursdayText, 0, 5);
-        Label thurStartTime = new Label("Start time : ");
-        grid2.add(thurStartTime, 1, 5);
-        TextField thurStartTimeText = new TextField();
-        thurStartTimeText.setPromptText("HH:mm");
-        grid2.add(thurStartTimeText, 2, 5);
+        grid2.add(thursdayText, 1, 6);
+//        Label thurStartTime = new Label("Start time : ");
+//        grid2.add(thurStartTime, 1, 5);
+        ChoiceBox thurStartTimeText = new ChoiceBox();
+//        thurStartTimeText.setPromptText("HH:mm");
+        grid2.add(thurStartTimeText, 2, 6);
         thurStartTimeText.setMaxWidth(100);
         
-        Label thurEndTime = new Label("End time : ");
-        grid2.add(thurEndTime, 3, 5);
-        TextField thurEndTimeText = new TextField();
-        thurEndTimeText.setPromptText("HH:mm");
-        grid2.add(thurEndTimeText, 4, 5);
+//        Label thurEndTime = new Label("End time : ");
+//        grid2.add(thurEndTime, 3, 5);
+        ChoiceBox thurEndTimeText = new ChoiceBox();
+//        thurEndTimeText.setPromptText("HH:mm");
+        grid2.add(thurEndTimeText, 3, 6);
         thurEndTimeText.setMaxWidth(100);
         
         //Friday
-        Text fridayText = new Text("FRIDAY");
+        Text fridayText = new Text("Friday");
         fridayText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
-        grid2.add(fridayText, 0, 6);
-        Label friStartTime = new Label("Start time : ");
-        grid2.add(friStartTime, 1, 6);
-        TextField friStartTimeText = new TextField();
-        friStartTimeText.setPromptText("HH:mm");
-        grid2.add(friStartTimeText, 2, 6);
+        grid2.add(fridayText, 1, 7);
+//        Label friStartTime = new Label("Start time : ");
+//        grid2.add(friStartTime, 1, 6);
+        ChoiceBox friStartTimeText = new ChoiceBox();
+//        friStartTimeText.setPromptText("HH:mm");
+        grid2.add(friStartTimeText, 2, 7);
         friStartTimeText.setMaxWidth(100);
         
-        Label friEndTime = new Label("End time : ");
-        grid2.add(friEndTime, 3, 6);
-        TextField friEndTimeText = new TextField();
-        friEndTimeText.setPromptText("HH:mm");
-        grid2.add(friEndTimeText, 4, 6);
+//        Label friEndTime = new Label("End time : ");
+//        grid2.add(friEndTime, 3, 6);
+        ChoiceBox friEndTimeText = new ChoiceBox();
+//        friEndTimeText.setPromptText("HH:mm");
+        grid2.add(friEndTimeText, 3, 7);
         friEndTimeText.setMaxWidth(100);
         
         //Saturday
-        Text saturdayText = new Text("SATURDAY");
+        Text saturdayText = new Text("Saturday");
         saturdayText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
-        grid2.add(saturdayText, 0, 7);
-        Label satStartTime = new Label("Start time : ");
-        grid2.add(satStartTime, 1, 7);
-        TextField satStartTimeText = new TextField();
-        satStartTimeText.setPromptText("HH:mm");
-        grid2.add(satStartTimeText, 2, 7);
+        grid2.add(saturdayText, 1, 8);
+//        Label satStartTime = new Label("Start time : ");
+//        grid2.add(satStartTime, 1, 7);
+        ChoiceBox satStartTimeText = new ChoiceBox();
+//        satStartTimeText.setPromptText("HH:mm");
+        grid2.add(satStartTimeText, 2, 8);
         satStartTimeText.setMaxWidth(100);
         
-        Label satEndTime = new Label("End time : ");
-        grid2.add(satEndTime, 3, 7);
-        TextField satEndTimeText = new TextField();
-        satEndTimeText.setPromptText("HH:mm");
-        grid2.add(satEndTimeText, 4, 7);
+//        Label satEndTime = new Label("End time : ");
+//        grid2.add(satEndTime, 3, 7);
+        ChoiceBox satEndTimeText = new ChoiceBox();
+//        satEndTimeText.setPromptText("HH:mm");
+        grid2.add(satEndTimeText, 3, 8);
         satEndTimeText.setMaxWidth(100);
 
         //Sunday
-        Text sundayText = new Text("SUNDAY");
+        Text sundayText = new Text("Sunday");
         sundayText.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
-        grid2.add(sundayText, 0, 8);
-        Label sunStartTime = new Label("Start time : ");
-        grid2.add(sunStartTime, 1, 8);
-        TextField sunStartTimeText = new TextField();
-        sunStartTimeText.setPromptText("HH:mm");
-        grid2.add(sunStartTimeText, 2, 8);
+        grid2.add(sundayText, 1, 9);
+//        Label sunStartTime = new Label("Start time : ");
+//        grid2.add(sunStartTime, 1, 8);
+        ChoiceBox sunStartTimeText = new ChoiceBox();
+//        sunStartTimeText.setPromptText("HH:mm");
+        grid2.add(sunStartTimeText, 2, 9);
         sunStartTimeText.setMaxWidth(100);
         
-        Label sunEndTime = new Label("End time : ");
-        grid2.add(sunEndTime, 3, 8);
-        TextField sunEndTimeText = new TextField();
-        sunEndTimeText.setPromptText("HH:mm");
-        grid2.add(sunEndTimeText, 4, 8);
+//        Label sunEndTime = new Label("End time : ");
+//        grid2.add(sunEndTime, 3, 8);
+        ChoiceBox sunEndTimeText = new ChoiceBox();
+//        sunEndTimeText.setPromptText("HH:mm");
+        grid2.add(sunEndTimeText, 3, 9);
         sunEndTimeText.setMaxWidth(100);
         //TODO 
         //CHECK FORMAT OF INPUT "HHMM"
@@ -404,60 +467,61 @@ public class BusinessMenu extends SceneManager{
         register.setMinHeight(30);
         register.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
         hbRegister.getChildren().add(register);
-        grid2.add(hbRegister, 4, 9);
+        grid2.add(hbRegister, 3, 10);
+
         
         register.setOnAction(e -> {
-        	LocalTime monStart, monEnd, tueStart, tueEnd, wedStart, wedEnd, thurStart, thurEnd, 
-        				friStart, friEnd, satStart, satEnd, sunStart, sunEnd;
-        	HashMap<String,LocalTime> times = new HashMap<String,LocalTime>();
-    		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-        	String monStartTimeStr = monStartTimeText.getText();
-        	String monEndTimeStr = monEndTimeText.getText();
-        	String tueStartTimeStr = tueStartTimeText.getText();
-        	String tueEndTimeStr = tueEndTimeText.getText();
-        	String wedStartTimeStr = wedStartTimeText.getText();
-        	String wedEndTimeStr = wedEndTimeText.getText();
-        	String thurStartTimeStr = thurStartTimeText.getText();
-        	String thurEndTimeStr = thurEndTimeText.getText();
-        	String friStartTimeStr = friStartTimeText.getText();
-        	String friEndTimeStr = friEndTimeText.getText();
-        	String satStartTimeStr = satStartTimeText.getText();
-        	String satEndTimeStr = satEndTimeText.getText();
-        	String sunStartTimeStr = sunStartTimeText.getText();
-        	String sunEndTimeStr = sunEndTimeText.getText();
-    		monStart = LocalTime.parse(monStartTimeStr, dtf);
-    		monEnd = LocalTime.parse(monEndTimeStr, dtf);
-    		tueStart = LocalTime.parse(tueStartTimeStr, dtf);
-    		tueEnd = LocalTime.parse(tueEndTimeStr, dtf);
-    		wedStart = LocalTime.parse(wedStartTimeStr, dtf);
-    		wedEnd = LocalTime.parse(wedEndTimeStr, dtf);
-    		thurStart = LocalTime.parse(thurStartTimeStr, dtf);
-    		thurEnd = LocalTime.parse(thurEndTimeStr, dtf);
-    		friStart = LocalTime.parse(friStartTimeStr, dtf);
-    		friEnd = LocalTime.parse(friEndTimeStr, dtf);
-    		satStart = LocalTime.parse(satStartTimeStr, dtf);
-    		satEnd = LocalTime.parse(satEndTimeStr, dtf);
-    		sunStart = LocalTime.parse(sunStartTimeStr, dtf);
-    		sunEnd = LocalTime.parse(sunEndTimeStr, dtf);
-    		times.put("monStart", monStart);
-    		times.put("monEnd", monEnd);
-    		times.put("tueStart", tueStart);
-    		times.put("tueEnd", tueEnd);
-    		times.put("wedStart", wedStart);
-    		times.put("wedEnd", wedEnd);
-    		times.put("thurStart", thurStart);
-    		times.put("thurEnd", thurEnd);
-    		times.put("friStart", friStart);
-    		times.put("friEnd", friEnd);
-    		times.put("satStart", satStart);
-    		times.put("satEnd", satEnd);
-    		times.put("sunStart", sunStart);
-    		times.put("sunEnd", sunEnd);
-        	
-    		emp.updateSchedule(times);
-        	
-        	//TODO
-    		//CHECK INPUTS FOR WRONG/EMPTY strings
+//        	LocalTime monStart, monEnd, tueStart, tueEnd, wedStart, wedEnd, thurStart, thurEnd, 
+//        				friStart, friEnd, satStart, satEnd, sunStart, sunEnd;
+//        	HashMap<String,LocalTime> times = new HashMap<String,LocalTime>();
+//    		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+//        	String monStartTimeStr = monStartTimeText.getText();
+//        	String monEndTimeStr = monEndTimeText.getText();
+//        	String tueStartTimeStr = tueStartTimeText.getText();
+//        	String tueEndTimeStr = tueEndTimeText.getText();
+//        	String wedStartTimeStr = wedStartTimeText.getText();
+//        	String wedEndTimeStr = wedEndTimeText.getText();
+//        	String thurStartTimeStr = thurStartTimeText.getText();
+//        	String thurEndTimeStr = thurEndTimeText.getText();
+//        	String friStartTimeStr = friStartTimeText.getText();
+//        	String friEndTimeStr = friEndTimeText.getText();
+//        	String satStartTimeStr = satStartTimeText.getText();
+//        	String satEndTimeStr = satEndTimeText.getText();
+//        	String sunStartTimeStr = sunStartTimeText.getText();
+//        	String sunEndTimeStr = sunEndTimeText.getText();
+//    		monStart = LocalTime.parse(monStartTimeStr, dtf);
+//    		monEnd = LocalTime.parse(monEndTimeStr, dtf);
+//    		tueStart = LocalTime.parse(tueStartTimeStr, dtf);
+//    		tueEnd = LocalTime.parse(tueEndTimeStr, dtf);
+//    		wedStart = LocalTime.parse(wedStartTimeStr, dtf);
+//    		wedEnd = LocalTime.parse(wedEndTimeStr, dtf);
+//    		thurStart = LocalTime.parse(thurStartTimeStr, dtf);
+//    		thurEnd = LocalTime.parse(thurEndTimeStr, dtf);
+//    		friStart = LocalTime.parse(friStartTimeStr, dtf);
+//    		friEnd = LocalTime.parse(friEndTimeStr, dtf);
+//    		satStart = LocalTime.parse(satStartTimeStr, dtf);
+//    		satEnd = LocalTime.parse(satEndTimeStr, dtf);
+//    		sunStart = LocalTime.parse(sunStartTimeStr, dtf);
+//    		sunEnd = LocalTime.parse(sunEndTimeStr, dtf);
+//    		times.put("monStart", monStart);
+//    		times.put("monEnd", monEnd);
+//    		times.put("tueStart", tueStart);
+//    		times.put("tueEnd", tueEnd);
+//    		times.put("wedStart", wedStart);
+//    		times.put("wedEnd", wedEnd);
+//    		times.put("thurStart", thurStart);
+//    		times.put("thurEnd", thurEnd);
+//    		times.put("friStart", friStart);
+//    		times.put("friEnd", friEnd);
+//    		times.put("satStart", satStart);
+//    		times.put("satEnd", satEnd);
+//    		times.put("sunStart", sunStart);
+//    		times.put("sunEnd", sunEnd);
+//        	
+//    		emp.updateSchedule(times);
+//        	
+//        	//TODO
+//    		//CHECK INPUTS FOR WRONG/EMPTY strings
 
         	FIO.saveBus(businesses);
     		businessMenu();
@@ -472,13 +536,16 @@ public class BusinessMenu extends SceneManager{
         back.setMinHeight(30);
         back.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
         hbBack.getChildren().add(back);
-        grid2.add(hbBack, 0, 9);
+        grid2.add(hbBack, 0, 10, 2, 1);
         back.setOnAction(e -> {
         	busSelectEmp((Business)userInst);
         	window.setScene(busSelectEmp);
         });
         
         busAddWorkTime = new Scene(grid2, 600, 500);
+	}
+	public void addDays(Stage window, int row, String day, GridPane grid){
+		
 	}
 
 }

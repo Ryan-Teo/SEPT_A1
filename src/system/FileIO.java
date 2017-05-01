@@ -128,7 +128,6 @@ public class FileIO {
 				}
 			}
 		}
-		
 		saveBus(businesses); //LOG
 		return businesses;
 	}

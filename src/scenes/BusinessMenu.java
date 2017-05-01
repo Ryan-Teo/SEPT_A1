@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -159,10 +160,22 @@ public class BusinessMenu extends SceneManager{
         	String empNameString = empNameText.getText();
         	//TODO
         	//check if empNameString is empty?
-        	bus.addNewEmp(empNameString);
-        	FIO.saveBus(businesses);
-    		businessMenu();
-    		window.setScene(businessMenu);
+        	if(empNameString.length() > 0){
+	        	bus.addNewEmp(empNameString);
+	        	FIO.saveBus(businesses);
+	    		businessMenu();
+	    		window.setScene(businessMenu);
+        	}
+        	
+        	else{
+        		/*
+        		 * JULIA
+        		 * please add box saying that they need to enter a name... or can't leave box blank
+        		 * 
+        		 */
+        		addEmp((Business)userInst);
+        		window.setScene(busAddEmpSc);
+        	}
         });
             
         Button back = new Button("Back");
@@ -264,105 +277,162 @@ public class BusinessMenu extends SceneManager{
         registerTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
         grid2.add(registerTitle, 0, 1,2, 1);
         
+        ArrayList<LocalTime> times = new ArrayList<LocalTime>() ;
+        LocalTime checkTime = bus.getOpenTime();
+        int timeInMin = bus.getTimeSlotInMins();
+        int i = 0;
+        while(checkTime.plusMinutes(i*timeInMin).isBefore(bus.getCloseTime())){
+        	times.add(checkTime.plusMinutes(i*timeInMin));
+        	i++;
+        }
+        
+        ObservableList<LocalTime> timeChoices = FXCollections.observableArrayList(times);
+        
+ 
+        
         //Monday
         grid2.add(new Label("-Monday-"), 0, 2);
         Label monStartTime = new Label("Start time : ");
         grid2.add(monStartTime, 0, 3);
-        TextField monStartTimeText = new TextField();
-        monStartTimeText.setPromptText("HH:mm");
-        grid2.add(monStartTimeText, 1, 3);
+        CheckBox cbMonday = new CheckBox();
+        grid2.add(cbMonday, 1, 2);
+        ChoiceBox<LocalTime> monStart = new ChoiceBox<LocalTime>();
+        monStart.setItems(timeChoices);
+        monStart.setValue(timeChoices.get(0));
+        monStart.setTooltip(new Tooltip("Select Start Time"));
+        grid2.add(monStart, 1, 3);
         
         Label monEndTime = new Label("End time : ");
         grid2.add(monEndTime, 2, 3);
-        TextField monEndTimeText = new TextField();
-        monEndTimeText.setPromptText("HH:mm");
-        grid2.add(monEndTimeText, 3, 3);
+        ChoiceBox<LocalTime> monEnd = new ChoiceBox<LocalTime>();
+        monEnd.setItems(timeChoices);
+        monEnd.setValue(timeChoices.get(0));
+        monEnd.setTooltip(new Tooltip("Select End Time"));
+        grid2.add(monEnd, 3, 3);
         
         //Tuesday
         grid2.add(new Label("-Tuesday-"), 0, 4);
         Label tueStartTime = new Label("Start time : ");
         grid2.add(tueStartTime, 0, 5);
-        TextField tueStartTimeText = new TextField();
-        tueStartTimeText.setPromptText("HH:mm");
-        grid2.add(tueStartTimeText, 1, 5);
+        CheckBox cbTuesday = new CheckBox();
+        grid2.add(cbTuesday, 1, 4);
+        ChoiceBox<LocalTime> tueStart = new ChoiceBox<LocalTime>();
+        tueStart.setItems(timeChoices);
+        tueStart.setValue(timeChoices.get(0));
+        tueStart.setTooltip(new Tooltip("Select Start Time"));
+        grid2.add(tueStart, 1, 5);
         
         Label tueEndTime = new Label("End time : ");
         grid2.add(tueEndTime, 2, 5);
-        TextField tueEndTimeText = new TextField();
-        tueEndTimeText.setPromptText("HH:mm");
-        grid2.add(tueEndTimeText, 3, 5);
+        ChoiceBox<LocalTime> tueEnd = new ChoiceBox<LocalTime>();
+        tueEnd.setItems(timeChoices);
+        tueEnd.setValue(timeChoices.get(0));
+        tueEnd.setTooltip(new Tooltip("Select End Time"));
+        grid2.add(tueEnd, 3, 5);
         
         //Wednesday
         grid2.add(new Label("-Wednesday-"), 0, 6);
         Label wedStartTime = new Label("Start time : ");
         grid2.add(wedStartTime, 0, 7);
-        TextField wedStartTimeText = new TextField();
-        wedStartTimeText.setPromptText("HH:mm");
-        grid2.add(wedStartTimeText, 1, 7);
+        CheckBox cbWednesday = new CheckBox();
+        grid2.add(cbWednesday, 1, 6);
+        ChoiceBox<LocalTime> wedStart = new ChoiceBox<LocalTime>();
+        wedStart.setItems(timeChoices);
+        wedStart.setValue(timeChoices.get(0));
+        wedStart.setTooltip(new Tooltip("Select Start Time"));
+        grid2.add(wedStart, 1, 7);
         
         Label wedEndTime = new Label("End time : ");
         grid2.add(wedEndTime, 2, 7);
-        TextField wedEndTimeText = new TextField();
-        wedEndTimeText.setPromptText("HH:mm");
-        grid2.add(wedEndTimeText, 3, 7);
+        ChoiceBox<LocalTime> wedEnd = new ChoiceBox<LocalTime>();
+        wedEnd.setItems(timeChoices);
+        wedEnd.setValue(timeChoices.get(0));
+        wedEnd.setTooltip(new Tooltip("Select End Time"));
+        grid2.add(wedEnd, 3, 7);
         
         //Thursday
         grid2.add(new Label("-Thursday-"), 0, 8);
         Label thurStartTime = new Label("Start time : ");
         grid2.add(thurStartTime, 0, 9);
-        TextField thurStartTimeText = new TextField();
-        thurStartTimeText.setPromptText("HH:mm");
-        grid2.add(thurStartTimeText, 1, 9);
+        CheckBox cbThursday = new CheckBox();
+        grid2.add(cbThursday, 1, 8);
+        ChoiceBox<LocalTime> thurStart = new ChoiceBox<LocalTime>();
+        thurStart.setItems(timeChoices);
+        thurStart.setValue(timeChoices.get(0));
+        thurStart.setTooltip(new Tooltip("Select Start Time"));
+        grid2.add(thurStart, 1, 9);
         
         Label thurEndTime = new Label("End time : ");
         grid2.add(thurEndTime, 2, 9);
-        TextField thurEndTimeText = new TextField();
-        thurEndTimeText.setPromptText("HH:mm");
-        grid2.add(thurEndTimeText, 3, 9);
+        ChoiceBox<LocalTime> thurEnd = new ChoiceBox<LocalTime>();
+        thurEnd.setItems(timeChoices);
+        thurEnd.setValue(timeChoices.get(0));
+        thurEnd.setTooltip(new Tooltip("Select End Time"));
+        grid2.add(thurEnd, 3, 9);
         
         //Friday
         grid2.add(new Label("-Friday-"), 0, 10);
         Label friStartTime = new Label("Start time : ");
         grid2.add(friStartTime, 0, 11);
-        TextField friStartTimeText = new TextField();
-        friStartTimeText.setPromptText("HH:mm");
-        grid2.add(friStartTimeText, 1, 11);
+        CheckBox cbFriday = new CheckBox();
+        grid2.add(cbFriday, 1, 10);
+        ChoiceBox<LocalTime> friStart = new ChoiceBox<LocalTime>();
+        friStart.setItems(timeChoices);
+        friStart.setValue(timeChoices.get(0));
+        friStart.setTooltip(new Tooltip("Select Start Time"));
+        grid2.add(friStart, 1, 11);
         
         Label friEndTime = new Label("End time : ");
         grid2.add(friEndTime, 2, 11);
-        TextField friEndTimeText = new TextField();
-        friEndTimeText.setPromptText("HH:mm");
-        grid2.add(friEndTimeText, 3, 11);
+        ChoiceBox<LocalTime> friEnd = new ChoiceBox<LocalTime>();
+        friEnd.setItems(timeChoices);
+        friEnd.setValue(timeChoices.get(0));
+        friEnd.setTooltip(new Tooltip("Select End Time"));
+        grid2.add(friEnd, 3, 11);
         
         //Saturday
         grid2.add(new Label("-Saturday-"), 0, 12);
         Label satStartTime = new Label("Start time : ");
         grid2.add(satStartTime, 0, 13);
-        TextField satStartTimeText = new TextField();
-        satStartTimeText.setPromptText("HH:mm");
-        grid2.add(satStartTimeText, 1, 13);
+        CheckBox cbSaturday = new CheckBox();
+        grid2.add(cbSaturday, 1, 12);
+        ChoiceBox<LocalTime> satStart = new ChoiceBox<LocalTime>();
+        satStart.setItems(timeChoices);
+        satStart.setValue(timeChoices.get(0));
+        satStart.setTooltip(new Tooltip("Select Start Time"));
+        grid2.add(satStart, 1, 13);
+        
         
         Label satEndTime = new Label("End time : ");
         grid2.add(satEndTime, 2, 13);
-        TextField satEndTimeText = new TextField();
-        satEndTimeText.setPromptText("HH:mm");
-        grid2.add(satEndTimeText, 3, 13);
-
+        ChoiceBox<LocalTime> satEnd = new ChoiceBox<LocalTime>();
+        satEnd.setItems(timeChoices);
+        satEnd.setValue(timeChoices.get(0));
+        satEnd.setTooltip(new Tooltip("Select End Time"));
+        grid2.add(satEnd, 3, 13);
+        
         //Sunday
         grid2.add(new Label("-Sunday-"), 0, 14);
         Label sunStartTime = new Label("Start time : ");
         grid2.add(sunStartTime, 0, 15);
-        TextField sunStartTimeText = new TextField();
-        sunStartTimeText.setPromptText("HH:mm");
-        grid2.add(sunStartTimeText, 1, 15);
+        CheckBox cbSunday = new CheckBox();
+        grid2.add(cbSunday, 1, 14);
+        ChoiceBox<LocalTime> sunStart = new ChoiceBox<LocalTime>();
+        sunStart.setItems(timeChoices);
+        sunStart.setValue(timeChoices.get(0));
+        sunStart.setTooltip(new Tooltip("Select Start Time"));
+        grid2.add(sunStart, 1, 15);
         
         Label sunEndTime = new Label("End time : ");
         grid2.add(sunEndTime, 2, 15);
-        TextField sunEndTimeText = new TextField();
-        sunEndTimeText.setPromptText("HH:mm");
-        grid2.add(sunEndTimeText, 3, 15);
+        ChoiceBox<LocalTime> sunEnd = new ChoiceBox<LocalTime>();
+        sunEnd.setItems(timeChoices);
+        sunEnd.setValue(timeChoices.get(0));
+        sunEnd.setTooltip(new Tooltip("Select End Time"));
+        grid2.add(sunEnd, 3, 15);
+        
         //TODO 
-        //CHECK FORMAT OF INPUT "HHMM"
+        //CHECK FORMAT OF INPUT "HHMMMMMMMMMMMMMMM....."
             
         Button register = new Button("Add!");
         HBox hbRegister = new HBox(10);
@@ -374,57 +444,50 @@ public class BusinessMenu extends SceneManager{
         grid2.add(hbRegister, 3, 16);
         
         register.setOnAction(e -> {
-        	LocalTime monStart, monEnd, tueStart, tueEnd, wedStart, wedEnd, thurStart, thurEnd, 
-        				friStart, friEnd, satStart, satEnd, sunStart, sunEnd;
-        	HashMap<String,LocalTime> times = new HashMap<String,LocalTime>();
-    		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-        	String monStartTimeStr = monStartTimeText.getText();
-        	String monEndTimeStr = monEndTimeText.getText();
-        	String tueStartTimeStr = tueStartTimeText.getText();
-        	String tueEndTimeStr = tueEndTimeText.getText();
-        	String wedStartTimeStr = wedStartTimeText.getText();
-        	String wedEndTimeStr = wedEndTimeText.getText();
-        	String thurStartTimeStr = thurStartTimeText.getText();
-        	String thurEndTimeStr = thurEndTimeText.getText();
-        	String friStartTimeStr = friStartTimeText.getText();
-        	String friEndTimeStr = friEndTimeText.getText();
-        	String satStartTimeStr = satStartTimeText.getText();
-        	String satEndTimeStr = satEndTimeText.getText();
-        	String sunStartTimeStr = sunStartTimeText.getText();
-        	String sunEndTimeStr = sunEndTimeText.getText();
-    		monStart = LocalTime.parse(monStartTimeStr, dtf);
-    		monEnd = LocalTime.parse(monEndTimeStr, dtf);
-    		tueStart = LocalTime.parse(tueStartTimeStr, dtf);
-    		tueEnd = LocalTime.parse(tueEndTimeStr, dtf);
-    		wedStart = LocalTime.parse(wedStartTimeStr, dtf);
-    		wedEnd = LocalTime.parse(wedEndTimeStr, dtf);
-    		thurStart = LocalTime.parse(thurStartTimeStr, dtf);
-    		thurEnd = LocalTime.parse(thurEndTimeStr, dtf);
-    		friStart = LocalTime.parse(friStartTimeStr, dtf);
-    		friEnd = LocalTime.parse(friEndTimeStr, dtf);
-    		satStart = LocalTime.parse(satStartTimeStr, dtf);
-    		satEnd = LocalTime.parse(satEndTimeStr, dtf);
-    		sunStart = LocalTime.parse(sunStartTimeStr, dtf);
-    		sunEnd = LocalTime.parse(sunEndTimeStr, dtf);
-    		times.put("monStart", monStart);
-    		times.put("monEnd", monEnd);
-    		times.put("tueStart", tueStart);
-    		times.put("tueEnd", tueEnd);
-    		times.put("wedStart", wedStart);
-    		times.put("wedEnd", wedEnd);
-    		times.put("thurStart", thurStart);
-    		times.put("thurEnd", thurEnd);
-    		times.put("friStart", friStart);
-    		times.put("friEnd", friEnd);
-    		times.put("satStart", satStart);
-    		times.put("satEnd", satEnd);
-    		times.put("sunStart", sunStart);
-    		times.put("sunEnd", sunEnd);
-        	
-    		emp.updateSchedule(times);
-        	
-        	//TODO
-    		//CHECK INPUTS FOR WRONG/EMPTY strings
+        	HashMap<String,LocalTime> newTimes = new HashMap<String,LocalTime>();
+    		
+        	if(monStart.getSelectionModel().getSelectedItem().isBefore(monEnd.getSelectionModel().getSelectedItem()) && cbMonday.isSelected()){
+	  
+	    		newTimes.put("monStart", monStart.getSelectionModel().getSelectedItem());
+	    		newTimes.put("monEnd", monEnd.getSelectionModel().getSelectedItem());
+	    		System.out.println("THE MONDAY START IS: " + newTimes.get("monStart"));
+        	}
+        	if(tueStart.getSelectionModel().getSelectedItem().isBefore(tueEnd.getSelectionModel().getSelectedItem()) && cbTuesday.isSelected()){
+	    		newTimes.put("tueStart", tueStart.getSelectionModel().getSelectedItem());
+	    		newTimes.put("tueEnd", tueEnd.getSelectionModel().getSelectedItem());
+	    		System.out.println("THE TUesdat START IS: " + newTimes.get("tueStart"));
+        	}
+    		if(wedStart.getSelectionModel().getSelectedItem().isBefore(wedEnd.getSelectionModel().getSelectedItem()) && cbWednesday.isSelected()){
+	        	newTimes.put("wedStart", wedStart.getSelectionModel().getSelectedItem());
+	    		newTimes.put("wedEnd", wedEnd.getSelectionModel().getSelectedItem());
+    		}
+    		
+    		if(thurStart.getSelectionModel().getSelectedItem().isBefore(thurEnd.getSelectionModel().getSelectedItem()) && cbThursday.isSelected()){
+	    		newTimes.put("thurStart", thurStart.getSelectionModel().getSelectedItem());
+	    		newTimes.put("thurEnd", thurEnd.getSelectionModel().getSelectedItem());
+    		}
+    		
+    		if(friStart.getSelectionModel().getSelectedItem().isBefore(friEnd.getSelectionModel().getSelectedItem()) && cbFriday.isSelected()){
+	    		newTimes.put("friStart", friStart.getSelectionModel().getSelectedItem());
+	    		newTimes.put("friEnd", friEnd.getSelectionModel().getSelectedItem());
+    		}
+    		
+    		if(satStart.getSelectionModel().getSelectedItem().isBefore(satEnd.getSelectionModel().getSelectedItem()) && cbSaturday.isSelected()){
+	    		newTimes.put("satStart", satStart.getSelectionModel().getSelectedItem());
+	    		newTimes.put("satEnd", satEnd.getSelectionModel().getSelectedItem());
+    		}
+    		
+    		if(sunStart.getSelectionModel().getSelectedItem().isBefore(sunEnd.getSelectionModel().getSelectedItem()) && cbSunday.isSelected()){
+
+	    		newTimes.put("sunStart", sunStart.getSelectionModel().getSelectedItem());
+	    		newTimes.put("sunEnd", sunEnd.getSelectionModel().getSelectedItem());
+	        	
+    		}
+    		
+    		emp.updateSchedule(newTimes);
+//        	
+//        	//TODO
+//    		//CHECK INPUTS FOR WRONG/EMPTY strings
 
         	FIO.saveBus(businesses);
     		businessMenu();

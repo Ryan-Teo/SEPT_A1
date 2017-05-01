@@ -433,7 +433,7 @@ public class CustomerMenu extends SceneManager{
 		//Business Column
 		TableColumn<Booking,String> business =  new TableColumn<>("Business");
 		business.setMinWidth(50);
-		business.setCellValueFactory(new PropertyValueFactory<>("bookBus"));
+		business.setCellValueFactory(new PropertyValueFactory<>("strBus"));
 		
 		//Date Column
 		TableColumn<Booking,LocalDate> bookingDate =  new TableColumn<>("Date");
@@ -453,7 +453,7 @@ public class CustomerMenu extends SceneManager{
 		//Employee
 		TableColumn<Booking, String> emp =  new TableColumn<>("Employee");
 		emp.setMinWidth(50);
-		emp.setCellValueFactory(new PropertyValueFactory<>("bookEmp"));
+		emp.setCellValueFactory(new PropertyValueFactory<>("strEmp"));
 		
 		
 		table.setItems(bookItems);
@@ -472,8 +472,24 @@ public class CustomerMenu extends SceneManager{
 			
 			if(table.getSelectionModel().getSelectedIndex() != -1){
 				Booking bookInst = table.getSelectionModel().getSelectedItem();
-				if(((Customer) userInst).cancelBooking(bookings, bookInst))
+				Employee empInst;
+				
+				for(int i = 0; i < businesses.size(); i++){
+					if(bookInst.getBookBus().equals(businesses.get(i).getBusName())){
+						ArrayList<Employee>emps = businesses.get(i).getEmps();
+						for(int j = 0; j < emps.size(); j++){
+							if(bookInst.getBookEmp().equals(emps.get(i).getName())){
+								empInst = emps.get(i);
+							}
+						}
+					}
+						
+				}
+				
+				if(((Customer) userInst).cancelBooking(bookings, bookInst)){
+					
 					FIO.saveBook(bookings);
+				}
 				logger.info("A booking has been cancelled, summary is updated");
 				showBookingSummary();
 				window.setScene(customerBookingSummary);

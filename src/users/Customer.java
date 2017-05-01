@@ -35,7 +35,7 @@ public class Customer extends User{
 	public boolean bookSession(LocalDate date, LocalTime sessionStart, LocalTime sessionEnd, Customer cust, Business busInst ,Employee emp, ArrayList<Booking> bookings){
 		
 		if(true){ //condition only used for dummy code
-//		if(emp.checkSchedule(date, sessionStart, sessionEnd, busInst.getTimeSlotInMins())){
+		if(emp.checkSchedule(date, sessionStart, sessionEnd, busInst.getTimeSlotInMins())){
 			Booking newBook = new Booking(date, sessionStart, sessionEnd, cust, busInst, emp);
 			bookings.add(newBook);
 			return true;
@@ -45,6 +45,7 @@ public class Customer extends User{
 	}
 
 	public boolean cancelBooking(ArrayList<Booking> bookings, Booking toCancel){
+		toCancel.getBookEmp().unbookEmp(toCancel.getBookDate(), toCancel.getStartTime(), toCancel.getService());
 		for(int i = 0; i < bookings.size(); i++){
 			if(bookings.get(i).equals(toCancel)){
 				bookings.remove(i);

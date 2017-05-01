@@ -14,14 +14,20 @@ public class Booking implements Serializable{
 	private String bookCust;
 	private String bookBus;
 	private String bookEmp;
+	private String service;
 
-	public Booking(LocalDate bookDate, LocalTime bookStart, LocalTime bookEnd, Customer bookCust, Business bookBus, Employee bookEmp){
+	public Booking(LocalDate bookDate, LocalTime bookStart, LocalTime bookEnd, Customer bookCust, Business bookBus, Employee bookEmp, String service){
 		this.bookDate = bookDate;
 		this.startTime = bookStart;
 		this.endTime= bookEnd;
 		this.bookCust = bookCust.getUsername();
 		this.bookBus = bookBus.getBusName();
 		this.bookEmp = bookEmp.getName();
+		this.service = service;
+	}
+	
+	public String getService(){
+		return service;
 	}
 	
 	public LocalDate getBookDate() {

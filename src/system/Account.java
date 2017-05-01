@@ -122,7 +122,8 @@ public class Account {
 		}
 		else{
 			logger.info("Business registration is successful");
-			businesses.add(new Business(name, username, busName, password1, address, phone));
+			businesses.add(new Business(busName, name, address, phone, username, password1));
+			FIO.saveBus(businesses);
 			FIO.saveBus(businesses);
 			return true;
 		}

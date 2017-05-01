@@ -1,7 +1,5 @@
 package scenes;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
@@ -23,8 +21,6 @@ import system.Account;
 import system.Booking;
 import users.Business;
 import users.Customer;
-import users.Employee;
-import users.User;
 
 public class MainMenu extends SceneManager{
 
@@ -75,29 +71,18 @@ public class MainMenu extends SceneManager{
         	String passwordString = passwordInput.getText();
         	mainLogIn(customers, businesses, userNameString, passwordString);
         	if(userInst instanceof Customer){
-        		
-        		/*
-        		 * creating a dummy booking
-        		 */
-        		LocalDate date = LocalDate.now();
-        		LocalTime sessionStart = LocalTime.now();
-        		LocalTime sessionEnd = sessionStart.plusMinutes(30);
-        		Business busInst = businesses.get(0);
-        		Employee emp = new Employee("abc", "Bob", busInst);
-        		userInst.bookSession(date, sessionStart, sessionEnd, (Customer)userInst, busInst ,emp, bookings);
-        		System.out.println("saved a dummy");
-        		FIO.saveBook(bookings);
-        		/*
-        		 * end creating a dummy booking
-        		 */
         		logger.info("Initializing customer menu");
-        		custScreen.customerMenu();
+        		custScreen.customerMenu(userInst);
         		window.setScene(customerMenu);
         	}
         	else if(userInst instanceof Business){
         		logger.info("Initializing business menu");
-        		busScreen.businessMenu();
+        		busScreen.businessMenu(userInst);
         		window.setScene(businessMenu);
+        	}
+        	else{
+        		String msg = "Incorrect username/password!";
+        		handleGenericFail(window, msg);
         	}
 
         });
@@ -111,6 +96,11 @@ public class MainMenu extends SceneManager{
         hbRegisterButton.getChildren().add(registerButton);
         grid.add(hbRegisterButton, 1, 0);
         registerButton.setOnAction(e -> {
+//        		Under CONSTRUCTION
+//        	
+//        	custScreen.customerMenu();
+//        	window.setScene(customerMenu);
+//        	
         		showRegister();
 	        	window.setScene(registerMenu);
         	});

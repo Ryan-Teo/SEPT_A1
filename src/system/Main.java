@@ -1,15 +1,12 @@
 package system;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.*;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import scenes.SceneManager;
 import users.Business;
 import users.Customer;
-import users.User;
 
 public class Main extends Application{
 	
@@ -18,9 +15,7 @@ public class Main extends Application{
 	
 	ArrayList<Customer> customers = FIO.loadCust();
 	ArrayList<Business> businesses = FIO.loadBus();
-	ArrayList<Booking> bookings = FIO.loadBook(businesses);
-	
-//	LinkedHashMap<Business, LinkedHashMap<LocalDate, Booking[]>> bookings = FIO.loadBook(help, businesses); //Loading existing bookings	
+	ArrayList<Booking> bookings = FIO.loadBook();
 	
 	public static void main(String args[]) throws IOException{ //Handle exceptions
 	

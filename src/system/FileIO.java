@@ -8,18 +8,24 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.StringTokenizer;
-
+import org.apache.log4j.Logger;
 import users.Business;
 import users.Customer;
 import users.Employee;
 
 public class FileIO {
+	Logger logger = Logger.getLogger(FileIO.class);
+	
+	public void save(ArrayList<Customer> customers, ArrayList<Business> businesses, ArrayList<Booking> bookings){
+		saveCust(customers);
+		saveBus(businesses);
+		saveBook(bookings);
+	}
+	
+	
 	public ArrayList<Customer> loadCust(){
 		ArrayList<Customer> customers = new ArrayList<Customer>(); //Use for error checking
 		String line, name, username, password, address, phone;
@@ -56,7 +62,7 @@ public class FileIO {
 		try {
 			pw = new PrintWriter (new BufferedWriter (new FileWriter ("customers.txt")));
 		} catch (IOException e) {
-			System.err.println("-customers.txt has been created-");
+			logger.error("customer.txt has been created");
 		}
 		for (int i=0; i<customers.size(); i++){
 			Customer customer = customers.get(i);			
@@ -90,8 +96,8 @@ public class FileIO {
 			}
 			scBus.close();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			System.out.println("-- POPULATING BUSINESSES --");
+			logger.error(e.getMessage());
+			logger.info("-- POPULATING BUSINESSES --");
 			businesses.add(new Business("Sal's Hair Salon", "Harry", "1 Alumbra St", "0400000000", "harryOwner", "password"));
 			businesses.add(new Business("East Medical Centre", "Ryan", "10 Car St", "0411111111", "ryanOwner", "password"));
 			businesses.add(new Business("Manny's Manicures", "Anton", "100 Leianne St", "0422222222", "antonOwner", "password"));
@@ -113,10 +119,9 @@ public class FileIO {
 			in.close();
 			inFile.close();
 		} catch (IOException e) {
-			System.out.println("-No existing employees-"); //LOG
+			logger.warn("No existing employees");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		
 		for(Employee emp : emps){
@@ -128,8 +133,8 @@ public class FileIO {
 				}
 			}
 		}
+		saveBus(businesses);
 		
-		saveBus(businesses); //LOG
 		return businesses;
 	}
 	
@@ -137,10 +142,12 @@ public class FileIO {
 		String busName, name, username, password, address, phone;
 		PrintWriter pwBus = null;
 		try {
+			logger.info("Business has been saved successfully into business.txt");
 			pwBus = new PrintWriter (new BufferedWriter (new FileWriter ("business.txt")));
 		} catch (IOException e) {
-			System.err.println("-business.txt has been created-"); //LOG
+			logger.warn("business.txt has been created");
 		}
+		
 		for (int i=0; i<businesses.size(); i++){
 			Business business = businesses.get(i);			
 			busName = business.getBusName();
@@ -155,6 +162,7 @@ public class FileIO {
 		ArrayList<Employee> emps = new ArrayList<Employee>();
 		//Saving employee arraylist for each business
 		try {
+			logger.info("Employees has been successfully saved into 'employees' file");
 	        FileOutputStream outFile = new FileOutputStream("employees");
 	        ObjectOutputStream out = new ObjectOutputStream(outFile);
 			out.reset();
@@ -167,32 +175,35 @@ public class FileIO {
 	        out.close();
 	        outFile.close();
 	     }catch(IOException e) {
-	    	 System.err.println("-employees file has been created-"); //LOG
+	    	 logger.warn("-employees file has been created-");
 	     }
 	}
 	
 
 	@SuppressWarnings("unchecked")
-	public ArrayList<Booking> loadBook(ArrayList<Business> businesses){
+	public ArrayList<Booking> loadBook(){
 		//deal with exception here
 		//part 2 : check against businesses array, init days for new businesses (defunct)
 		ArrayList<Booking> bookings = new ArrayList<Booking>(); //Check for null when called
 		try {
+			logger.info("bookings has been loaded successfully");
 			FileInputStream inFile = new FileInputStream("bookings");
 			ObjectInputStream in = new ObjectInputStream(inFile);
 			bookings = (ArrayList<Booking>) in.readObject();			
 			in.close();
 			inFile.close();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			System.out.println("-- NO BOOKINGS EXIST --"); //LOG
+			logger.info(e.getMessage());
+			logger.warn("-- NO BOOKINGS EXIST --"); //LOG
 		}
-		saveBook(bookings); //LOG
+		
+		saveBook(bookings);
 		return bookings;
 	}
 	
 	public void saveBook(ArrayList<Booking> bookings){
 		try {
+			logger.info("Bookings have been saved successfully");
 	        FileOutputStream outFile = new FileOutputStream("bookings");
 	        ObjectOutputStream out = new ObjectOutputStream(outFile);
 			out.reset();
@@ -200,15 +211,8 @@ public class FileIO {
 	        out.close();
 	        outFile.close();
 	     }catch(Exception e) {
-	    	 System.out.println(e.getMessage());
+	    	 logger.error(e.getMessage());
 	    	 e.printStackTrace();
 	     }
 	}
-
-	
-//WHAT IS THIS?
-//	public static <T> T parseObjectFromString(String s, Class<T> clazz) throws Exception {
-//	    return clazz.getConstructor(new Class[] {String.class }).newInstance(s);
-//	}
-
 }

@@ -2,10 +2,6 @@ package users;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.LinkedHashMap;
-import java.util.Scanner;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import system.Booking;
@@ -31,26 +27,21 @@ public class Customer extends User{
 		return bookingsToBeViewed;
 	}
 	
+	
 	@Override
-	public boolean bookSession(LocalDate date, LocalTime sessionStart, LocalTime sessionEnd, Customer cust, Business busInst ,Employee emp, ArrayList<Booking> bookings){
-		
-		if(true){ //condition only used for dummy code
-//		if(emp.checkSchedule(date, sessionStart, sessionEnd, busInst.getTimeSlotInMins())){
-			Booking newBook = new Booking(date, sessionStart, sessionEnd, cust, busInst, emp);
-			bookings.add(newBook);
-			return true;
-		}
-		else
-			return false;
+	public boolean makeBooking(LocalDate date, LocalTime startTime, Customer bookCust, Business bus, 
+								Employee myEmp, String service, ArrayList<Booking> bookings){
+    	int bookingLen = bus.getServices().get(service)*bus.getTimeSlotInMins();
+    	bookings.add(new Booking(date, startTime, startTime.plusMinutes(bookingLen), this ,bus, myEmp, service));
+    	myEmp.bookEmp(date, startTime, service);
+
+		return true;
 	}
 
-	public boolean cancelBooking(ArrayList<Booking> bookings, Booking toCancel){
-		for(int i = 0; i < bookings.size(); i++){
-			if(bookings.get(i).equals(toCancel)){
-				bookings.remove(i);
-				//also set the employee to boolean false not in those sessions
-				return true;
-			}	
+	public boolean cancelBooking(ArrayList<Booking> bookings, Booking booking){
+		booking.getBookEmp().unbookEmp(booking.getBookDate(), booking.getStartTime(), booking.getService());
+		if(bookings.remove(booking)){
+			return true;
 		}
 		return false;
 	}

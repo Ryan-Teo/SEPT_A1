@@ -3,8 +3,12 @@ Ryan|ryanCust|password|ryan@sept.com|0411111111
 Anton|antonCust|password|anton@sept.com|0422222222
 Julia|juliaCust|password|julia@sept.com|0433333333
 Grace|graceCust|password|grace@sept.com|0493020302
-<<<<<<< HEAD
-=======
-qwe|bobobobobob|123456|qwe123|0454545454545
-Antqwe|svsdfjqiwe|123456|qwe123qwe|04654654654
->>>>>>> 155bba539ccc2440b24af9baefbddb5b647b1dbd
+Harry|harryCust|password|utomorulz@sept.com|0400000000
+Ryan|ryanCust|password|ryan@sept.com|0411111111
+Anton|antonCust|password|anton@sept.com|0422222222
+Julia|juliaCust|password|julia@sept.com|0433333333
+Grace|graceCust|password|grace@sept.com|0493020302
+Iris|irisCust|password|1234|0411111111
+Izzy|izzyCust|password|1234|0422222222
+heya|heyaCust|password|1234|0433333333
+a|a|a|a|a

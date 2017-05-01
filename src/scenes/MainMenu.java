@@ -99,6 +99,9 @@ public class MainMenu extends SceneManager{
         		busScreen.businessMenu();
         		window.setScene(businessMenu);
         	}
+        	else{
+        		handleSignInFail(window);
+        	}
 
         });
 
@@ -111,6 +114,11 @@ public class MainMenu extends SceneManager{
         hbRegisterButton.getChildren().add(registerButton);
         grid.add(hbRegisterButton, 1, 0);
         registerButton.setOnAction(e -> {
+//        		Under CONSTRUCTION
+//        	
+//        	custScreen.customerMenu();
+//        	window.setScene(customerMenu);
+//        	
         		showRegister();
 	        	window.setScene(registerMenu);
         	});

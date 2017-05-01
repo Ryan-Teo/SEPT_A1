@@ -21,7 +21,7 @@ public class Business extends User {
 		super(ownerName,username,password,address,phone);
 		this.busName = busName;
 		
-		String start = "09:00" , end = "17:00";
+		String start = "09:00" , end = "17:00"; //HARDCODED REMOVE
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 		
 		openTime = LocalTime.parse(start, dtf);

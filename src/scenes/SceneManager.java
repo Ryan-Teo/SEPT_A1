@@ -32,7 +32,7 @@ public class SceneManager {
 	ArrayList<Customer> customers;
 	ArrayList<Business> businesses;
 	ArrayList<Booking> bookings;
-	static User userInst = null;
+	User userInst;
 	Account acct;
 	FileIO FIO = new FileIO();
 	static MainMenu menuScreen;

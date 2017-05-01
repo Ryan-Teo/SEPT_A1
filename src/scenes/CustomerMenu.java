@@ -284,8 +284,8 @@ public class CustomerMenu extends SceneManager{
     	//Show times here based on bus opening, closing hour and time slots
     	LocalTime openTime, closeTime;
     	long timeSlot;
-    	System.out.println(bus);
-    	System.out.println(bus.getOpenTime());
+    	logger.info(bus);
+    	logger.info(bus.getOpenTime());
     	openTime = bus.getOpenTime();
     	closeTime = bus.getCloseTime();
     	timeSlot = bus.getTimeSlotInMins();

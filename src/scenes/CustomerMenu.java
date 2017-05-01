@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -44,7 +45,7 @@ public class CustomerMenu extends SceneManager{
     	grid3.setAlignment(Pos.CENTER);
     	grid3.setHgap(10);
     	grid3.setVgap(10);
-
+//    	
     	Text custTitle = new Text("Welcome --" + userInst.getName() + "--");
     	custTitle.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
         grid3.add(custTitle, 0, 0, 1, 1);
@@ -93,7 +94,7 @@ public class CustomerMenu extends SceneManager{
         	this.userInst = null;
         	});
         
-        customerMenu = new Scene(grid3, 200, 400);
+        customerMenu = new Scene(grid3, 100, 200);
 	}
 		//Customer Add Booking Stuff
 	public void selectBusiness(){
@@ -105,8 +106,9 @@ public class CustomerMenu extends SceneManager{
         grid.setHgap(10);
         grid.setVgap(10);
         
-        Text header = new Text("Select a Business to Book");
-        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+        
+        Text header = new Text("Select business:");
+        header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
         grid.add(header, 0, 1,2, 1);
         
         ListView<String> busList = new ListView<String>(); 
@@ -119,12 +121,12 @@ public class CustomerMenu extends SceneManager{
         busList.setPrefHeight(300);
         busList.setPrefWidth(300);
         
-        grid.add(busList, 2,2);
+        grid.add(busList, 1,2);
         
-        Button selectButton = new Button("Select");
-        selectButton.setMinHeight(50);
-        selectButton.setMinWidth(100);
-        selectButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        Button selectButton = new Button("Next");
+        selectButton.setMinWidth(70);
+        selectButton.setMinHeight(30);
+        selectButton.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
         grid.add(selectButton, 3, 3);
         selectButton.setOnAction(e -> {
         
@@ -136,17 +138,19 @@ public class CustomerMenu extends SceneManager{
         	}
         });
         
+        GridPane.setHalignment(busList, HPos.CENTER);
+        
         Button returnButton = new Button("Back");
-        returnButton.setMinHeight(50);
-        returnButton.setMinWidth(100);
-        returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        returnButton.setMinWidth(70);
+        returnButton.setMinHeight(30);
+        returnButton.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
         grid.add(returnButton, 0, 3);
         returnButton.setOnAction(e -> {
         	logger.info("Back to customer menu");
         	customerMenu();
         	window.setScene(customerMenu);
         });
-        custSelectBus = new Scene(grid, 500, 500);
+        custSelectBus = new Scene(grid, 600, 500);
 	}
 	
 	public void selectService(int busIndex){
@@ -157,8 +161,8 @@ public class CustomerMenu extends SceneManager{
         grid.setHgap(10);
         grid.setVgap(10);
         
-        Text header = new Text("Select a Service");
-        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+        Text header = new Text("Select service:");
+        header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
         grid.add(header, 0, 1,2, 1);
         
         Business bus = businesses.get(busIndex);
@@ -174,12 +178,12 @@ public class CustomerMenu extends SceneManager{
         serviceList.setPrefHeight(300);
         serviceList.setPrefWidth(300);
         
-        grid.add(serviceList, 2,2);
+        grid.add(serviceList, 1,2);
         
-        Button selectButton = new Button("Select");
-        selectButton.setMinHeight(50);
-        selectButton.setMinWidth(100);
-        selectButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        Button selectButton = new Button("Next");
+        selectButton.setMinWidth(70);
+        selectButton.setMinHeight(30);
+        selectButton.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
         grid.add(selectButton, 3, 3);
         selectButton.setOnAction(e -> {
     		String service = serviceList.getSelectionModel().getSelectedItem();
@@ -189,9 +193,9 @@ public class CustomerMenu extends SceneManager{
         });
         
         Button returnButton = new Button("Back");
-        returnButton.setMinHeight(50);
-        returnButton.setMinWidth(100);
-        returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        returnButton.setMinWidth(70);
+        returnButton.setMinHeight(30);
+        returnButton.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
         grid.add(returnButton, 0, 3);
         returnButton.setOnAction(e -> {
         	logger.info("Back to business selection phase ");
@@ -199,7 +203,7 @@ public class CustomerMenu extends SceneManager{
         	window.setScene(custSelectBus);
         });
 		
-		custSelectService = new Scene(grid, 500, 500);
+		custSelectService = new Scene(grid, 600, 500);
 	}
 	
 	public void selectDate(int busIndex, String service){
@@ -211,9 +215,9 @@ public class CustomerMenu extends SceneManager{
         grid.setHgap(10);
         grid.setVgap(10);
         
-        Text header = new Text("Select a Date");
-        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
-        grid.add(header, 2, 0);
+        Text header = new Text("Select Date:");
+        header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
+        grid.add(header, 0, 1,2, 1);
         
         DatePicker datePicker = new DatePicker();
         
@@ -236,14 +240,13 @@ public class CustomerMenu extends SceneManager{
         };
         datePicker.setDayCellFactory(dayCellFactory);
         datePicker.setValue(LocalDate.now());
-        grid.add(datePicker, 2, 2);
-        
+        grid.add(datePicker, 1, 2);
         
         
         Button checkButton = new Button("Check");
-        checkButton.setMinHeight(50);
-        checkButton.setMinWidth(100);
-        checkButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        checkButton.setMinWidth(70);
+        checkButton.setMinHeight(30);
+        checkButton.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
         grid.add(checkButton, 3, 3);
         checkButton.setOnAction(e -> {
             Business bus = businesses.get(busIndex);
@@ -253,9 +256,9 @@ public class CustomerMenu extends SceneManager{
         });
         
         Button returnButton = new Button("Back");
-        returnButton.setMinHeight(50);
-        returnButton.setMinWidth(100);
-        returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        returnButton.setMinWidth(70);
+        returnButton.setMinHeight(30);
+        returnButton.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
         grid.add(returnButton, 0, 3);
         returnButton.setOnAction(e -> {
         	logger.info("back to service selection phase");
@@ -264,7 +267,7 @@ public class CustomerMenu extends SceneManager{
         });
         
         
-        custSelectDate = new Scene(grid, 500, 500);
+        custSelectDate = new Scene(grid, 600, 500);
         
 	}
 		
@@ -275,17 +278,17 @@ public class CustomerMenu extends SceneManager{
         grid.setHgap(10);
         grid.setVgap(10);
         
-        Text header = new Text("Select a Time");
-        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
-        grid.add(header, 2, 0);
+        Text header = new Text("Select time:");
+        header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
+        grid.add(header, 0, 1,2, 1);
         
         ListView<String> timeList = new ListView<String>();
         
     	//Show times here based on bus opening, closing hour and time slots
     	LocalTime openTime, closeTime;
     	long timeSlot;
-    	System.out.println(bus);
-    	System.out.println(bus.getOpenTime());
+    	logger.info(bus);
+    	logger.info(bus.getOpenTime());
     	openTime = bus.getOpenTime();
     	closeTime = bus.getCloseTime();
     	timeSlot = bus.getTimeSlotInMins();
@@ -313,10 +316,10 @@ public class CustomerMenu extends SceneManager{
         
         grid.add(timeList, 2,2);
         
-        Button selectButton = new Button("Select");
-        selectButton.setMinHeight(50);
-        selectButton.setMinWidth(100);
-        selectButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        Button selectButton = new Button("Next");
+        selectButton.setMinWidth(70);
+        selectButton.setMinHeight(30);
+        selectButton.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
         grid.add(selectButton, 3, 3);
         selectButton.setOnAction(e -> {
         	int timeIndex = timeList.getSelectionModel().getSelectedIndex();
@@ -329,16 +332,16 @@ public class CustomerMenu extends SceneManager{
         });
         
         Button returnButton = new Button("Back");
-        returnButton.setMinHeight(50);
-        returnButton.setMinWidth(100);
-        returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        returnButton.setMinWidth(70);
+        returnButton.setMinHeight(30);
+        returnButton.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
         grid.add(returnButton, 0, 3);
         returnButton.setOnAction(e -> {
     		selectDate(busIndex, service);
     		window.setScene(custSelectDate);
         });
         
-        custSelectTime = new Scene(grid, 500, 500);
+        custSelectTime = new Scene(grid,600, 500);
         
 	}
 	
@@ -352,8 +355,8 @@ public class CustomerMenu extends SceneManager{
         grid.setHgap(10);
         grid.setVgap(10);
         
-        Text header = new Text("Select an Employee:");
-        header.setFont(Font.font("Tahoma", FontWeight.NORMAL, 40));
+        Text header = new Text("Select Employee:");
+        header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
         grid.add(header, 0, 1,2,1);
         
         ArrayList<Employee> emps = new ArrayList<Employee>();
@@ -378,11 +381,10 @@ public class CustomerMenu extends SceneManager{
         cb.setTooltip(new Tooltip("Select employee"));
         grid.add(cb, 1, 2);
         
-        
-        Button selectButton = new Button("Select");
-        selectButton.setMinHeight(50);
-        selectButton.setMinWidth(100);
-        selectButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        Button selectButton = new Button("Next");
+        selectButton.setMinWidth(70);
+        selectButton.setMinHeight(30);
+        selectButton.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
         grid.add(selectButton, 3, 3);
         selectButton.setOnAction(e -> {
         	Employee myEmp = emps.get(cb.getSelectionModel().getSelectedIndex());
@@ -399,16 +401,16 @@ public class CustomerMenu extends SceneManager{
         });
         
         Button returnButton = new Button("Back");
-        returnButton.setMinHeight(50);
-        returnButton.setMinWidth(100);
-        returnButton.setStyle("-fx-font: 22 arial; -fx-base: #000555;");
+        returnButton.setMinWidth(70);
+        returnButton.setMinHeight(30);
+        returnButton.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
         grid.add(returnButton, 0, 3);
         returnButton.setOnAction(e -> {
         	selectTime(busIndex ,bus, date , service);
         	window.setScene(custSelectTime);
         });
         
-        custSelectEmp = new Scene(grid, 500, 500);
+        custSelectEmp = new Scene(grid, 600, 500);
 	}
 	
 		//End Customer Add Booking Stuff
@@ -422,9 +424,9 @@ public class CustomerMenu extends SceneManager{
 		grid.setHgap(10);
 		grid.setVgap(10);
 
-		Text header = new Text("Your Summary");
+		Text header = new Text("Your Summary:");
 		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
-		grid.add(header, 3, 1);
+		grid.add(header, 0, 1,2, 1);
 		
 		
 		TableView<Booking> table = new TableView<Booking>();
@@ -460,14 +462,14 @@ public class CustomerMenu extends SceneManager{
 		table.getColumns().addAll(business, bookingDate, sessionStart, sessionEnd, emp);
 		table.setPlaceholder(new Label("You Currently Have no Bookings"));
 		
-		grid.add(table, 3, 3);
+		grid.add(table, 0, 3,6, 1);
+		GridPane.setHalignment(table, HPos.CENTER);
 		
-		
-		Button cancelButton = new Button("Cancel a Booking");
-		cancelButton.minHeight(50);
-		cancelButton.minWidth(100);
-		cancelButton.setStyle("-fx-font: 22 verdana; -fx-base: #000555;");
-		grid.add(cancelButton,  4,  5);
+		Button cancelButton = new Button("Cancel Booking");
+		cancelButton.minHeight(30);
+		cancelButton.minWidth(70);
+		cancelButton.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
+		grid.add(cancelButton,  5,  5);
 		cancelButton.setOnAction(e -> {
 			
 			if(table.getSelectionModel().getSelectedIndex() != -1){
@@ -491,20 +493,21 @@ public class CustomerMenu extends SceneManager{
 					FIO.saveBook(bookings);
 				}
 				logger.info("A booking has been cancelled, summary is updated");
+
 				showBookingSummary();
 				window.setScene(customerBookingSummary);
 			}
 
 		});
 		
-		Button backToMenuButton = new Button("Go back to menu");
+		Button backToMenuButton = new Button("Return to Menu");
 		HBox hbBackToMenuButton = new HBox(10);
 		hbBackToMenuButton.setAlignment(Pos.BOTTOM_RIGHT);
-		backToMenuButton.minHeight(50);
-		backToMenuButton.minWidth(100);
-		backToMenuButton.setStyle("-fx-font: 22 verdana; -fx-base: #000555;");
+		backToMenuButton.minHeight(30);
+		backToMenuButton.minWidth(70);
+        backToMenuButton.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
 		hbBackToMenuButton.getChildren().add(backToMenuButton);
-		grid.add(hbBackToMenuButton, 3, 5);
+		grid.add(hbBackToMenuButton, 0, 5);
 
 		backToMenuButton.setOnAction(e -> {
 			logger.info("Back to customer menu");
@@ -512,7 +515,7 @@ public class CustomerMenu extends SceneManager{
 			window.setScene(customerMenu);
 		});
 		
-		customerBookingSummary = new Scene(grid, 500, 500);
+		customerBookingSummary = new Scene(grid, 600, 500);
 
 	}
 }

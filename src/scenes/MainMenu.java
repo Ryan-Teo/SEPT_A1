@@ -85,7 +85,7 @@ public class MainMenu extends SceneManager{
         		Business busInst = businesses.get(0);
         		Employee emp = new Employee("abc", "Bob", busInst);
         		userInst.bookSession(date, sessionStart, sessionEnd, (Customer)userInst, busInst ,emp, bookings);
-        		System.out.println("saved a dummy");
+        		logger.info("saved a dummy");
         		FIO.saveBook(bookings);
         		/*
         		 * end creating a dummy booking
@@ -99,6 +99,9 @@ public class MainMenu extends SceneManager{
         		busScreen.businessMenu();
         		window.setScene(businessMenu);
         	}
+        	else{
+        		handleSignInFail(window);
+        	}
 
         });
 
@@ -111,6 +114,11 @@ public class MainMenu extends SceneManager{
         hbRegisterButton.getChildren().add(registerButton);
         grid.add(hbRegisterButton, 1, 0);
         registerButton.setOnAction(e -> {
+//        		Under CONSTRUCTION
+//        	
+//        	custScreen.customerMenu();
+//        	window.setScene(customerMenu);
+//        	
         		showRegister();
 	        	window.setScene(registerMenu);
         	});

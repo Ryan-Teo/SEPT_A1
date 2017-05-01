@@ -111,8 +111,6 @@ public class SceneManager {
 
 	}
 
-	
-
 	public boolean mainRegisterBusiness(ArrayList<Business>businesses, String name, String username, 
 			String busName, String password1, String password2, String phone, String address){
 		return acct.registerBusiness(name, username, busName, password1, password2, phone, address, businesses);
@@ -137,6 +135,11 @@ public class SceneManager {
         successful.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
         successful.setTextAlignment(TextAlignment.CENTER);
         dialogVbox.add(successful, 0, 1);
+        Label successful1 = new Label("Please Log In to Begin.");
+        successful1.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        GridPane.setHalignment(successful1, HPos.CENTER);
+//        successful1.setTextAlignment(TextAlignment.CENTER);
+        dialogVbox.add(successful1, 0, 2);
         
         Button back = new Button("Return");
         HBox hbBack = new HBox(15);
@@ -233,5 +236,39 @@ public class SceneManager {
         dialog.show();
     }
 
-
+	public void handleSignInFail(Stage window) {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(window);
+        GridPane dialogVbox = new GridPane();
+        
+        dialogVbox.setPadding(new Insets(30, 30, 30, 30));
+        dialogVbox.setHgap(10);
+        dialogVbox.setVgap(5);
+        Text fail = new Text("Incorrect Username/Password!");
+        fail.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        fail.setFill(Color.RED);
+        fail.setTextAlignment(TextAlignment.CENTER);
+        dialogVbox.add(fail, 0, 1);
+        
+        Button back = new Button("Return");
+        HBox hbBack = new HBox(15);
+        hbBack.setAlignment(Pos.BASELINE_CENTER);
+        back.setMinWidth(100);
+        back.setMinHeight(20);
+        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
+        dialogVbox.getChildren().add(hbBack);
+        dialogVbox.add(back, 0, 2);
+        back.setOnAction(e -> {
+        	menuScreen.showMainMenu();
+        	window.setScene(mainMenu);
+        	((Node)(e.getSource())).getScene().getWindow().hide();
+        });
+        GridPane.setHalignment(back, HPos.CENTER);
+        dialogVbox.setAlignment(Pos.CENTER);
+        
+        Scene dialogScene = new Scene(dialogVbox, 300, 200);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
 }

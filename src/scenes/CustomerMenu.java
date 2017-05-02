@@ -242,10 +242,12 @@ public class CustomerMenu extends SceneManager{
                     @Override public void updateItem(LocalDate item, boolean empty) {
                         super.updateItem(item, empty);
                         
-                        if (item.isBefore(LocalDate.now())||item.isAfter(LocalDate.now().plusDays(31))) {
+                        if (item.isBefore(LocalDate.now())||item.isAfter(LocalDate.now().plusDays(31))||!bus.slotExists(item)) {
                             setDisable(true);
                             setStyle("-fx-background-color: #ffc0cb;");
                         }
+                        //TODO
+                        //Disable day is there are no available times
                     }
                 };
             }

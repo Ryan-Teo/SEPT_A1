@@ -165,5 +165,21 @@ public class Business extends User {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	public boolean slotExists(LocalDate date){
+		boolean exists = false;
+		for(Employee emp : emps){
+			if(emp.getSchedule().containsKey(date)){
+				for(LocalTime time : emp.getSchedule().get(date).keySet()){
+					if(emp.getSchedule().get(date).get(time).equals(false)){
+						//If one employee is free, return true and give date as an option
+						return true;
+					}
+				}
+			}
+		}
+		//If not return false and remove data as option
+		return exists;
+	}
 }
 

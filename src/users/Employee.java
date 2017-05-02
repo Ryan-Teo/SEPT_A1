@@ -199,6 +199,7 @@ public class Employee implements Serializable {
 		    		//TRUE == BOOKED
 		    		j++;
 		    	}while(startTime.plusMinutes(j*slotsInMins).isBefore(endTime));
+		    	System.out.println(thisDate);
 		    	schedule.put(thisDate,daySchedule);
 			}
 			

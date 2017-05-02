@@ -232,7 +232,6 @@ public class CustomerMenu extends SceneManager{
         grid.add(header, 0, 1,2, 1);
         
         DatePicker datePicker = new DatePicker();
-        
         /*
          * code based on https://docs.oracle.com/javase/8/javafx/user-interface-tutorial/date-picker.htm
          */
@@ -253,7 +252,7 @@ public class CustomerMenu extends SceneManager{
             }
         };
         datePicker.setDayCellFactory(dayCellFactory);
-        datePicker.setValue(LocalDate.now());
+        datePicker.setValue(bus.earliestAvilable());
         grid.add(datePicker, 1, 2);
         
         

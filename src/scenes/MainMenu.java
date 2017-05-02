@@ -244,13 +244,19 @@ public class MainMenu extends SceneManager{
         	Boolean check = mainRegisterCust(customers, fullNameString, newUserNameString, newPasswordString, newPasswordString2, phoneString, addressString);
         	if (check){
         		handleSuccess(window);
+        		showMainMenu();
+            	window.setScene(mainMenu);
         	}
         	else{
+        		System.out.println("CheckUser: " + checkUser);
+        		System.out.println("CheckPassLength: " + checkPassLength);
+        		System.out.println("CheckPass1: " + checkPassword1);
+        		System.out.println("CheckPhone: " + checkPhone);
+        		
         		handleFail(window, checkUser, checkPassLength, checkPassword1, checkPhone);
         	}
         	
-        	showMainMenu();
-        	window.setScene(mainMenu);
+        	
         	
         });
             
@@ -350,14 +356,20 @@ public class MainMenu extends SceneManager{
         	String phoneString = phoneText.getText();
         	String addressString = addressNew.getText();
 
+        	Boolean checkUser = acct.checkBusName(newUserNameString, businesses);
+        	Boolean checkPassLength = acct.checkLength(newPasswordString, 6, 12);
+        	Boolean checkPassword1 = acct.checkPass(newPasswordString, newPasswordString2);
+        	Boolean checkPhone = acct.checkPhone(phoneString);
         	Boolean check = mainRegisterBusiness(businesses, fullNameString, newUserNameString, busNameString, newPasswordString, newPasswordString2, phoneString, addressString);
         	
         	if (check){
         		handleSuccess(window);
+        		showMainMenu();
+            	window.setScene(mainMenu);
         	}
-        	showMainMenu();
-        	window.setScene(mainMenu);
-        	
+        	else{
+        		handleFail(window, checkUser, checkPassLength, checkPassword1, checkPhone);
+        	}
        	
         	
         });

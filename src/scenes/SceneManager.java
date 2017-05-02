@@ -240,6 +240,7 @@ public class SceneManager {
         back.setOnAction(e -> {
         	((Node)(e.getSource())).getScene().getWindow().hide();
         	return;
+        	//I just did this to return to the previous screen
 //        	menuScreen.showMainMenu();
 //        	window.setScene(mainMenu);
         });

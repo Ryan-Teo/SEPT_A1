@@ -515,32 +515,36 @@ public class BusinessMenu extends SceneManager{
         	if(tueStart.getSelectionModel().getSelectedItem().isBefore(tueEnd.getSelectionModel().getSelectedItem()) && cbTuesday.isSelected()){
 	    		newTimes.put("tueStart", tueStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("tueEnd", tueEnd.getSelectionModel().getSelectedItem());
-	    		System.out.println("THE TUesdat START IS: " + newTimes.get("tueStart"));
+	    		System.out.println("THE TUESDAY START IS: " + newTimes.get("tueStart"));
         	}
     		if(wedStart.getSelectionModel().getSelectedItem().isBefore(wedEnd.getSelectionModel().getSelectedItem()) && cbWednesday.isSelected()){
 	        	newTimes.put("wedStart", wedStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("wedEnd", wedEnd.getSelectionModel().getSelectedItem());
+	    		System.out.println("THE WEDNESDAY START IS: " + newTimes.get("wedStart"));
     		}
     		
     		if(thurStart.getSelectionModel().getSelectedItem().isBefore(thurEnd.getSelectionModel().getSelectedItem()) && cbThursday.isSelected()){
 	    		newTimes.put("thurStart", thurStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("thurEnd", thurEnd.getSelectionModel().getSelectedItem());
+	    		System.out.println("THE THURSDAY START IS: " + newTimes.get("thurStart"));
     		}
     		
     		if(friStart.getSelectionModel().getSelectedItem().isBefore(friEnd.getSelectionModel().getSelectedItem()) && cbFriday.isSelected()){
 	    		newTimes.put("friStart", friStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("friEnd", friEnd.getSelectionModel().getSelectedItem());
+	    		System.out.println("THE FRIDAY START IS: " + newTimes.get("friStart"));
     		}
     		
     		if(satStart.getSelectionModel().getSelectedItem().isBefore(satEnd.getSelectionModel().getSelectedItem()) && cbSaturday.isSelected()){
 	    		newTimes.put("satStart", satStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("satEnd", satEnd.getSelectionModel().getSelectedItem());
+	    		System.out.println("THE SATURDAY START IS: " + newTimes.get("satStart"));
     		}
     		
     		if(sunStart.getSelectionModel().getSelectedItem().isBefore(sunEnd.getSelectionModel().getSelectedItem()) && cbSunday.isSelected()){
-
 	    		newTimes.put("sunStart", sunStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("sunEnd", sunEnd.getSelectionModel().getSelectedItem());
+	    		System.out.println("THE SUNDAY START IS: " + newTimes.get("sunStart"));
 	        	
     		}
     		

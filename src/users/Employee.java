@@ -1,12 +1,16 @@
 package users;
 import java.io.Serializable;
 import java.util.*;
+
+import org.apache.log4j.Logger;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Employee implements Serializable {
 
+	private static final Logger logger = Logger.getLogger(Employee.class);
 	private static final long serialVersionUID = 4L;
 	private String empID;	
 	private String name;
@@ -74,11 +78,11 @@ public class Employee implements Serializable {
 	    	do{
 	    		if(startTime.plusMinutes(i*slotsInMins).equals(thisTime)){
 	        		if(daySchedule.get(thisTime).equals(true)){
-	        			System.out.println(name + " is NOT free at " + thisTime);
+	        			logger.info(name + " is NOT free at " + thisTime);
 	        			return false;
 	        		}
 	        		else{
-	        			System.out.println(name + " is free at " + thisTime);
+	        			logger.info(name + " is free at " + thisTime);
 	        			freeCheck = true;
 	        		}
 	        	}
@@ -100,13 +104,13 @@ public class Employee implements Serializable {
 	        		if(daySchedule.get(thisTime).equals(true)){
 	        			//ALREADY BOOKED
 	        			//DO NOTHING
-	        			System.err.println("CODE SHOULD NOT REACH HERE : 001");
+	        			logger.error("CODE SHOULD NOT REACH HERE : 001");
 	        		}
 	        		else{
 	        			//NOT BOOKED
 	        			//MAKE A BOOKING
 	        			daySchedule.put(thisTime, true);
-	        			System.out.println(name + " has been booked at " + thisTime);
+	        			logger.info(name + " has been booked at " + thisTime);
 	        		}
 	        	}
 	    		i++;
@@ -127,12 +131,12 @@ public class Employee implements Serializable {
 	        			//ALREADY BOOKED
 	        			//FREE EMP
 	        			daySchedule.put(thisTime, false);
-	        			System.out.println(name + " has been freed at " + thisTime);
+	        			logger.info(name + " has been freed at " + thisTime);
 	        		}
 	        		else{
 	        			//NOT BOOKED
 	        			//DO NOTHING
-	        			System.err.println("CODE SHOULD NOT REACH HERE : 001");
+	        			logger.error("CODE SHOULD NOT REACH HERE : 001");
 	        		}
 	        	}
 	    		i++;

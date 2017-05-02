@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,6 +34,7 @@ import users.User;
 public class BusinessMenu extends SceneManager{
 
 	Business busInst;
+	String empNamePattern = "^[a-zA-Z]{1,}*$";
 	
 	public BusinessMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
 			ArrayList<Booking> bookings, Stage primaryStage) {
@@ -133,7 +135,6 @@ public class BusinessMenu extends SceneManager{
         
         businessMenu = new Scene(grid3, 200, 400);
 	}
-	
 	public void addEmp(Business bus){
         GridPane grid2 = new GridPane();
     	grid2.setPadding(new Insets(30, 30, 30, 30));
@@ -164,8 +165,8 @@ public class BusinessMenu extends SceneManager{
         register.setOnAction(e -> {
         	String empNameString = empNameText.getText();
         	//TODO
-        	//check if empNameString is empty?
-        	if(empNameString.length() > 0){
+        	//check if empNameString is empty and valid?
+        	if(empNameString.trim().length() > 0 && empNameString.matches(empNamePattern)){
 	        	bus.addNewEmp(empNameString);
 	        	FIO.saveBus(businesses);
 	    		businessMenu(busInst);
@@ -196,8 +197,6 @@ public class BusinessMenu extends SceneManager{
         
         busAddEmpSc = new Scene(grid2, 600, 500);
 	}
-	
-	
 	public void busSelectEmp(Business bus){
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(30, 30, 30, 30));
@@ -205,7 +204,7 @@ public class BusinessMenu extends SceneManager{
         grid.setHgap(10);
         grid.setVgap(10);
         //TODO
-        //CHECK HERE IF BUS DOES NOT HAVE ANY EMPLOYEES
+        //CHECK HERE IF BUSINESS DOES NOT HAVE ANY EMPLOYEES
         if(bus.getEmps().isEmpty()){
         	String msg = "There are no current employees";
         	handleGenericFail(window, msg);
@@ -263,7 +262,6 @@ public class BusinessMenu extends SceneManager{
         
         busSelectEmp = new Scene(grid, 600, 500);
 	}
-	
 	public void addWorkTime(Employee emp, Business bus){
 		//add to employees hm HashMap<LocalDate, HashMap<LocalTime, Boolean>>
 		//Weekly? by day?
@@ -574,5 +572,7 @@ public class BusinessMenu extends SceneManager{
 	public void addDays(Stage window, int row, String day, GridPane grid){
 		
 	}
+	
+	
 
 }

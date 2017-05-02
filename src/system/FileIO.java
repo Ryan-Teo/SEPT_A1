@@ -194,7 +194,7 @@ public class FileIO {
 			inFile.close();
 		} catch (Exception e) {
 			logger.info(e.getMessage());
-			logger.warn("-- NO BOOKINGS EXIST --"); //LOG
+			logger.warn("-- NO BOOKINGS EXIST --");
 		}
 		
 		saveBook(bookings);

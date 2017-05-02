@@ -20,9 +20,19 @@ import users.Business;
 import users.Customer;
 import users.Employee;
 
+
+/*
+ * viewBookingSummary
+ * makeBooking
+ * cancelBooking
+ */
+
+
+
+
+
 public class CustomerTest {
 	FileIO FIO = new FileIO();
-	Helper help = new Helper();
 	Customer customer = new Customer("Bob", "Bobber", "Bobby123", "Bob@bob.com", "999999999");
 	Business myBusiness = new Business("Sal's Hair Salon","Harry","Alumbra St","0120103004","harryOwner","password");
 	ArrayList<Business> businesses = new ArrayList<Business>();
@@ -126,34 +136,29 @@ public class CustomerTest {
 		}
 	}
 	
-	@Test
-	public void cancelBooking(){
-		Booking [] myBookings;
-		Booking currentBooking = null;
-		linkedHm = initHashMapDummy();
-		for(LocalDate date : linkedHm.keySet()){
-			if (date.equals(myDate)){
-				myBookings = linkedHm.get(date);
-				for(int i=0; i<linkedHm.get(date).length; i++){
-					if(myBookings[i].getStartTime().equals(myTime) && myBookings[i].getBookStat() == true){
-						myBookings[i].unbooked();
-						myBookings[i].setCust(null);
-						currentBooking = myBookings[i];
-						currentBooking.unbooked();
-					}
-				}
-			}
-		}
-	}
+	
+//	public void cancelBooking(){
+//		Booking [] myBookings;
+//		Booking currentBooking = null;
+//		linkedHm = initHashMapDummy();
+//		for(LocalDate date : linkedHm.keySet()){
+//			if (date.equals(myDate)){
+//				myBookings = linkedHm.get(date);
+//				for(int i=0; i<linkedHm.get(date).length; i++){
+//					if(myBookings[i].getStartTime().equals(myTime) && myBookings[i].getBookStat() == true){
+//						myBookings[i].unbooked();
+//						myBookings[i].setCust(null);
+//						currentBooking = myBookings[i];
+//						currentBooking.unbooked();
+//					}
+//				}
+//			}
+//		}
+//	}
 	
 	@Test
 	public void testBookingSummary(){
-		customer.viewBookingSummary(businesslinkedHm);
-	}
-	
-	public LinkedHashMap<LocalDate, Booking[]> initHashMapDummy(){
-		LinkedHashMap<LocalDate, Booking[]> businessSched = help.initDaySlots(myBusiness);
-		return businessSched;
+//		customer.viewBookingSummary(businesslinkedHm);
 	}
 
 }

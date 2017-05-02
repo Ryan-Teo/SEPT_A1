@@ -387,8 +387,7 @@ public class CustomerMenu extends SceneManager{
         }
 
         if(emps.isEmpty()){
-        	//LOG
-        	//NO EMPLOYEES AVAILABLE AT THIS TIME
+        	logger.info("No Employees are available at this time");
         	String msg = "No employees available at this time!";
         	handleGenericFail(window, msg);
         	selectBusiness();
@@ -426,7 +425,7 @@ public class CustomerMenu extends SceneManager{
         	Employee myEmp = emps.get(cb.getSelectionModel().getSelectedIndex());
         	booked = custInst.makeBooking(date, startTime, custInst ,bus, myEmp, service, bookings);
         	if(booked){
-        		System.out.println("Booking Made!"); //REMOVE
+        		logger.info("Booking made!");
             	FIO.save(customers, businesses, bookings);
         	}
         	else{
@@ -451,7 +450,7 @@ public class CustomerMenu extends SceneManager{
         custSelectEmp = new Scene(grid, 600, 500);
 	}
 	
-		//End Customer Add Booking Stuff
+	//End Customer Add Booking Stuff
 	
 	@SuppressWarnings("unchecked")
 	public void showBookingSummary() {

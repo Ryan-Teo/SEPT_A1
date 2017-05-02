@@ -4,12 +4,15 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import system.Booking;
 
 public class Business extends User {
 
+	private final static Logger logger = Logger.getLogger(Business.class);
 	private static final long serialVersionUID = 2L;
 	private String busName;
 	private ArrayList<Employee> emps = new ArrayList<Employee>();
@@ -84,13 +87,14 @@ public class Business extends User {
 	//Adding a service to a business
 	public void addService(String serviceName, int noOfTimeSlots){
 		if(services.containsKey(serviceName)){
-			System.err.println("Add Service : Service already exists"); //LOG
+			logger.error("Add Service : Service already exists");
 		}
 		else if(noOfTimeSlots<1){ //Minimum 1 slot
-			System.err.println("Each service has to take up at least one time slot"); //LOG
+			logger.error("Each service has to take up at least one time slot");
 		}
 		else{
-			services.put(serviceName, noOfTimeSlots); //LOG
+			services.put(serviceName, noOfTimeSlots); 
+			logger.info( "'"+ serviceName +"'"+" service has been added to the business");
 		}
 	}
 	
@@ -98,22 +102,24 @@ public class Business extends User {
 	public void updateService(String serviceName, int noOfTimeSlots){
 		if(services.containsKey(serviceName)){
 			services.put(serviceName, noOfTimeSlots); //LOG
+			logger.info( "'"+ serviceName +"'"+" service has been added updated");
 		}
 		else if(noOfTimeSlots<1){ //Minimum 1 slot
-			System.err.println("Each service has to take up at least one time slot"); //LOG
+			logger.error("Each service has to take up at least one time slot");
 		}
 		else{
-			System.err.println("Update Service : Service does not exist"); //LOG
+			logger.error("Update Service : Service does not exist");
 		}
 	}
 	
 	//Removing service from business
 	public void removeService(String serviceName){
 		if(services.containsKey(serviceName)){
-			services.remove(serviceName); //LOG
+			services.remove(serviceName);
+			logger.info("'"+ serviceName +"'"+" service has been removed successfully"); 
 		}
 		else{
-			System.err.println("Remove Service : Service does not exist"); //LOG
+			logger.info("Remove Service : Service does not exist");
 		}
 	}
 
@@ -129,12 +135,7 @@ public class Business extends User {
 		return bookingsToBeViewed;
 	}
 	
-	//Adding booking on behalf of customer
-	//Do we need to make "makeBooking" as a function in the super class?
-	public void makeBooking(){
-		
-	}
-	
+	//TODO
 	public void showWorkerAvailability(){
 		//display all employees
 		//choose employees from the given options
@@ -144,6 +145,7 @@ public class Business extends User {
 	}
 	
 	public void addEmp(Employee myEmp){
+		logger.info("New employee has been added to the system");
 		emps.add(myEmp);
 	}
 	
@@ -153,17 +155,15 @@ public class Business extends User {
 		//Make sure emp id is unique
 		empID = String.format("emp%03d", emps.size());
 		Employee new_emp = new Employee(empID,empName,this);
-		emps.add(new_emp); //LOG
+		emps.add(new_emp);
 	}
 
+//	Adding booking on behalf of customer
 	@Override
 	public boolean makeBooking(LocalDate date, LocalTime startTime, Customer bookCust, Business bus, Employee myEmp,
 			String service, ArrayList<Booking> bookings) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-
-
 }
 

@@ -73,12 +73,12 @@ public class MainMenu extends SceneManager{
         	mainLogIn(customers, businesses, userNameString, passwordString);
         	if(userInst instanceof Customer){
         		logger.info("Initializing customer menu");
-        		custScreen.customerMenu(userInst);
+        		custScreen.customerMenu();
         		window.setScene(customerMenu);
         	}
         	else if(userInst instanceof Business){
         		logger.info("Initializing business menu");
-        		busScreen.businessMenu(userInst);
+        		busScreen.businessMenu();
         		window.setScene(businessMenu);
         	}
         	else{

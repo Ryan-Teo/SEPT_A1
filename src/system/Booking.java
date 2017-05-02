@@ -24,10 +24,12 @@ public class Booking implements Serializable{
 		this.bookCust = bookCust;
 		this.bookBus = bookBus;
 		this.bookEmp = bookEmp;
-		this.strBus = bookBus.getBusName();
-		this.strEmp = bookEmp.getName();
+		this.setStrBus(bookBus.getBusName());
+		this.setStrEmp(bookEmp.getName());
 		this.service = service;
 	}
+	
+	
 	
 	public String getService(){
 		return service;
@@ -63,6 +65,42 @@ public class Booking implements Serializable{
 	
 	public void setCust(Customer cust){
 		this.bookCust = cust;
+	}
+
+
+
+	public String getStrBus() {
+		return strBus;
+	}
+
+
+
+	public void setStrBus(String strBus) {
+		this.strBus = strBus;
+	}
+
+
+
+	public String getStrCust() {
+		return strCust;
+	}
+
+
+
+	public void setStrCust(String strCust) {
+		this.strCust = strCust;
+	}
+
+
+
+	public String getStrEmp() {
+		return strEmp;
+	}
+
+
+
+	public void setStrEmp(String strEmp) {
+		this.strEmp = strEmp;
 	}
 
 

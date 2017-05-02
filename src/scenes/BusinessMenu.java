@@ -32,8 +32,6 @@ import users.Employee;
 import users.User;
 
 public class BusinessMenu extends SceneManager{
-
-	Business busInst;
 	String empNamePattern = "^[a-zA-Z ]*$";
 	
 	public BusinessMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
@@ -42,8 +40,7 @@ public class BusinessMenu extends SceneManager{
 		
 	}
 	
-	public void businessMenu(User myUser){
-		busInst = (Business)myUser;
+	public void businessMenu(){
 		
         GridPane grid3 = new GridPane();
     	grid3.setPadding(new Insets(30, 30, 30, 30));
@@ -51,7 +48,7 @@ public class BusinessMenu extends SceneManager{
     	grid3.setHgap(10);
     	grid3.setVgap(10);
         
-    	Text busTitle = new Text("Welcome --" + busInst.getName() + "--");
+    	Text busTitle = new Text("Welcome --" + userInst.getName() + "--");
     	busTitle.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
         grid3.add(busTitle, 0, 0, 1, 1);
         
@@ -64,7 +61,7 @@ public class BusinessMenu extends SceneManager{
         hbBusAddEmp.getChildren().add(busAddEmp);
         grid3.add(hbBusAddEmp, 0, 1);
         busAddEmp.setOnAction(e -> {
-        	addEmp(busInst);
+        	addEmp((Business)userInst);
         	window.setScene(busAddEmpSc);
         });
         
@@ -78,7 +75,7 @@ public class BusinessMenu extends SceneManager{
         hbBusWorkingTime.getChildren().add(busWorkingTime);
         grid3.add(hbBusWorkingTime, 0, 2);
         busWorkingTime.setOnAction(e -> {
-        	busSelectEmp(busInst);
+        	busSelectEmp((Business)userInst);
         	window.setScene(busSelectEmp);
         });
         
@@ -170,14 +167,14 @@ public class BusinessMenu extends SceneManager{
         	if(empNameString.trim().length() > 0 && empNameString.matches(empNamePattern)){
 	        	bus.addNewEmp(empNameString);
 	        	FIO.saveBus(businesses);
-	    		businessMenu(busInst);
+	    		businessMenu();
 	    		window.setScene(businessMenu);
         	}
         	
         	else{
         		String msg = "Please enter employee name!";
         		handleGenericFail(window, msg);
-        		addEmp(busInst);
+        		addEmp(bus);
         		window.setScene(busAddEmpSc);
         	}
         });
@@ -192,7 +189,7 @@ public class BusinessMenu extends SceneManager{
         grid2.add(hbBack, 0, 3);
         
         back.setOnAction(e -> {
-    		businessMenu(busInst);
+    		businessMenu();
     		window.setScene(businessMenu);
         });
         
@@ -210,7 +207,7 @@ public class BusinessMenu extends SceneManager{
         if(bus.getEmps().isEmpty()){
         	String msg = "There are no current employees";
         	handleGenericFail(window, msg);
-    		businessMenu(busInst);
+    		businessMenu();
     		window.setMinHeight(500);
     		window.setMinWidth(600);
     		window.setScene(businessMenu);
@@ -259,7 +256,7 @@ public class BusinessMenu extends SceneManager{
         hbBack.getChildren().add(back);
         grid.add(hbBack, 0, 3);
         back.setOnAction(e -> {
-    		businessMenu(busInst);
+    		businessMenu();
     		window.setScene(businessMenu);
         });
         
@@ -519,7 +516,6 @@ public class BusinessMenu extends SceneManager{
         	HashMap<String,LocalTime> newTimes = new HashMap<String,LocalTime>();
     		
         	if(monStart.getSelectionModel().getSelectedItem().isBefore(monEnd.getSelectionModel().getSelectedItem()) && cbMonday.isSelected()){
-	  
 	    		newTimes.put("monStart", monStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("monEnd", monEnd.getSelectionModel().getSelectedItem());
 	    		System.out.println("THE MONDAY START IS: " + newTimes.get("monStart"));
@@ -597,7 +593,7 @@ public class BusinessMenu extends SceneManager{
     			String msg = "Working times successfully added.";
         		handleGenericSuccess(window, msg);
         		FIO.saveBus(businesses);
-        		businessMenu(busInst);
+        		businessMenu();
         		window.setScene(businessMenu);
     		}
     		else{
@@ -621,7 +617,7 @@ public class BusinessMenu extends SceneManager{
         hbBack.getChildren().add(back);
         grid2.add(hbBack, 0, 10, 2, 1);
         back.setOnAction(e -> {
-        	busSelectEmp(busInst);
+        	busSelectEmp(bus);
         	window.setScene(busSelectEmp);
         });
         

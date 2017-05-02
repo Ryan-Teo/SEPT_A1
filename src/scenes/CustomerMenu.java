@@ -31,7 +31,6 @@ import users.User;
 public class CustomerMenu extends SceneManager{
 	
 	Logger logger = Logger.getLogger(SceneManager.class);
-	Customer custInst;
 	
 	public CustomerMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
 			ArrayList<Booking> bookings, Stage primaryStage) {
@@ -39,8 +38,7 @@ public class CustomerMenu extends SceneManager{
 
 	}
 	
-	public void customerMenu(User myUser){
-		custInst = (Customer)myUser;
+	public void customerMenu(){
 		
         GridPane grid3 = new GridPane();
     	grid3.setPadding(new Insets(30, 30, 30, 30));
@@ -48,7 +46,7 @@ public class CustomerMenu extends SceneManager{
     	grid3.setHgap(10);
     	grid3.setVgap(10);
     	
-    	Text custTitle = new Text("Welcome --" + custInst.getName() + "--");
+    	Text custTitle = new Text("Welcome --" + userInst.getName() + "--");
     	custTitle.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
         grid3.add(custTitle, 0, 0, 1, 1);
         
@@ -161,7 +159,7 @@ public class CustomerMenu extends SceneManager{
         grid.add(returnButton, 0, 3);
         returnButton.setOnAction(e -> {
         	logger.info("Back to customer menu");
-        	customerMenu(custInst);
+        	customerMenu();
         	window.setScene(customerMenu);
         });
         custSelectBus = new Scene(grid, 600, 500);
@@ -424,15 +422,13 @@ public class CustomerMenu extends SceneManager{
         selectButton.setOnAction(e -> {
         	Boolean booked = false;
         	Employee myEmp = emps.get(cb.getSelectionModel().getSelectedIndex());
-        	booked = custInst.makeBooking(date, startTime, custInst ,bus, myEmp, service, bookings);
-        	if(booked){
-        		logger.info("Booking made!");
-            	FIO.save(customers, businesses, bookings);
-        	}
-        	else{
-        		logger.info("Something went wrong when making a booking");
-        	}
-    		customerMenu(custInst);
+        	int bookingLen = bus.getServices().get(service)*bus.getTimeSlotInMins();
+        	bookings.add(new Booking(date, startTime, startTime.plusMinutes(bookingLen), (Customer)userInst ,bus, myEmp, service));
+        	myEmp.bookEmp(date, startTime, service);
+    		logger.info("Booking made!");
+    		System.out.println(bookings);
+        	FIO.save(customers, businesses, bookings);
+    		customerMenu();
     		window.setScene(customerMenu);
     		//TODO
     		//Success or fail alerts?
@@ -466,9 +462,15 @@ public class CustomerMenu extends SceneManager{
 		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
 		grid.add(header, 0, 1,2, 1);
 		
-		
+		System.out.println(bookings.size());
+		for(Booking book : bookings){
+			
+			System.out.println(book.getBookCust());
+			
+		}
+		System.out.println();
 		TableView<Booking> table = new TableView<Booking>();
-		ObservableList<Booking> bookItems = custInst.viewBookingSummary(bookings);
+		ObservableList<Booking> bookItems = ((Customer)userInst).viewBookingSummary(bookings);
 		
 		//Business Column
 		TableColumn<Booking,String> business =  new TableColumn<>("Business");
@@ -514,7 +516,7 @@ public class CustomerMenu extends SceneManager{
 				Booking bookInst = table.getSelectionModel().getSelectedItem();
 				//TODO cancel booking
 				
-				if(custInst.cancelBooking(bookings, bookInst)){
+				if(((Customer)userInst).cancelBooking(bookings, bookInst)){
 
 					logger.info("Booking has been succesfully cancelled");
 					FIO.save(customers, businesses, bookings);
@@ -538,7 +540,7 @@ public class CustomerMenu extends SceneManager{
 
 		backToMenuButton.setOnAction(e -> {
 			logger.info("Back to customer menu");
-			customerMenu(custInst);
+			customerMenu();
 			window.setScene(customerMenu);
 		});
 		

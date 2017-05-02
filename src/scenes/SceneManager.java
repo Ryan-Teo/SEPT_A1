@@ -29,9 +29,9 @@ public class SceneManager {
 	static Scene mainMenu, customerRegister, ownerRegister, registerMenu, customerMenu, custSelectService, busAddEmpSc, busAddWorkTime,
 			custSelectBus, custSelectDate, custSelectTime, custSelectEmp, businessMenu, scene4, customerBookingSummary,
 			busSelectEmp;
-	ArrayList<Customer> customers;
-	ArrayList<Business> businesses;
-	ArrayList<Booking> bookings;
+	static ArrayList<Customer> customers;
+	static ArrayList<Business> businesses;
+	static ArrayList<Booking> bookings;
 	User userInst;
 	Account acct;
 	FileIO FIO = new FileIO();
@@ -55,8 +55,7 @@ public class SceneManager {
 	 */
 	
 	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses, 
-			Account account, ArrayList<Booking> bookings, 
-			Stage primaryStage) {
+			Account account, ArrayList<Booking> bookings, Stage primaryStage) {
 		this.customers = customers;
 		this.businesses = businesses;
 		this.acct = account;

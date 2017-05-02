@@ -34,7 +34,7 @@ import users.User;
 public class BusinessMenu extends SceneManager{
 
 	Business busInst;
-	String empNamePattern = "^[a-zA-Z]{1,}*$";
+	String empNamePattern = "^[a-zA-Z ]*$";
 	
 	public BusinessMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
 			ArrayList<Booking> bookings, Stage primaryStage) {
@@ -64,7 +64,7 @@ public class BusinessMenu extends SceneManager{
         hbBusAddEmp.getChildren().add(busAddEmp);
         grid3.add(hbBusAddEmp, 0, 1);
         busAddEmp.setOnAction(e -> {
-        	addEmp((Business)userInst);
+        	addEmp(busInst);
         	window.setScene(busAddEmpSc);
         });
         
@@ -78,7 +78,7 @@ public class BusinessMenu extends SceneManager{
         hbBusWorkingTime.getChildren().add(busWorkingTime);
         grid3.add(hbBusWorkingTime, 0, 2);
         busWorkingTime.setOnAction(e -> {
-        	busSelectEmp((Business)userInst);
+        	busSelectEmp(busInst);
         	window.setScene(busSelectEmp);
         });
         
@@ -135,6 +135,7 @@ public class BusinessMenu extends SceneManager{
         
         businessMenu = new Scene(grid3, 200, 400);
 	}
+	
 	public void addEmp(Business bus){
         GridPane grid2 = new GridPane();
     	grid2.setPadding(new Insets(30, 30, 30, 30));
@@ -176,7 +177,7 @@ public class BusinessMenu extends SceneManager{
         	else{
         		String msg = "Please enter employee name!";
         		handleGenericFail(window, msg);
-        		addEmp((Business)userInst);
+        		addEmp(busInst);
         		window.setScene(busAddEmpSc);
         	}
         });
@@ -205,6 +206,7 @@ public class BusinessMenu extends SceneManager{
         grid.setVgap(10);
         //TODO
         //CHECK HERE IF BUSINESS DOES NOT HAVE ANY EMPLOYEES
+        System.out.println(bus);
         if(bus.getEmps().isEmpty()){
         	String msg = "There are no current employees";
         	handleGenericFail(window, msg);
@@ -563,7 +565,7 @@ public class BusinessMenu extends SceneManager{
         hbBack.getChildren().add(back);
         grid2.add(hbBack, 0, 10, 2, 1);
         back.setOnAction(e -> {
-        	busSelectEmp((Business)userInst);
+        	busSelectEmp(busInst);
         	window.setScene(busSelectEmp);
         });
         

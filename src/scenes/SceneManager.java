@@ -238,9 +238,10 @@ public class SceneManager {
         dialogVbox.getChildren().add(hbBack);
         dialogVbox.add(back, 0, 2);
         back.setOnAction(e -> {
-        	menuScreen.showMainMenu();
-        	window.setScene(mainMenu);
         	((Node)(e.getSource())).getScene().getWindow().hide();
+        	return;
+//        	menuScreen.showMainMenu();
+//        	window.setScene(mainMenu);
         });
         GridPane.setHalignment(back, HPos.CENTER);
         dialogVbox.setAlignment(Pos.CENTER);

@@ -61,17 +61,21 @@ public class Account {
 	}
 	
 	public boolean checkCustName(String name, ArrayList<Customer> customers){
-		for(int i=0 ; i<customers.size(); i++){
-			if(customers.get(i).getUsername().equals(name))
-				return true;
+		if(name != null){
+			for(int i=0 ; i<customers.size(); i++){
+				if(customers.get(i).getUsername().equals(name))
+					return true;
+			}
 		}
 		return false;
 	}
 	
 	public boolean checkBusName(String name, ArrayList<Business> businesses){
-		for(int i=0 ; i<businesses.size(); i++){
-			if(businesses.get(i).getUsername().equals(name))
-				return true;
+		if(name != null){
+			for(int i=0 ; i<businesses.size(); i++){
+				if(businesses.get(i).getUsername().equals(name))
+					return true;
+			}
 		}
 		return false;
 	}

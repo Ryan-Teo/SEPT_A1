@@ -33,8 +33,7 @@ import users.User;
 
 public class BusinessMenu extends SceneManager{
 
-	Business busInst;
-	String empNamePattern = "^[a-zA-Z]{1,}*$";
+	String empNamePattern = "^[a-zA-Z]+$";
 	
 	public BusinessMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
 			ArrayList<Booking> bookings, Stage primaryStage) {
@@ -43,7 +42,7 @@ public class BusinessMenu extends SceneManager{
 	}
 	
 	public void businessMenu(User myUser){
-		busInst = (Business)myUser;
+//		busInst = (Business)myUser;
 		
         GridPane grid3 = new GridPane();
     	grid3.setPadding(new Insets(30, 30, 30, 30));
@@ -51,7 +50,7 @@ public class BusinessMenu extends SceneManager{
     	grid3.setHgap(10);
     	grid3.setVgap(10);
         
-    	Text busTitle = new Text("Welcome --" + busInst.getName() + "--");
+    	Text busTitle = new Text("Welcome --" + myUser.getName() + "--");
     	busTitle.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
         grid3.add(busTitle, 0, 0, 1, 1);
         
@@ -164,12 +163,13 @@ public class BusinessMenu extends SceneManager{
         grid2.add(hbRegister, 1, 3);
         register.setOnAction(e -> {
         	String empNameString = empNameText.getText();
+        	System.out.println("emp name : "+empNameString);
         	//TODO
         	//check if empNameString is empty and valid?
         	if(empNameString.trim().length() > 0 && empNameString.matches(empNamePattern)){
 	        	bus.addNewEmp(empNameString);
 	        	FIO.saveBus(businesses);
-	    		businessMenu(busInst);
+	    		businessMenu(userInst);
 	    		window.setScene(businessMenu);
         	}
         	
@@ -191,7 +191,7 @@ public class BusinessMenu extends SceneManager{
         grid2.add(hbBack, 0, 3);
         
         back.setOnAction(e -> {
-    		businessMenu(busInst);
+    		businessMenu(userInst);
     		window.setScene(businessMenu);
         });
         
@@ -208,7 +208,7 @@ public class BusinessMenu extends SceneManager{
         if(bus.getEmps().isEmpty()){
         	String msg = "There are no current employees";
         	handleGenericFail(window, msg);
-    		businessMenu(busInst);
+    		businessMenu(userInst);
     		window.setScene(businessMenu);
         }
         Text header = new Text("Select an Employee:");
@@ -255,7 +255,7 @@ public class BusinessMenu extends SceneManager{
         hbBack.getChildren().add(back);
         grid.add(hbBack, 0, 3);
         back.setOnAction(e -> {
-    		businessMenu(busInst);
+    		businessMenu(userInst);
     		window.setScene(businessMenu);
         });
         
@@ -548,7 +548,7 @@ public class BusinessMenu extends SceneManager{
     		//CHECK INPUTS FOR WRONG/EMPTY strings
 
         	FIO.saveBus(businesses);
-    		businessMenu(busInst);
+    		businessMenu(userInst);
     		window.setScene(businessMenu);
         	
         });

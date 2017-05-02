@@ -96,7 +96,7 @@ public class CustomerMenu extends SceneManager{
         	userInst = null;
         	});
         
-        customerMenu = new Scene(grid3, 100, 200);
+        customerMenu = new Scene(grid3, 200, 250);
 	}
 	
 	//Customer Add Booking Stuff

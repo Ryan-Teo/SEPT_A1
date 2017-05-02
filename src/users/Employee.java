@@ -53,12 +53,15 @@ public class Employee implements Serializable {
 	
 	private LocalTime getEndTime(LocalDate date){
 		LocalTime thisTime = LocalTime.MIN;
-		for(LocalTime myTime : schedule.get(date).keySet()){
-			if(myTime.isAfter(thisTime)){
-				thisTime = myTime;
+		if(schedule.containsKey(date)){
+			for(LocalTime myTime : schedule.get(date).keySet()){
+				if(myTime.isAfter(thisTime)){
+					thisTime = myTime;
+				}
 			}
+			return thisTime.plusMinutes(employer.getTimeSlotInMins());
 		}
-		return thisTime.plusMinutes(employer.getTimeSlotInMins());
+		return thisTime;
 	}
 	
 	public boolean empFree(LocalDate date, LocalTime startTime, String service){

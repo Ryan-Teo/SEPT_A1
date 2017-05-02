@@ -57,6 +57,7 @@ public class MainMenu extends SceneManager{
         PasswordField passwordInput = new PasswordField();
         passwordInput.setPromptText("password");
         grid.add(passwordInput, 1, 3);
+        
         Button signInButton = new Button("Sign in");
         HBox hbsignInButton = new HBox(10);
         hbsignInButton.setAlignment(Pos.BOTTOM_RIGHT);

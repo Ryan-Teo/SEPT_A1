@@ -29,7 +29,7 @@ import users.Employee;
 import users.User;
 
 public class CustomerMenu extends SceneManager{
-	
+		
 	Logger logger = Logger.getLogger(SceneManager.class);
 	Customer custInst;
 	
@@ -499,6 +499,7 @@ public class CustomerMenu extends SceneManager{
 		
 		table.setItems(bookItems);
 		table.getColumns().addAll(business, bookingDate, sessionStart, sessionEnd, emp);
+		System.out.println("Business: " + business);
 		table.setPlaceholder(new Label("You Currently Have no Bookings"));
 		
 		grid.add(table, 0, 3,6, 1);

@@ -1,4 +1,4 @@
-package users;
+kpackage users;
 import java.io.Serializable;
 import java.util.*;
 
@@ -165,7 +165,7 @@ public class Employee implements Serializable {
 				startTime = times.get("monStart");
 				endTime = times.get("monEnd");
 			}
-			else if(times.get("tuesStart")!= null &&thisDate.getDayOfWeek().equals(DayOfWeek.TUESDAY)){
+			else if(times.get("tueStart")!= null &&thisDate.getDayOfWeek().equals(DayOfWeek.TUESDAY)){
 				startTime = times.get("tueStart");
 				endTime = times.get("tueEnd");
 			}

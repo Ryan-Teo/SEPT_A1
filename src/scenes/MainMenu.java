@@ -21,17 +21,44 @@ import system.Account;
 import system.Booking;
 import users.Business;
 import users.Customer;
+import users.User;
 
-public class MainMenu extends SceneManager{
-
+public class MainMenu{
+	Stage window;
+	ArrayList<Customer> customers;
+	ArrayList<Business> businesses;
+	ArrayList<Booking> bookings;
+	Account acct;
+	User userInst;
 	Logger logger = Logger.getLogger(MainMenu.class);
+	
 	
 	public MainMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
 			ArrayList<Booking> bookings, Stage primaryStage) {
-		super(customers, businesses, account, bookings, primaryStage);
-		// TODO Auto-generated constructor stub
+		this.customers = customers;
+		this.businesses = businesses;
+		this.bookings = bookings;
+		this.acct = account;
+		this.window = primaryStage;
 	}
-			
+	
+	public void mainLogIn(ArrayList<Customer> customers, ArrayList<Business> businesses, String username,
+			String password) {
+		userInst = acct.login(customers, businesses, username, password);
+
+	}
+
+	public boolean mainRegisterBusiness(ArrayList<Business>businesses, String name, String username, 
+			String busName, String password1, String password2, String phone, String address){
+		return acct.registerBusiness(name, username, busName, password1, password2, phone, address, businesses);
+
+	}
+	
+	public boolean mainRegisterCust(ArrayList<Customer> customers, String name, String username, 
+			String password1, String password2, String phone, String address) {
+		return acct.registerCustomer(name, username, password1, password2, phone, address, customers);
+	}
+	
 	public void showMainMenu(){
     	GridPane grid = new GridPane();
     	grid.setPadding(new Insets(30, 30, 30, 30));
@@ -73,7 +100,10 @@ public class MainMenu extends SceneManager{
         	mainLogIn(customers, businesses, userNameString, passwordString);
         	if(userInst instanceof Customer){
         		logger.info("Initializing customer menu");
-        		custScreen.customerMenu();
+
+        		CustomerMenu custMenuInst = new CustomerMenu(customers, businesses, bookings, window);
+//        		busScreen = new BusinessMenu(customers, businesses, acct, bookings, window);
+        		custMenuInst.customerMenu();
         		window.setScene(customerMenu);
         	}
         	else if(userInst instanceof Business){

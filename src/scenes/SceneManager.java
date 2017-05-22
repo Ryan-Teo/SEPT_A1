@@ -22,22 +22,21 @@ import system.Booking;
 import system.FileIO;
 import users.Business;
 import users.Customer;
-import users.User;
 
 public class SceneManager {
 	static Stage window;
 	static Scene mainMenu, customerRegister, ownerRegister, registerMenu, customerMenu, custSelectService, busAddEmpSc, busAddWorkTime,
 			custSelectBus, custSelectDate, custSelectTime, custSelectEmp, businessMenu, scene4, customerBookingSummary,
 			busSelectEmp;
-	static ArrayList<Customer> customers;
-	static ArrayList<Business> businesses;
-	static ArrayList<Booking> bookings;
-	User userInst;
+	ArrayList<Customer> customers;
+	ArrayList<Business> businesses;
+	ArrayList<Booking> bookings;
 	Account acct;
 	FileIO FIO = new FileIO();
-	static MainMenu menuScreen;
-	static CustomerMenu custScreen;
-	static BusinessMenu busScreen;
+	MainMenu mainMenuInst;
+//	static MainMenu menuScreen;
+//	static CustomerMenu custScreen;
+//	static BusinessMenu busScreen;
 	/*
 	 * After movement, Scenemanager should have the following methods:
 	 * 
@@ -72,32 +71,17 @@ public class SceneManager {
 	}
 
 	public void getScreens(){
-		custScreen = new CustomerMenu(customers, businesses, acct, bookings, window);
-		busScreen = new BusinessMenu(customers, businesses, acct, bookings, window);
-		menuScreen = new MainMenu(customers, businesses, acct, bookings, window);
+//		menuScreen = new MainMenu(customers, businesses, acct, bookings, window);
+//		custScreen = new CustomerMenu(customers, businesses, acct, bookings, window);
+//		busScreen = new BusinessMenu(customers, businesses, acct, bookings, window);
 	}
 	public void getMenus(){
-		getScreens();
-		menuScreen.showMainMenu();
+		mainMenuInst = new MainMenu(customers, businesses, acct, bookings, window);
+		mainMenuInst.showMainMenu();
 		show();
 	}
  
-	public void mainLogIn(ArrayList<Customer> customers, ArrayList<Business> businesses, String username,
-			String password) {
-		userInst = acct.login(customers, businesses, username, password);
 
-	}
-
-	public boolean mainRegisterBusiness(ArrayList<Business>businesses, String name, String username, 
-			String busName, String password1, String password2, String phone, String address){
-		return acct.registerBusiness(name, username, busName, password1, password2, phone, address, businesses);
-
-	}
-	
-	public boolean mainRegisterCust(ArrayList<Customer> customers, String name, String username, 
-			String password1, String password2, String phone, String address) {
-		return acct.registerCustomer(name, username, password1, password2, phone, address, customers);
-	}
        
 	public void handleSuccess(Stage window) {
         Stage dialog = new Stage();
@@ -127,7 +111,7 @@ public class SceneManager {
         dialogVbox.getChildren().add(hbBack);
         dialogVbox.add(back, 0, 4);
         back.setOnAction(e -> {
-        	menuScreen.showMainMenu();
+        	mainMenuInst.showMainMenu();
         	window.setScene(mainMenu);
         	((Node)(e.getSource())).getScene().getWindow().hide();
         });
@@ -138,6 +122,7 @@ public class SceneManager {
         dialog.setScene(dialogScene);
         dialog.show();
     }
+	
 	public void handleGenericSuccess(Stage window, String msg) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);

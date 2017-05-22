@@ -31,12 +31,18 @@ import users.Customer;
 import users.Employee;
 import users.User;
 
-public class BusinessMenu extends SceneManager{
+public class BusinessMenu{
+	ArrayList<Customer> customers;
+	ArrayList<Business> businesses;
+	ArrayList<Booking> bookings;
+	
 	String empNamePattern = "^[a-zA-Z ]*$";
 	
-	public BusinessMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
+	public BusinessMenu(ArrayList<Customer> customers, ArrayList<Business> businesses,
 			ArrayList<Booking> bookings, Stage primaryStage) {
-		super(customers, businesses, account, bookings, primaryStage);
+		this.customers = customers;
+		this.businesses = businesses;
+		this.bookings = bookings;
 		
 	}
 	

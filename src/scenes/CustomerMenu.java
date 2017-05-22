@@ -28,14 +28,18 @@ import users.Customer;
 import users.Employee;
 import users.User;
 
-public class CustomerMenu extends SceneManager{
+public class CustomerMenu{
+	ArrayList<Customer> customers;
+	ArrayList<Business> businesses;
+	ArrayList<Booking> bookings;
 	
 	Logger logger = Logger.getLogger(SceneManager.class);
 	
-	public CustomerMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
+	public CustomerMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, 
 			ArrayList<Booking> bookings, Stage primaryStage) {
-		super(customers, businesses, account, bookings, primaryStage);
-
+		this.customers = customers;
+		this.businesses = businesses;
+		this.bookings = bookings;
 	}
 	
 	public void customerMenu(){

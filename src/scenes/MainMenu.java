@@ -3,8 +3,6 @@ package scenes;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.apache.log4j.Logger;
 
 import javafx.collections.FXCollections;
@@ -36,7 +34,6 @@ public class MainMenu extends SceneManager{
 	public MainMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
 			ArrayList<Booking> bookings, Stage primaryStage) {
 		super(customers, businesses, account, bookings, primaryStage);
-		// TODO Auto-generated constructor stub
 	}
 			
 	public void showMainMenu(){
@@ -64,7 +61,7 @@ public class MainMenu extends SceneManager{
         PasswordField passwordInput = new PasswordField();
         passwordInput.setPromptText("password");
         grid.add(passwordInput, 1, 3);
-        
+    		
         Button signInButton = new Button("Sign in");
         HBox hbsignInButton = new HBox(10);
         hbsignInButton.setAlignment(Pos.BOTTOM_RIGHT);
@@ -80,12 +77,12 @@ public class MainMenu extends SceneManager{
         	mainLogIn(customers, businesses, userNameString, passwordString);
         	if(userInst instanceof Customer){
         		logger.info("Initializing customer menu");
-        		custScreen.customerMenu(userInst);
+        		custScreen.customerMenu((Customer)userInst);
         		window.setScene(customerMenu);
         	}
         	else if(userInst instanceof Business){
         		logger.info("Initializing business menu");
-        		busScreen.businessMenu(userInst);
+        		busScreen.businessMenu((Business)userInst);
         		window.setScene(businessMenu);
         	}
         	else{
@@ -407,19 +404,6 @@ public class MainMenu extends SceneManager{
       
         register.setOnAction(e -> {
         	
-        	Boolean openCloseCheck = false;
-        	
-        	
-        	HashMap<String,LocalTime> newTimes = new HashMap<String,LocalTime>();
-    		
-        	
-        	if(cbOpen.getSelectionModel().getSelectedItem().isBefore(cbClose.getSelectionModel().getSelectedItem())){
-        		  
-	    		newTimes.put("monStart", cbOpen.getSelectionModel().getSelectedItem());
-	    		newTimes.put("monEnd", cbClose.getSelectionModel().getSelectedItem());
-	    		System.out.println("THE MONDAY START IS: " + newTimes.get("monStart"));
-	    		openCloseCheck = true;
-        	}
         	
         	
         	
@@ -435,13 +419,22 @@ public class MainMenu extends SceneManager{
         	int sessionLength = cbLength.getSelectionModel().getSelectedItem();
         	
         	
-        	
         	Boolean checkUserLength = acct.checkLength(newUserNameString, 6, 12);
         	Boolean checkUser = acct.checkBusName(newUserNameString, businesses);
         	Boolean checkPassLength = acct.checkLength(newPasswordString, 6, 12);
         	Boolean checkPassword1 = acct.checkPass(newPasswordString, newPasswordString2);
         	Boolean checkPhone = acct.checkPhone(phoneString);
         	Boolean check = mainRegisterBusiness(businesses, fullNameString, newUserNameString, busNameString, newPasswordString, newPasswordString2, phoneString, addressString, openLocalTime, closeLocalTime, sessionLength);
+        	Boolean openCloseCheck = false;
+        	System.out.println("OPENING IS:" + cbOpen.getSelectionModel().getSelectedItem() );
+        	System.out.println("CLOSING IS: " + cbClose.getSelectionModel().getSelectedItem());
+//        	HashMap<String,LocalTime> newTimes = new HashMap<String,LocalTime>();
+        	if(cbOpen.getSelectionModel().getSelectedItem().isBefore(cbClose.getSelectionModel().getSelectedItem())){
+//	    		newTimes.put("monStart", cbOpen.getSelectionModel().getSelectedItem());
+//	    		newTimes.put("monEnd", cbClose.getSelectionModel().getSelectedItem());
+//	    		System.out.println("THE MONDAY START IS: " + newTimes.get("monStart"));
+	    		openCloseCheck = true;
+        	}
         	
         	if (check){
         		handleSuccess(window);

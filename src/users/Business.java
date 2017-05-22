@@ -21,12 +21,12 @@ public class Business extends User {
 	private HashMap<String, Integer> services = new HashMap<String, Integer>();
 	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 	
-	public Business(String busName, String ownerName, String address, String phone, String username, String password, String openTime, String closeTime, String timeSlotInMins){
+	public Business(String busName, String ownerName, String address, String phone, String username, String password, String openTime, String closeTime, String sessionTime){
 		super(ownerName,username,password,address,phone);
 		this.busName = busName;
 		this.openTime = openTime;
 		this.closeTime = closeTime;
-		this.sessionTimeLocal = sessionTimeLocal;
+		this.sessionTime = sessionTime;
 //		String start = "09:00" , end = "17:00"; //HARDCODED REMOVE
 		
 		
@@ -70,7 +70,7 @@ public class Business extends User {
 	}
 	
 	//Get length of each time slot in minutes
-	public int getTimeSlotInMins(){
+	public int getSessionTime(){
 		sessionTimeLocal = Integer.parseInt(sessionTime);
 		return sessionTimeLocal;
 	}
@@ -186,6 +186,22 @@ public class Business extends User {
 		}
 		//If not return false and remove data as option
 		return exists;
+	}
+	
+	public LocalDate earliestAvilable(){
+		LocalDate date = LocalDate.MAX;
+		for(Employee emp : emps){
+			for(LocalDate thisDate : emp.getSchedule().keySet()){
+				for(LocalTime time : emp.getSchedule().get(thisDate).keySet()){
+					if(emp.getSchedule().get(thisDate).get(time).equals(false)){
+						if(thisDate.isBefore(date)){
+							date = thisDate;
+						}
+					}
+				}
+			}
+		}
+		return date;
 	}
 }
 

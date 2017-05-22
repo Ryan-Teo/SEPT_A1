@@ -104,6 +104,11 @@ public class Account {
 			return true;
 		return false;
 	}
+	
+	public boolean checkTime(LocalTime openTimeLocal, LocalTime closeTimeLocal){
+		return openTimeLocal.isBefore(closeTimeLocal);
+	}
+	
 	public boolean registerBusiness(String name, String username, String busName, String password1, String password2, String phone, String address, ArrayList<Business> businesses, LocalTime openTimeLocal, LocalTime closeTimeLocal, int sessionTimeLocal){
 		if(checkLength(username, 6, 12)){
 			logger.error("fail name length");
@@ -123,6 +128,10 @@ public class Account {
 		}
 		else if(!checkPhone(phone)){
 			logger.error("fail phone");
+			return false;
+		}
+		else if(!checkTime(openTimeLocal, closeTimeLocal)){
+			logger.error("fail opening hours");
 			return false;
 		}
 		else{

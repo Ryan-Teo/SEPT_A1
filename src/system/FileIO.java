@@ -144,7 +144,7 @@ public class FileIO {
 	}
 	
 	public void saveBus(ArrayList<Business> businesses){
-		String busName, name, username, password, address, phone;
+		String busName, name, username, password, address, phone, openTime, closeTime, sessionTime;
 		PrintWriter pwBus = null;
 		try {
 			logger.info("Business has been saved successfully into business.txt");
@@ -161,7 +161,12 @@ public class FileIO {
 			phone = business.getPhone();
 			username = business.getUsername();
 			password = business.getPassword();
-			pwBus.printf("%s|%s|%s|%s|%s|%s\n", busName, name, address, phone, username, password);			
+			openTime = business.getOpenTime().toString();
+			closeTime = business.getCloseTime().toString();
+			sessionTime = String.valueOf(business.getSessionTime());
+			
+			
+			pwBus.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s\n", busName, name, address, phone, username, password, openTime, closeTime, sessionTime);			
 		}
 		pwBus.close();
 		ArrayList<Employee> emps = new ArrayList<Employee>();

@@ -29,7 +29,7 @@ public class SceneManager {
 	static Stage window;
 	static Scene mainMenu, customerRegister, ownerRegister, registerMenu, customerMenu, custSelectService, busAddEmpSc, busAddWorkTime,
 			custSelectBus, custSelectDate, custSelectTime, custSelectEmp, businessMenu, scene4, customerBookingSummary,
-			busSelectEmp, busChangeHours, busViewSummary;
+			busSelectEmp, busShowServices, busChangeHours, busViewSummary;
 	ArrayList<Customer> customers;
 	ArrayList<Business> businesses;
 	ArrayList<Booking> bookings;
@@ -56,8 +56,7 @@ public class SceneManager {
 	 */
 	
 	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses, 
-			Account account, ArrayList<Booking> bookings, 
-			Stage primaryStage) {
+			Account account, ArrayList<Booking> bookings, Stage primaryStage) {
 		this.customers = customers;
 		this.businesses = businesses;
 		this.acct = account;
@@ -314,11 +313,11 @@ public class SceneManager {
         }
         
         if (checkTime == false){
-        	Text phone = new Text("-  Incorrect opening and closing hours");
-        	phone.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
-        	phone.setTextAlignment(TextAlignment.CENTER);
-        	phone.setFill(Color.RED);
-            dialogVbox.add(phone, 0, i+=1);
+        	Text time = new Text("-  Incorrect opening and closing hours");
+        	time.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	time.setTextAlignment(TextAlignment.CENTER);
+        	time.setFill(Color.RED);
+            dialogVbox.add(time, 0, i+=1);
         }
         
         Button back = new Button("Return");

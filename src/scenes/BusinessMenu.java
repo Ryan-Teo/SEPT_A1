@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,8 +17,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -104,7 +108,11 @@ public class BusinessMenu extends SceneManager{
         busViewSum.setMinHeight(25);
         busViewSum.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
         hbBusViewSum.getChildren().add(busViewSum);
-        grid3.add(hbBusViewSum, 0, 4);
+        grid3.add(hbBusViewSum, 0, 9); //PLEASE REPOSITION
+        busViewSum.setOnAction(e -> {
+        	busViewSummary(busInst);
+        	window.setScene(busViewSummary);
+        });
         
         Button busAddBooking = new Button("Add Booking");
         HBox hbBusAddBooking = new HBox(10);
@@ -140,6 +148,72 @@ public class BusinessMenu extends SceneManager{
         
         businessMenu = new Scene(grid3, 200, 400);
 	}
+	
+	public void busViewSummary(Business bus){
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(30, 30, 30, 30));
+		grid.setAlignment(Pos.CENTER);
+		grid.setHgap(10);
+		grid.setVgap(10);
+
+		Text header = new Text("Your Summary:");
+		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
+		grid.add(header, 0, 1,2, 1);
+		
+		TableView<Booking> table = new TableView<Booking>();
+		ObservableList<Booking> bookItems = bus.viewBookingSummary(bookings);
+		
+		//Customer Column
+		TableColumn<Booking,String> customer =  new TableColumn<>("Customer");
+		customer.setMinWidth(50);
+		customer.setCellValueFactory(new PropertyValueFactory<>("strCust"));
+		
+		//Date Column
+		TableColumn<Booking,LocalDate> bookingDate =  new TableColumn<>("Date");
+		bookingDate.setMinWidth(50);
+		bookingDate.setCellValueFactory(new PropertyValueFactory<>("bookDate"));
+		
+		//Session start column
+		TableColumn<Booking,LocalTime> sessionStart =  new TableColumn<>("Session Start");
+		sessionStart.setMinWidth(50);
+		sessionStart.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+				
+		//Session ends column
+		TableColumn<Booking,LocalTime> sessionEnd =  new TableColumn<>("Session End");
+		sessionEnd.setMinWidth(50);
+		sessionEnd.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+		
+		//Employee
+		TableColumn<Booking, String> emp =  new TableColumn<>("Employee");
+		emp.setMinWidth(50);
+		emp.setCellValueFactory(new PropertyValueFactory<>("strEmp"));
+		
+		
+		table.setItems(bookItems);
+		table.getColumns().addAll(customer, bookingDate, sessionStart, sessionEnd, emp);
+		System.out.println("Business: " + customer);
+		table.setPlaceholder(new Label("You Currently Have no Bookings"));
+		
+		grid.add(table, 0, 3,6, 1);
+		GridPane.setHalignment(table, HPos.CENTER);
+		
+        Button back = new Button("Back");
+        HBox hbBack = new HBox(10);
+        hbBack.setAlignment(Pos.BOTTOM_LEFT);
+        back.setMinWidth(70);
+        back.setMinHeight(30);
+        back.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
+        hbBack.getChildren().add(back);
+        grid.add(hbBack, 5, 5);
+        
+        back.setOnAction(e -> {
+    		businessMenu(busInst);
+    		window.setScene(businessMenu);
+        });
+		
+		busViewSummary = new Scene(grid, 600, 500);
+	}
+	
 	public void busChangeHours(Business bus){
 		GridPane grid2 = new GridPane();
     	grid2.setPadding(new Insets(30, 30, 30, 30));

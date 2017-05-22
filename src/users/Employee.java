@@ -1,4 +1,4 @@
-kpackage users;
+package users;
 import java.io.Serializable;
 import java.util.*;
 

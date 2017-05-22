@@ -157,7 +157,7 @@ public class Business extends User {
 		Employee new_emp = new Employee(empID,empName,this);
 		emps.add(new_emp);
 	}
-
+	
 //	Adding booking on behalf of customer
 	@Override
 	public boolean makeBooking(LocalDate date, LocalTime startTime, Customer bookCust, Business bus, Employee myEmp,

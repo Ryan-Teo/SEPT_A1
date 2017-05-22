@@ -29,7 +29,7 @@ public class SceneManager {
 	static Stage window;
 	static Scene mainMenu, customerRegister, ownerRegister, registerMenu, customerMenu, custSelectService, busAddEmpSc, busAddWorkTime,
 			custSelectBus, custSelectDate, custSelectTime, custSelectEmp, businessMenu, scene4, customerBookingSummary,
-			busSelectEmp, busChangeHours, busViewSummary;
+			busSelectEmp, busShowServices, busChangeHours, busViewSummary;
 	ArrayList<Customer> customers;
 	ArrayList<Business> businesses;
 	ArrayList<Booking> bookings;
@@ -56,8 +56,7 @@ public class SceneManager {
 	 */
 	
 	public SceneManager(ArrayList<Customer> customers, ArrayList<Business> businesses, 
-			Account account, ArrayList<Booking> bookings, 
-			Stage primaryStage) {
+			Account account, ArrayList<Booking> bookings, Stage primaryStage) {
 		this.customers = customers;
 		this.businesses = businesses;
 		this.acct = account;

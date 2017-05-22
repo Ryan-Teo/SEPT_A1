@@ -36,8 +36,6 @@ public class Employee implements Serializable {
 	}
 	
 	public HashMap<LocalDate, HashMap<LocalTime, Boolean>> getSchedule(){
-		//Init enough slots for each employee working time
-		//TODO
 		return schedule;
 	}
 	
@@ -149,6 +147,8 @@ public class Employee implements Serializable {
 	
 	
 	public void updateSchedule(HashMap<String,LocalTime> times){
+		//Clear schedule before updating
+		schedule.clear();
 		int days = 31, slotsInMins = employer.getSessionTime();
 		LocalDate currentDate = LocalDate.now();
 		LocalDate endDate = currentDate.plusDays(days); //the last day the schedule needs to be put in

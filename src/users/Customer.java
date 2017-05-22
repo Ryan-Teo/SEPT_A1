@@ -34,7 +34,6 @@ public class Customer extends User{
     	int bookingLen = bus.getServices().get(service)*bus.getSessionTime();
     	bookings.add(new Booking(date, startTime, startTime.plusMinutes(bookingLen), this ,bus, myEmp, service));
     	myEmp.bookEmp(date, startTime, service);
-
 		return true;
 	}
 

@@ -39,9 +39,8 @@ public class CustomerMenu extends SceneManager{
 
 	}
 	
-	public void customerMenu(User myUser){
-		custInst = (Customer)myUser;
-		
+	public void customerMenu(Customer custInst){
+		this.custInst = custInst;
         GridPane grid3 = new GridPane();
     	grid3.setPadding(new Insets(30, 30, 30, 30));
     	grid3.setAlignment(Pos.CENTER);
@@ -94,6 +93,7 @@ public class CustomerMenu extends SceneManager{
         	menuScreen.showMainMenu();
         	window.setScene(mainMenu);
         	userInst = null;
+        	this.custInst = null;
         	});
         
         customerMenu = new Scene(grid3, 200, 250);
@@ -232,7 +232,6 @@ public class CustomerMenu extends SceneManager{
         grid.add(header, 0, 1,2, 1);
         
         DatePicker datePicker = new DatePicker();
-        
         /*
          * code based on https://docs.oracle.com/javase/8/javafx/user-interface-tutorial/date-picker.htm
          */
@@ -253,7 +252,7 @@ public class CustomerMenu extends SceneManager{
             }
         };
         datePicker.setDayCellFactory(dayCellFactory);
-        datePicker.setValue(LocalDate.now());
+        datePicker.setValue(bus.earliestAvilable());
         grid.add(datePicker, 1, 2);
         
         
@@ -423,16 +422,13 @@ public class CustomerMenu extends SceneManager{
         selectButton.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
         grid.add(selectButton, 3, 3);
         selectButton.setOnAction(e -> {
-        	Boolean booked = false;
         	Employee myEmp = emps.get(cb.getSelectionModel().getSelectedIndex());
-        	booked = custInst.makeBooking(date, startTime, custInst ,bus, myEmp, service, bookings);
-        	if(booked){
-        		logger.info("Booking made!");
-            	FIO.save(customers, businesses, bookings);
-        	}
-        	else{
-        		logger.info("Something went wrong when making a booking");
-        	}
+        	int bookingLen = bus.getServices().get(service)*bus.getSessionTime();
+        	bookings.add(new Booking(date, startTime, startTime.plusMinutes(bookingLen), custInst ,bus, myEmp, service));
+        	myEmp.bookEmp(date, startTime, service);
+    		logger.info("Booking made!");
+    		System.out.println(bookings);
+        	FIO.save(customers, businesses, bookings);
     		customerMenu(custInst);
     		window.setScene(customerMenu);
     		//TODO
@@ -467,9 +463,8 @@ public class CustomerMenu extends SceneManager{
 		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
 		grid.add(header, 0, 1,2, 1);
 		
-		
 		TableView<Booking> table = new TableView<Booking>();
-		ObservableList<Booking> bookItems = custInst.viewBookingSummary(bookings);
+		ObservableList<Booking> bookItems = (custInst).viewBookingSummary(bookings);
 		
 		//Business Column
 		TableColumn<Booking,String> business =  new TableColumn<>("Business");
@@ -516,8 +511,7 @@ public class CustomerMenu extends SceneManager{
 				Booking bookInst = table.getSelectionModel().getSelectedItem();
 				//TODO cancel booking
 				
-				if(custInst.cancelBooking(bookings, bookInst)){
-
+				if((custInst).cancelBooking(bookings, bookInst)){
 					logger.info("Booking has been succesfully cancelled");
 					FIO.save(customers, businesses, bookings);
 				}

@@ -3,8 +3,6 @@ package scenes;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.apache.log4j.Logger;
 
 import javafx.collections.FXCollections;
@@ -36,7 +34,6 @@ public class MainMenu extends SceneManager{
 	public MainMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
 			ArrayList<Booking> bookings, Stage primaryStage) {
 		super(customers, businesses, account, bookings, primaryStage);
-		// TODO Auto-generated constructor stub
 	}
 			
 	public void showMainMenu(){
@@ -64,7 +61,7 @@ public class MainMenu extends SceneManager{
         PasswordField passwordInput = new PasswordField();
         passwordInput.setPromptText("password");
         grid.add(passwordInput, 1, 3);
-        
+    		
         Button signInButton = new Button("Sign in");
         HBox hbsignInButton = new HBox(10);
         hbsignInButton.setAlignment(Pos.BOTTOM_RIGHT);
@@ -80,12 +77,12 @@ public class MainMenu extends SceneManager{
         	mainLogIn(customers, businesses, userNameString, passwordString);
         	if(userInst instanceof Customer){
         		logger.info("Initializing customer menu");
-        		custScreen.customerMenu(userInst);
+        		custScreen.customerMenu((Customer)userInst);
         		window.setScene(customerMenu);
         	}
         	else if(userInst instanceof Business){
         		logger.info("Initializing business menu");
-        		busScreen.businessMenu(userInst);
+        		busScreen.businessMenu((Business)userInst);
         		window.setScene(businessMenu);
         	}
         	else{

@@ -67,62 +67,27 @@ public class Booking implements Serializable{
 		this.bookCust = cust;
 	}
 
-
-
 	public String getStrBus() {
 		return strBus;
 	}
-
-
 
 	public void setStrBus(String strBus) {
 		this.strBus = strBus;
 	}
 
-
-
 	public String getStrCust() {
 		return strCust;
 	}
-
-
 
 	public void setStrCust(String strCust) {
 		this.strCust = strCust;
 	}
 
-
-
 	public String getStrEmp() {
 		return strEmp;
 	}
 
-
-
 	public void setStrEmp(String strEmp) {
 		this.strEmp = strEmp;
 	}
-
-
-//	Why do we need setters? 
-//	Set start time on a particular time slot
-//	public void setStartTime(String time) {
-//		SimpleDateFormat ft = new SimpleDateFormat("HH:mm");
-//		try {
-//			this.startTime = ft.parse(time);
-//		} catch (ParseException e) {
-//			e.printStackTrace();
-//		}
-//	}
-	
-//	Set end time on a particular time slot
-//	public void setEndTime(String time) {
-//		SimpleDateFormat ft = new SimpleDateFormat("HH:mm");
-//		try {
-//			this.endTime = ft.parse(time);
-//		} catch (ParseException e) {
-//			e.printStackTrace();
-//		}
-//	}
-
 }

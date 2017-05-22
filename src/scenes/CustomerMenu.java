@@ -29,8 +29,9 @@ import users.Employee;
 import users.User;
 
 public class CustomerMenu extends SceneManager{
-	
+		
 	Logger logger = Logger.getLogger(SceneManager.class);
+	Customer custInst;
 	
 	public CustomerMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
 			ArrayList<Booking> bookings, Stage primaryStage) {
@@ -38,15 +39,15 @@ public class CustomerMenu extends SceneManager{
 
 	}
 	
-	public void customerMenu(){
-		
+	public void customerMenu(Customer custInst){
+		this.custInst = custInst;
         GridPane grid3 = new GridPane();
     	grid3.setPadding(new Insets(30, 30, 30, 30));
     	grid3.setAlignment(Pos.CENTER);
     	grid3.setHgap(10);
     	grid3.setVgap(10);
     	
-    	Text custTitle = new Text("Welcome --" + userInst.getName() + "--");
+    	Text custTitle = new Text("Welcome --" + custInst.getName() + "--");
     	custTitle.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
         grid3.add(custTitle, 0, 0, 1, 1);
         
@@ -92,6 +93,7 @@ public class CustomerMenu extends SceneManager{
         	menuScreen.showMainMenu();
         	window.setScene(mainMenu);
         	userInst = null;
+        	this.custInst = null;
         	});
         
         customerMenu = new Scene(grid3, 200, 250);
@@ -159,7 +161,7 @@ public class CustomerMenu extends SceneManager{
         grid.add(returnButton, 0, 3);
         returnButton.setOnAction(e -> {
         	logger.info("Back to customer menu");
-        	customerMenu();
+        	customerMenu(custInst);
         	window.setScene(customerMenu);
         });
         custSelectBus = new Scene(grid, 600, 500);
@@ -423,12 +425,12 @@ public class CustomerMenu extends SceneManager{
         	Boolean booked = false;
         	Employee myEmp = emps.get(cb.getSelectionModel().getSelectedIndex());
         	int bookingLen = bus.getServices().get(service)*bus.getTimeSlotInMins();
-        	bookings.add(new Booking(date, startTime, startTime.plusMinutes(bookingLen), (Customer)userInst ,bus, myEmp, service));
+        	bookings.add(new Booking(date, startTime, startTime.plusMinutes(bookingLen), custInst ,bus, myEmp, service));
         	myEmp.bookEmp(date, startTime, service);
     		logger.info("Booking made!");
     		System.out.println(bookings);
         	FIO.save(customers, businesses, bookings);
-    		customerMenu();
+    		customerMenu(custInst);
     		window.setScene(customerMenu);
     		//TODO
     		//Success or fail alerts?
@@ -462,15 +464,8 @@ public class CustomerMenu extends SceneManager{
 		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
 		grid.add(header, 0, 1,2, 1);
 		
-		System.out.println(bookings.size());
-		for(Booking book : bookings){
-			
-			System.out.println(book.getBookCust());
-			
-		}
-		System.out.println();
 		TableView<Booking> table = new TableView<Booking>();
-		ObservableList<Booking> bookItems = ((Customer)userInst).viewBookingSummary(bookings);
+		ObservableList<Booking> bookItems = (custInst).viewBookingSummary(bookings);
 		
 		//Business Column
 		TableColumn<Booking,String> business =  new TableColumn<>("Business");
@@ -500,6 +495,7 @@ public class CustomerMenu extends SceneManager{
 		
 		table.setItems(bookItems);
 		table.getColumns().addAll(business, bookingDate, sessionStart, sessionEnd, emp);
+		System.out.println("Business: " + business);
 		table.setPlaceholder(new Label("You Currently Have no Bookings"));
 		
 		grid.add(table, 0, 3,6, 1);
@@ -516,7 +512,7 @@ public class CustomerMenu extends SceneManager{
 				Booking bookInst = table.getSelectionModel().getSelectedItem();
 				//TODO cancel booking
 				
-				if(((Customer)userInst).cancelBooking(bookings, bookInst)){
+				if((custInst).cancelBooking(bookings, bookInst)){
 
 					logger.info("Booking has been succesfully cancelled");
 					FIO.save(customers, businesses, bookings);
@@ -540,7 +536,7 @@ public class CustomerMenu extends SceneManager{
 
 		backToMenuButton.setOnAction(e -> {
 			logger.info("Back to customer menu");
-			customerMenu();
+			customerMenu(custInst);
 			window.setScene(customerMenu);
 		});
 		

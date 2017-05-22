@@ -407,19 +407,6 @@ public class MainMenu extends SceneManager{
       
         register.setOnAction(e -> {
         	
-        	Boolean openCloseCheck = false;
-        	
-        	
-        	HashMap<String,LocalTime> newTimes = new HashMap<String,LocalTime>();
-    		
-        	
-        	if(cbOpen.getSelectionModel().getSelectedItem().isBefore(cbClose.getSelectionModel().getSelectedItem())){
-        		  
-	    		newTimes.put("monStart", cbOpen.getSelectionModel().getSelectedItem());
-	    		newTimes.put("monEnd", cbClose.getSelectionModel().getSelectedItem());
-	    		System.out.println("THE MONDAY START IS: " + newTimes.get("monStart"));
-	    		openCloseCheck = true;
-        	}
         	
         	
         	
@@ -435,13 +422,22 @@ public class MainMenu extends SceneManager{
         	int sessionLength = cbLength.getSelectionModel().getSelectedItem();
         	
         	
-        	
         	Boolean checkUserLength = acct.checkLength(newUserNameString, 6, 12);
         	Boolean checkUser = acct.checkBusName(newUserNameString, businesses);
         	Boolean checkPassLength = acct.checkLength(newPasswordString, 6, 12);
         	Boolean checkPassword1 = acct.checkPass(newPasswordString, newPasswordString2);
         	Boolean checkPhone = acct.checkPhone(phoneString);
         	Boolean check = mainRegisterBusiness(businesses, fullNameString, newUserNameString, busNameString, newPasswordString, newPasswordString2, phoneString, addressString, openLocalTime, closeLocalTime, sessionLength);
+        	Boolean openCloseCheck = false;
+//        	System.out.println("OPENING IS:" + cbOpen.getSelectionModel().getSelectedItem() );
+//        	System.out.println("CLOSING IS: " + cbClose.getSelectionModel().getSelectedItem());
+//        	HashMap<String,LocalTime> newTimes = new HashMap<String,LocalTime>();
+        	if(cbOpen.getSelectionModel().getSelectedItem().isBefore(cbClose.getSelectionModel().getSelectedItem())){
+//	    		newTimes.put("monStart", cbOpen.getSelectionModel().getSelectedItem());
+//	    		newTimes.put("monEnd", cbClose.getSelectionModel().getSelectedItem());
+//	    		System.out.println("THE MONDAY START IS: " + newTimes.get("monStart"));
+	    		openCloseCheck = true;
+        	}
         	
         	if (check){
         		handleSuccess(window);

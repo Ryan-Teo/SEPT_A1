@@ -53,7 +53,7 @@ public class BusinessMenu extends SceneManager{
     	grid3.setHgap(10);
     	grid3.setVgap(10);
         
-    	Text busTitle = new Text("Welcome --" + myUser.getName() + "--");
+    	Text busTitle = new Text("Welcome --" + busInst.getName() + "--");
     	busTitle.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
         grid3.add(busTitle, 0, 0, 1, 1);
         
@@ -371,7 +371,7 @@ public class BusinessMenu extends SceneManager{
         grid2.add(hbBack, 0, 3);
         
         back.setOnAction(e -> {
-    		businessMenu(userInst);
+    		businessMenu((Business) userInst);
     		window.setScene(businessMenu);
         });
         

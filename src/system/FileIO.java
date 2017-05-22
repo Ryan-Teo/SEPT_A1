@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
@@ -79,7 +80,7 @@ public class FileIO {
 	@SuppressWarnings("unchecked")
 	public ArrayList<Business> loadBus(){
 		ArrayList<Business> businesses = new ArrayList<Business>();
-		String line, busName, name, username, password, address, phone;
+		String line, busName, name, username, password, address, phone, openTime, closeTime, sessionTime;
 		
 		try {
 			Scanner scBus = new Scanner(new File("business.txt"));
@@ -92,21 +93,25 @@ public class FileIO {
 				phone = st.nextToken();
 				username = st.nextToken();
 				password = st.nextToken();
-				businesses.add(new Business(busName, name, address, phone, username, password));
+				openTime = st.nextToken();
+				closeTime = st.nextToken();
+				sessionTime = st.nextToken();
+				
+				businesses.add(new Business(busName, name, address, phone, username, password, openTime, closeTime, sessionTime));
 			}
 			scBus.close();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			logger.info("-- POPULATING BUSINESSES --");
-			businesses.add(new Business("Sal's Hair Salon", "Harry", "1 Alumbra St", "0400000000", "harryOwner", "password"));
-			businesses.add(new Business("East Medical Centre", "Ryan", "10 Car St", "0411111111", "ryanOwner", "password"));
-			businesses.add(new Business("Manny's Manicures", "Anton", "100 Leianne St", "0422222222", "antonOwner", "password"));
-			businesses.add(new Business("Don't Shop, Adopt", "Julia", "3 Puppy St", "0433333333", "juliaOwner", "password"));
-			businesses.add(new Business("Doctor Approved", "Sally", "35 Novia St", "0444444444", "sallyOwner", "password"));
-			businesses.add(new Business("Netherlands", "Nathan", "40 Oak St", "0455555555", "nathanOwner", "password"));
-			businesses.add(new Business("Blinding Smiles", "Grace", "209 Yellow St", "0466666666", "graceOwner", "password"));
-			businesses.add(new Business("Beds R Us", "Paulo", "245 Hunny St", "0477777777", "pauloOwner", "password"));
-			businesses.add(new Business("Personally Fit", "Jayden", "90 Twin St", "0488888888", "jaydenOwner", "password"));
+			businesses.add(new Business("Sal's Hair Salon", "Harry", "1 Alumbra St", "0400000000", "harryOwner", "password", "09:00", "15:00", "15"));
+			businesses.add(new Business("East Medical Centre", "Ryan", "10 Car St", "0411111111", "ryanOwner", "password", "09:00", "15:00", "15"));
+			businesses.add(new Business("Manny's Manicures", "Anton", "100 Leianne St", "0422222222", "antonOwner", "password", "09:00", "15:00", "15"));
+			businesses.add(new Business("Don't Shop, Adopt", "Julia", "3 Puppy St", "0433333333", "juliaOwner", "password", "09:00", "15:00", "15"));
+			businesses.add(new Business("Doctor Approved", "Sally", "35 Novia St", "0444444444", "sallyOwner", "password", "09:00", "15:00", "15"));
+			businesses.add(new Business("Netherlands", "Nathan", "40 Oak St", "0455555555", "nathanOwner", "password", "09:00", "15:00", "15"));
+			businesses.add(new Business("Blinding Smiles", "Grace", "209 Yellow St", "0466666666", "graceOwner", "password", "09:00", "15:00", "15"));
+			businesses.add(new Business("Beds R Us", "Paulo", "245 Hunny St", "0477777777", "pauloOwner", "password", "09:00", "15:00", "15"));
+			businesses.add(new Business("Personally Fit", "Jayden", "90 Twin St", "0488888888", "jaydenOwner", "password", "09:00", "15:00", "15"));
 			//no existing businesses, file will be created
 		}
 

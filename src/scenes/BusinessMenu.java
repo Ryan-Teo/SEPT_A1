@@ -2,6 +2,7 @@ package scenes;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
@@ -82,14 +83,18 @@ public class BusinessMenu extends SceneManager{
         	window.setScene(busSelectEmp);
         });
         
-        Button busAssignSesh = new Button("Assign Sessions");
-        HBox hbBusAssignSesh = new HBox(10);
-        hbBusAssignSesh.setAlignment(Pos.CENTER);
-        busAssignSesh.setMinWidth(150);
-        busAssignSesh.setMinHeight(25);
-        busAssignSesh.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
-        hbBusAssignSesh.getChildren().add(busAssignSesh);
-        grid3.add(hbBusAssignSesh, 0, 3);
+        Button busChangeWorkTime = new Button("Change Opening Hours");
+        HBox hbBusChangeWorkTime = new HBox(10);
+        hbBusChangeWorkTime.setAlignment(Pos.CENTER);
+        busChangeWorkTime.setMinWidth(150);
+        busChangeWorkTime.setMinHeight(25);
+        busChangeWorkTime.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
+        hbBusChangeWorkTime.getChildren().add(busChangeWorkTime);
+        grid3.add(hbBusChangeWorkTime, 0, 3);
+        busChangeWorkTime.setOnAction(e -> {
+        	busChangeHours(busInst);
+        	window.setScene(busChangeHours);
+        });
         
         
         Button busViewSum = new Button("View Booking Summary");
@@ -134,6 +139,95 @@ public class BusinessMenu extends SceneManager{
         	});
         
         businessMenu = new Scene(grid3, 200, 400);
+	}
+	public void busChangeHours(Business bus){
+		GridPane grid2 = new GridPane();
+    	grid2.setPadding(new Insets(30, 30, 30, 30));
+    	grid2.setAlignment(Pos.CENTER);
+    	grid2.setHgap(20);
+    	grid2.setVgap(20);
+    	
+    	Text title = new Text ("Select working hours");
+    	title.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
+    	grid2.add(title,  0,  1, 2, 1);
+    	
+        ArrayList<LocalTime> times = new ArrayList<LocalTime>();
+        
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+        String initTime = "00:00";
+        String endTime = "24:00";
+        
+        LocalTime initialTime = LocalTime.parse(initTime, dtf);
+        LocalTime endingTime = LocalTime.parse(endTime, dtf);
+        int i = 0;
+        do{
+        	System.out.println(initialTime.plusMinutes(i*15));
+        	times.add(initialTime.plusMinutes(i*15));
+        	i++;
+        }while(!initialTime.plusMinutes(i*15).equals(endingTime));
+        
+        ObservableList<LocalTime> timeItems = FXCollections.observableArrayList(times);
+           
+        ChoiceBox<LocalTime> cbOpen = new ChoiceBox<LocalTime>();
+        cbOpen.setItems(timeItems);
+        cbOpen.setValue(timeItems.get(0));
+        cbOpen.setTooltip(new Tooltip("Select Opening Time"));
+        grid2.add(cbOpen, 1, 2);
+    	
+    	Label openLabel = new Label("Opening Time:");
+    	grid2.add(openLabel, 0, 2);
+    	
+    	Label closeLabel = new Label("Closing Time:");
+    	grid2.add(closeLabel, 0, 3);
+    	
+    	ChoiceBox<LocalTime> cbClose = new ChoiceBox<LocalTime>();
+        cbClose.setItems(timeItems);
+        cbClose.setValue(timeItems.get(0));
+        cbClose.setTooltip(new Tooltip("Select Closing Time"));
+        grid2.add(cbClose, 1, 3);
+    	
+    	Button accept = new Button("Change Times");
+    	HBox hbAccept = new HBox(10);
+    	hbAccept.setAlignment(Pos.BOTTOM_RIGHT);
+    	accept.setMinWidth(70);
+    	accept.setMinHeight(30);
+    	accept.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
+        hbAccept.getChildren().add(accept);
+        grid2.add(hbAccept, 6, 5);
+        accept.setOnAction(e -> {
+        	if(cbOpen.getValue().isBefore(cbClose.getValue())){
+
+        		
+        		bus.setOpenTime(cbOpen.getValue());
+        		bus.setCloseTime(cbClose.getValue());
+        		
+        		//logger goes here?
+        		
+        		businessMenu(busInst);
+        		window.setScene(businessMenu);
+        		
+        		//window saying that times have been successfully changed please!  + New working times.
+        		}
+        	else{
+        		//error window please!
+        	}
+        });
+    	
+        Button back = new Button("Back");
+        HBox hbBack = new HBox(10);
+        hbBack.setAlignment(Pos.BOTTOM_LEFT);
+        back.setMinWidth(70);
+        back.setMinHeight(30);
+        back.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
+        hbBack.getChildren().add(back);
+        grid2.add(hbBack, 5, 5);
+        
+        back.setOnAction(e -> {
+    		businessMenu(busInst);
+    		window.setScene(businessMenu);
+        });
+        
+        busChangeHours = new Scene(grid2, 600, 500);
 	}
 	
 	public void addEmp(Business bus){

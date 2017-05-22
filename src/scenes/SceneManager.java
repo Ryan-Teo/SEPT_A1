@@ -29,7 +29,7 @@ public class SceneManager {
 	static Stage window;
 	static Scene mainMenu, customerRegister, ownerRegister, registerMenu, customerMenu, custSelectService, busAddEmpSc, busAddWorkTime,
 			custSelectBus, custSelectDate, custSelectTime, custSelectEmp, businessMenu, scene4, customerBookingSummary,
-			busSelectEmp;
+			busSelectEmp, busChangeHours;
 	ArrayList<Customer> customers;
 	ArrayList<Business> businesses;
 	ArrayList<Booking> bookings;

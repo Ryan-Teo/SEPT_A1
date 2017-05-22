@@ -163,7 +163,7 @@ public class FileIO {
 			password = business.getPassword();
 			openTime = business.getOpenTime().toString();
 			closeTime = business.getCloseTime().toString();
-			sessionTime = Integer.toString(business.getSessionTime());
+			sessionTime = String.valueOf(business.getSessionTime());
 			
 			
 			pwBus.printf("%s|%s|%s|%s|%s|%s|%s|%s|%s\n", busName, name, address, phone, username, password, openTime, closeTime, sessionTime);			

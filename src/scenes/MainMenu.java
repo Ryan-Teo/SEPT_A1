@@ -429,8 +429,8 @@ public class MainMenu extends SceneManager{
         	Boolean checkPhone = acct.checkPhone(phoneString);
         	Boolean check = mainRegisterBusiness(businesses, fullNameString, newUserNameString, busNameString, newPasswordString, newPasswordString2, phoneString, addressString, openLocalTime, closeLocalTime, sessionLength);
         	Boolean openCloseCheck = false;
-//        	System.out.println("OPENING IS:" + cbOpen.getSelectionModel().getSelectedItem() );
-//        	System.out.println("CLOSING IS: " + cbClose.getSelectionModel().getSelectedItem());
+        	System.out.println("OPENING IS:" + cbOpen.getSelectionModel().getSelectedItem() );
+        	System.out.println("CLOSING IS: " + cbClose.getSelectionModel().getSelectedItem());
 //        	HashMap<String,LocalTime> newTimes = new HashMap<String,LocalTime>();
         	if(cbOpen.getSelectionModel().getSelectedItem().isBefore(cbClose.getSelectionModel().getSelectedItem())){
 //	    		newTimes.put("monStart", cbOpen.getSelectionModel().getSelectedItem());

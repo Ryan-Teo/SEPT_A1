@@ -21,7 +21,7 @@ public class Business extends User {
 	private HashMap<String, Integer> services = new HashMap<String, Integer>();
 	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 	
-	public Business(String busName, String ownerName, String address, String phone, String username, String password, String openTime, String closeTime, String timeSlotInMins){
+	public Business(String busName, String ownerName, String address, String phone, String username, String password, String openTime, String closeTime, String sessionTime){
 		super(ownerName,username,password,address,phone);
 		this.busName = busName;
 		this.openTime = openTime;

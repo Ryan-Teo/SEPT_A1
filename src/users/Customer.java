@@ -31,7 +31,7 @@ public class Customer extends User{
 	@Override
 	public boolean makeBooking(LocalDate date, LocalTime startTime, Customer bookCust, Business bus, 
 								Employee myEmp, String service, ArrayList<Booking> bookings){
-    	int bookingLen = bus.getServices().get(service)*bus.getTimeSlotInMins();
+    	int bookingLen = bus.getServices().get(service)*bus.getSessionTime();
     	bookings.add(new Booking(date, startTime, startTime.plusMinutes(bookingLen), this ,bus, myEmp, service));
     	myEmp.bookEmp(date, startTime, service);
 

@@ -26,7 +26,7 @@ public class Business extends User {
 		this.busName = busName;
 		this.openTime = openTime;
 		this.closeTime = closeTime;
-		this.sessionTimeLocal = sessionTimeLocal;
+		this.sessionTime = sessionTime;
 //		String start = "09:00" , end = "17:00"; //HARDCODED REMOVE
 		
 		
@@ -70,7 +70,7 @@ public class Business extends User {
 	}
 	
 	//Get length of each time slot in minutes
-	public int getTimeSlotInMins(){
+	public int getSessionTime(){
 		sessionTimeLocal = Integer.parseInt(sessionTime);
 		return sessionTimeLocal;
 	}

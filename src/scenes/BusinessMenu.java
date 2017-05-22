@@ -477,7 +477,7 @@ public class BusinessMenu extends SceneManager{
         
         ArrayList<LocalTime> times = new ArrayList<LocalTime>() ;
         LocalTime checkTime = bus.getOpenTime();
-        int timeInMin = bus.getTimeSlotInMins();
+        int timeInMin = bus.getSessionTime();
         int i = 0;
         while(!checkTime.plusMinutes(i*timeInMin).isAfter(bus.getCloseTime())){
         	times.add(checkTime.plusMinutes(i*timeInMin));

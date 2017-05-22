@@ -314,11 +314,11 @@ public class SceneManager {
         }
         
         if (checkTime == false){
-        	Text phone = new Text("-  Incorrect opening and closing hours");
-        	phone.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
-        	phone.setTextAlignment(TextAlignment.CENTER);
-        	phone.setFill(Color.RED);
-            dialogVbox.add(phone, 0, i+=1);
+        	Text time = new Text("-  Incorrect opening and closing hours");
+        	time.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	time.setTextAlignment(TextAlignment.CENTER);
+        	time.setFill(Color.RED);
+            dialogVbox.add(time, 0, i+=1);
         }
         
         Button back = new Button("Return");

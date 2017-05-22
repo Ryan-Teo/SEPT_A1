@@ -303,7 +303,7 @@ public class CustomerMenu extends SceneManager{
     	logger.info(bus.getOpenTime());
     	openTime = bus.getOpenTime();
     	closeTime = bus.getCloseTime();
-    	timeSlot = bus.getTimeSlotInMins();
+    	timeSlot = bus.getSessionTime();
     	int noOfTimeSlots = bus.getServices().get(service);
     	//uhm, get number of timeslots for each service from business
     	//service needs to be selected before time is shown.
@@ -422,9 +422,8 @@ public class CustomerMenu extends SceneManager{
         selectButton.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
         grid.add(selectButton, 3, 3);
         selectButton.setOnAction(e -> {
-        	Boolean booked = false;
         	Employee myEmp = emps.get(cb.getSelectionModel().getSelectedIndex());
-        	int bookingLen = bus.getServices().get(service)*bus.getTimeSlotInMins();
+        	int bookingLen = bus.getServices().get(service)*bus.getSessionTime();
         	bookings.add(new Booking(date, startTime, startTime.plusMinutes(bookingLen), custInst ,bus, myEmp, service));
         	myEmp.bookEmp(date, startTime, service);
     		logger.info("Booking made!");
@@ -513,7 +512,6 @@ public class CustomerMenu extends SceneManager{
 				//TODO cancel booking
 				
 				if((custInst).cancelBooking(bookings, bookInst)){
-
 					logger.info("Booking has been succesfully cancelled");
 					FIO.save(customers, businesses, bookings);
 				}

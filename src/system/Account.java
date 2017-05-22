@@ -1,5 +1,6 @@
 package system;
 
+import java.time.LocalTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -103,7 +104,12 @@ public class Account {
 			return true;
 		return false;
 	}
-	public boolean registerBusiness(String name, String username, String busName, String password1, String password2, String phone, String address, ArrayList<Business> businesses){
+	
+	public boolean checkTime(LocalTime openTimeLocal, LocalTime closeTimeLocal){
+		return openTimeLocal.isBefore(closeTimeLocal);
+	}
+	
+	public boolean registerBusiness(String name, String username, String busName, String password1, String password2, String phone, String address, ArrayList<Business> businesses, LocalTime openTimeLocal, LocalTime closeTimeLocal, int sessionTimeLocal){
 		if(checkLength(username, 6, 12)){
 			logger.error("fail name length");
 			return false;
@@ -124,9 +130,13 @@ public class Account {
 			logger.error("fail phone");
 			return false;
 		}
+		else if(!checkTime(openTimeLocal, closeTimeLocal)){
+			logger.error("fail opening hours");
+			return false;
+		}
 		else{
 			logger.info("Business registration is successful");
-			businesses.add(new Business(busName, name, address, phone, username, password1));
+			businesses.add(new Business(busName, name, address, phone, username, password1, openTimeLocal.toString(), closeTimeLocal.toString(), Integer.toBinaryString(sessionTimeLocal)));
 			FIO.saveBus(businesses);
 			FIO.saveBus(businesses);
 			return true;

@@ -36,8 +36,6 @@ public class Employee implements Serializable {
 	}
 	
 	public HashMap<LocalDate, HashMap<LocalTime, Boolean>> getSchedule(){
-		//Init enough slots for each employee working time
-		//TODO
 		return schedule;
 	}
 	
@@ -59,7 +57,7 @@ public class Employee implements Serializable {
 					thisTime = myTime;
 				}
 			}
-			return thisTime.plusMinutes(employer.getTimeSlotInMins());
+			return thisTime.plusMinutes(employer.getSessionTime());
 		}
 		return thisTime;
 	}
@@ -67,7 +65,7 @@ public class Employee implements Serializable {
 	public boolean empFree(LocalDate date, LocalTime startTime, String service){
 		boolean freeCheck = false;
         int slotsNeeded = employer.getServices().get(service);
-        int slotsInMins = employer.getTimeSlotInMins();
+        int slotsInMins = employer.getSessionTime();
         LocalTime endTime = startTime.plusMinutes(slotsNeeded * slotsInMins);
         HashMap<LocalTime, Boolean> daySchedule = schedule.get(date);
         if(endTime.isAfter(getEndTime(date))){
@@ -97,7 +95,7 @@ public class Employee implements Serializable {
 	
 	public void bookEmp(LocalDate date, LocalTime startTime, String service){
         int slotsNeeded = employer.getServices().get(service);
-        int slotsInMins = employer.getTimeSlotInMins();
+        int slotsInMins = employer.getSessionTime();
         LocalTime endTime = startTime.plusMinutes(slotsNeeded * slotsInMins);
         HashMap<LocalTime, Boolean> daySchedule = schedule.get(date);
         for(LocalTime thisTime : daySchedule.keySet()){
@@ -123,7 +121,7 @@ public class Employee implements Serializable {
 	
 	public void unbookEmp(LocalDate date, LocalTime startTime, String service){
         int slotsNeeded = employer.getServices().get(service);
-        int slotsInMins = employer.getTimeSlotInMins();
+        int slotsInMins = employer.getSessionTime();
         LocalTime endTime = startTime.plusMinutes(slotsNeeded * slotsInMins);
         HashMap<LocalTime, Boolean> daySchedule = schedule.get(date);
         for(LocalTime thisTime : daySchedule.keySet()){
@@ -151,7 +149,7 @@ public class Employee implements Serializable {
 	public void updateSchedule(HashMap<String,LocalTime> times){
 		//Clear schedule before updating
 		schedule.clear();
-		int days = 31, slotsInMins = employer.getTimeSlotInMins();
+		int days = 31, slotsInMins = employer.getSessionTime();
 		LocalDate currentDate = LocalDate.now();
 		LocalDate endDate = currentDate.plusDays(days); //the last day the schedule needs to be put in
 		LocalTime startTime = null, endTime = null;

@@ -24,6 +24,7 @@ public class Booking implements Serializable{
 		this.bookCust = bookCust;
 		this.bookBus = bookBus;
 		this.bookEmp = bookEmp;
+		this.setStrCust(bookCust.getName());
 		this.setStrBus(bookBus.getBusName());
 		this.setStrEmp(bookEmp.getName());
 		this.service = service;

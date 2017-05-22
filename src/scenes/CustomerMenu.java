@@ -304,7 +304,7 @@ public class CustomerMenu extends SceneManager{
     	logger.info(bus.getOpenTime());
     	openTime = bus.getOpenTime();
     	closeTime = bus.getCloseTime();
-    	timeSlot = bus.getTimeSlotInMins();
+    	timeSlot = bus.getSessionTime();
     	int noOfTimeSlots = bus.getServices().get(service);
     	//uhm, get number of timeslots for each service from business
     	//service needs to be selected before time is shown.

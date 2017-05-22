@@ -17,21 +17,23 @@ public class Business extends User {
 	private String busName;
 	private ArrayList<Employee> emps = new ArrayList<Employee>();
 	private LocalTime openTime, closeTime; //hardcoded
-	private int timeSlotInMins = 30; //Default 30 min slots
+	private int timeSlotInMins;
 	private HashMap<String, Integer> services = new HashMap<String, Integer>();
 	
-	public Business(String busName, String ownerName, String address, String phone, String username, String password){
+	public Business(String busName, String ownerName, String address, String phone, String username, String password, LocalTime openTime, LocalTime closeTime, int timeSlotInMins){
 		super(ownerName,username,password,address,phone);
 		this.busName = busName;
-		
-		String start = "09:00" , end = "17:00"; //HARDCODED REMOVE
+		this.openTime = openTime;
+		this.closeTime = closeTime;
+		this.timeSlotInMins = timeSlotInMins;
+//		String start = "09:00" , end = "17:00"; //HARDCODED REMOVE
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 		
-		openTime = LocalTime.parse(start, dtf);
-		closeTime = LocalTime.parse(end, dtf);
-		services.put("General", 1);
-		services.put("General 2", 2); //HARDCODED REMOVE
-		services.put("General 3", 3);
+//		openTime = LocalTime.parse(start, dtf);
+//		closeTime = LocalTime.parse(end, dtf);
+//		services.put("General", 1);
+//		services.put("General 2", 2); //HARDCODED REMOVE
+//		services.put("General 3", 3);
 	}
 	
 	//return business name

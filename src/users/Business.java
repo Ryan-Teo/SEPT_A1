@@ -134,7 +134,7 @@ public class Business extends User {
 	public ObservableList<Booking> viewBookingSummary(ArrayList<Booking>bookings) {	
 		ObservableList<Booking> bookingsToBeViewed = FXCollections.observableArrayList();
 		for(int i = 0; i < bookings.size(); i++){
-			if(bookings.get(i).getBookBus().equals(this.getBusName())){
+			if(bookings.get(i).getBookBus().getBusName().equals(this.getBusName())){
 				bookingsToBeViewed.add(bookings.get(i));
 			}
 		}

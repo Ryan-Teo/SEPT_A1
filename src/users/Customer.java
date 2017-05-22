@@ -20,7 +20,7 @@ public class Customer extends User{
 		ObservableList<Booking> bookingsToBeViewed = FXCollections.observableArrayList();
 		
 		for(int i = 0; i < bookings.size(); i++){
-			if(bookings.get(i).getBookCust().equals(this.getUsername())){
+			if(bookings.get(i).getBookCust().getUsername().equals(this.getUsername())){
 				bookingsToBeViewed.add(bookings.get(i));
 			}
 		}

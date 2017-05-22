@@ -139,7 +139,38 @@ public class SceneManager {
         dialog.setScene(dialogScene);
         dialog.show();
     }
-	
+	public void handleGenericSuccess(Stage window, String msg) {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(window);
+        GridPane dialogVbox = new GridPane();
+        
+        dialogVbox.setPadding(new Insets(30, 30, 30, 30));
+        dialogVbox.setHgap(10);
+        dialogVbox.setVgap(5);
+        Text successful = new Text(msg);
+        successful.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        successful.setTextAlignment(TextAlignment.CENTER);
+        dialogVbox.add(successful, 0, 1);
+        
+        Button back = new Button("Return");
+        HBox hbBack = new HBox(15);
+        hbBack.setAlignment(Pos.BASELINE_CENTER);
+        back.setMinWidth(100);
+        back.setMinHeight(20);
+        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
+        dialogVbox.getChildren().add(hbBack);
+        dialogVbox.add(back, 0, 4);
+        back.setOnAction(e -> {
+        	((Node)(e.getSource())).getScene().getWindow().hide();
+        });
+        GridPane.setHalignment(back, HPos.CENTER);
+        dialogVbox.setAlignment(Pos.CENTER);
+        
+        Scene dialogScene = new Scene(dialogVbox, 300, 100);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
 	public void handleFail(Stage window, Boolean checkUser, Boolean checkPassLength, Boolean checkPassword1, Boolean checkPhone) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
@@ -160,7 +191,7 @@ public class SceneManager {
         
         int i = 2;
         
-        if (checkUser == false){
+        if (checkUser == true){
         	Text user = new Text("-  UserName already exists");
         	user.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
         	user.setTextAlignment(TextAlignment.CENTER);
@@ -202,8 +233,6 @@ public class SceneManager {
         dialogVbox.getChildren().add(hbBack);
         dialogVbox.add(back, 0, i+=1);
         back.setOnAction(e -> {
-        	menuScreen.showMainMenu();
-        	window.setScene(mainMenu);
         	((Node)(e.getSource())).getScene().getWindow().hide();
         });
         GridPane.setHalignment(back, HPos.CENTER);
@@ -214,6 +243,100 @@ public class SceneManager {
         dialog.show();
     }
 
+	public void handleWorkTimeFail(Stage window, Boolean monCheck, Boolean tueCheck, Boolean wedCheck, Boolean thuCheck, Boolean friCheck, Boolean satCheck, Boolean sunCheck) {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(window);
+        GridPane dialogVbox = new GridPane();
+        
+        dialogVbox.setPadding(new Insets(30, 30, 30, 30));
+        dialogVbox.setHgap(10);
+        dialogVbox.setVgap(5);
+        Text fail = new Text("Incorrect Working Time Input!");
+        Text fail1 = new Text("Please amend the following days:");
+        fail.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        fail.setTextAlignment(TextAlignment.CENTER);
+        fail1.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        fail1.setTextAlignment(TextAlignment.CENTER);
+        dialogVbox.add(fail, 0, 1);
+        dialogVbox.add(fail1, 0, 2);
+        
+        int i = 2;
+        
+        if (monCheck == false){
+        	Text user = new Text("-  Monday ");
+        	user.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	user.setTextAlignment(TextAlignment.CENTER);
+        	user.setFill(Color.RED);
+            dialogVbox.add(user, 0, i+=1);
+        }
+        
+        if (tueCheck == false){
+        	Text user = new Text("-  Tuesday ");
+        	user.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	user.setTextAlignment(TextAlignment.CENTER);
+        	user.setFill(Color.RED);
+            dialogVbox.add(user, 0, i+=1);
+        }
+        
+        if (wedCheck == false){
+        	Text user = new Text("-  Wednesday ");
+        	user.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	user.setTextAlignment(TextAlignment.CENTER);
+        	user.setFill(Color.RED);
+            dialogVbox.add(user, 0, i+=1);
+        }
+        
+        if (thuCheck == false){
+        	Text user = new Text("-  Thursday ");
+        	user.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	user.setTextAlignment(TextAlignment.CENTER);
+        	user.setFill(Color.RED);
+            dialogVbox.add(user, 0, i+=1);
+        }
+        
+        if (friCheck == false){
+        	Text user = new Text("-  Friday ");
+        	user.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	user.setTextAlignment(TextAlignment.CENTER);
+        	user.setFill(Color.RED);
+            dialogVbox.add(user, 0, i+=1);
+        }
+        
+        if (satCheck == false){
+        	Text user = new Text("-  Saturday ");
+        	user.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	user.setTextAlignment(TextAlignment.CENTER);
+        	user.setFill(Color.RED);
+            dialogVbox.add(user, 0, i+=1);
+        }
+        
+        if (sunCheck == false){
+        	Text user = new Text("-  Sunday ");
+        	user.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	user.setTextAlignment(TextAlignment.CENTER);
+        	user.setFill(Color.RED);
+            dialogVbox.add(user, 0, i+=1);
+        }
+        
+        Button back = new Button("Return");
+        HBox hbBack = new HBox(15);
+        hbBack.setAlignment(Pos.BASELINE_CENTER);
+        back.setMinWidth(100);
+        back.setMinHeight(20);
+        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
+        dialogVbox.getChildren().add(hbBack);
+        dialogVbox.add(back, 0, i+=1);
+        back.setOnAction(e -> {
+        	((Node)(e.getSource())).getScene().getWindow().hide();
+        });
+        GridPane.setHalignment(back, HPos.CENTER);
+        dialogVbox.setAlignment(Pos.CENTER);
+        
+        Scene dialogScene = new Scene(dialogVbox, 300, 200);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
 	public void handleGenericFail(Stage window, String msg) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);

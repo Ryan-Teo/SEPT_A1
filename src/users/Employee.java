@@ -156,12 +156,16 @@ public class Employee implements Serializable {
 		//increment days for 31 days save to HM
 		int i = 0;
 		do{
+			//Reset time variables
+			startTime=null;
+			endTime=null;
+			
 			LocalDate thisDate = currentDate.plusDays(i);
 			if(times.get("monStart")!= null && thisDate.getDayOfWeek().equals(DayOfWeek.MONDAY)){
 				startTime = times.get("monStart");
 				endTime = times.get("monEnd");
 			}
-			else if(times.get("tuesStart")!= null && thisDate.getDayOfWeek().equals(DayOfWeek.TUESDAY)){
+			else if(times.get("tueStart")!= null &&thisDate.getDayOfWeek().equals(DayOfWeek.TUESDAY)){
 				startTime = times.get("tueStart");
 				endTime = times.get("tueEnd");
 			}
@@ -185,16 +189,19 @@ public class Employee implements Serializable {
 				startTime = times.get("sunStart");
 				endTime = times.get("sunEnd");
 			}
-			HashMap<LocalTime, Boolean> daySchedule = new HashMap<LocalTime, Boolean>();
-	    	int j = 0;
-	    	do{
-	    		daySchedule.put(startTime.plusMinutes(j*slotsInMins), false);
-	    		//FALSE == UNBOOKED
-	    		//TRUE == BOOKED
-	    		j++;
-	    	}while(startTime.plusMinutes(j*slotsInMins).isBefore(endTime));
-	    	System.out.println(thisDate);
-	    	schedule.put(thisDate,daySchedule);
+			
+			if(startTime!=null && endTime!=null){
+				HashMap<LocalTime, Boolean> daySchedule = new HashMap<LocalTime, Boolean>();
+		    	int j = 0;
+		    	do{
+		    		daySchedule.put(startTime.plusMinutes(j*slotsInMins), false);
+		    		//FALSE == UNBOOKED
+		    		//TRUE == BOOKED
+		    		j++;
+		    	}while(startTime.plusMinutes(j*slotsInMins).isBefore(endTime));
+		    	System.out.println(thisDate);
+		    	schedule.put(thisDate,daySchedule);
+			}
 			
 			i++;
 		}while(!currentDate.plusDays(i).isAfter(endDate));

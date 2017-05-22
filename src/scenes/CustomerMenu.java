@@ -29,7 +29,7 @@ import users.Employee;
 import users.User;
 
 public class CustomerMenu extends SceneManager{
-	
+		
 	Logger logger = Logger.getLogger(SceneManager.class);
 	Customer custInst;
 	
@@ -242,10 +242,12 @@ public class CustomerMenu extends SceneManager{
                     @Override public void updateItem(LocalDate item, boolean empty) {
                         super.updateItem(item, empty);
                         
-                        if (item.isBefore(LocalDate.now())||item.isAfter(LocalDate.now().plusDays(31))) {
+                        if (item.isBefore(LocalDate.now())||item.isAfter(LocalDate.now().plusDays(31))||!bus.slotExists(item)) {
                             setDisable(true);
                             setStyle("-fx-background-color: #ffc0cb;");
                         }
+                        //TODO
+                        //Disable day is there are no available times
                     }
                 };
             }
@@ -497,6 +499,7 @@ public class CustomerMenu extends SceneManager{
 		
 		table.setItems(bookItems);
 		table.getColumns().addAll(business, bookingDate, sessionStart, sessionEnd, emp);
+		System.out.println("Business: " + business);
 		table.setPlaceholder(new Label("You Currently Have no Bookings"));
 		
 		grid.add(table, 0, 3,6, 1);

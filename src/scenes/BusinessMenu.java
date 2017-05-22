@@ -212,6 +212,8 @@ public class BusinessMenu extends SceneManager{
         	String msg = "There are no current employees";
         	handleGenericFail(window, msg);
     		businessMenu(busInst);
+    		window.setMinHeight(500);
+    		window.setMinWidth(600);
     		window.setScene(businessMenu);
         }
         Text header = new Text("Select an Employee:");
@@ -494,6 +496,8 @@ public class BusinessMenu extends SceneManager{
         grid2.add(sunEnd, 3, 9);
         
         
+        
+        
        
         Button register = new Button("Add");
         HBox hbRegister = new HBox(10);
@@ -505,6 +509,14 @@ public class BusinessMenu extends SceneManager{
         grid2.add(hbRegister, 3, 10);
 
         register.setOnAction(e -> {
+        	Boolean monCheck = false;
+        	Boolean tueCheck = false;
+        	Boolean wedCheck = false;
+        	Boolean thuCheck = false;
+        	Boolean friCheck = false;
+        	Boolean satCheck = false;
+        	Boolean sunCheck = false;
+        	
         	HashMap<String,LocalTime> newTimes = new HashMap<String,LocalTime>();
     		
         	if(monStart.getSelectionModel().getSelectedItem().isBefore(monEnd.getSelectionModel().getSelectedItem()) && cbMonday.isSelected()){
@@ -512,53 +524,66 @@ public class BusinessMenu extends SceneManager{
 	    		newTimes.put("monStart", monStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("monEnd", monEnd.getSelectionModel().getSelectedItem());
 	    		System.out.println("THE MONDAY START IS: " + newTimes.get("monStart"));
+	    		monCheck = true;
+        	}
+        	else if(!cbMonday.isSelected()){
+        		monCheck =true;
         	}
         	if(tueStart.getSelectionModel().getSelectedItem().isBefore(tueEnd.getSelectionModel().getSelectedItem()) && cbTuesday.isSelected()){
 	    		newTimes.put("tueStart", tueStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("tueEnd", tueEnd.getSelectionModel().getSelectedItem());
-	    		System.out.println("THE TUesdat START IS: " + newTimes.get("tueStart"));
+	    		System.out.println("THE TUESDAY START IS: " + newTimes.get("tueStart"));
+	    		tueCheck = true;
+        	}
+        	else if(!cbTuesday.isSelected()){
+        		tueCheck =true;
         	}
     		if(wedStart.getSelectionModel().getSelectedItem().isBefore(wedEnd.getSelectionModel().getSelectedItem()) && cbWednesday.isSelected()){
 	        	newTimes.put("wedStart", wedStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("wedEnd", wedEnd.getSelectionModel().getSelectedItem());
-	    		System.out.println("THE wednesday START IS: " + newTimes.get("wedStart"));
+
     		}
+    		else if(!cbWednesday.isSelected()){
+        		wedCheck =true;
+        	}
     		
     		if(thurStart.getSelectionModel().getSelectedItem().isBefore(thurEnd.getSelectionModel().getSelectedItem()) && cbThursday.isSelected()){
 	    		newTimes.put("thurStart", thurStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("thurEnd", thurEnd.getSelectionModel().getSelectedItem());
-	    		System.out.println("THE thursday START IS: " + newTimes.get("thurStart"));
     		}
+    		else if(!cbThursday.isSelected()){
+        		thuCheck =true;
+        	}
     		
     		if(friStart.getSelectionModel().getSelectedItem().isBefore(friEnd.getSelectionModel().getSelectedItem()) && cbFriday.isSelected()){
 	    		newTimes.put("friStart", friStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("friEnd", friEnd.getSelectionModel().getSelectedItem());
-	    		System.out.println("THE Friday START IS: " + newTimes.get("friStart"));
     		}
+    		else if(!cbFriday.isSelected()){
+        		friCheck =true;
+        	}
     		
     		if(satStart.getSelectionModel().getSelectedItem().isBefore(satEnd.getSelectionModel().getSelectedItem()) && cbSaturday.isSelected()){
 	    		newTimes.put("satStart", satStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("satEnd", satEnd.getSelectionModel().getSelectedItem());
-	    		System.out.println("THE Satday START IS: " + newTimes.get("satStart"));
     		}
+    		else if(!cbSaturday.isSelected()){
+        		satCheck =true;
+        	}
     		
     		if(sunStart.getSelectionModel().getSelectedItem().isBefore(sunEnd.getSelectionModel().getSelectedItem()) && cbSunday.isSelected()){
-
 	    		newTimes.put("sunStart", sunStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("sunEnd", sunEnd.getSelectionModel().getSelectedItem());
-	    		System.out.println("THE sunday START IS: " + newTimes.get("sunStart"));
 	        	
     		}
+    		else if(!cbSunday.isSelected()){
+        		sunCheck =true;
+        	}
     		
     		emp.updateSchedule(newTimes);
         	
         	//TODO
     		//CHECK INPUTS FOR WRONG/EMPTY strings
-
-        	FIO.saveBus(businesses);
-    		businessMenu(userInst);
-    		window.setScene(businessMenu);
-        	
         });
 
             

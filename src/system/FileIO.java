@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
@@ -21,9 +22,11 @@ public class FileIO {
 	Logger logger = Logger.getLogger(FileIO.class);
 	
 	public void save(ArrayList<Customer> customers, ArrayList<Business> businesses, ArrayList<Booking> bookings){
+		logger.info("General Save Called");
 		saveCust(customers);
 		saveBus(businesses);
 		saveBook(bookings);
+		logger.info("General Save Complete");
 	}
 	
 	
@@ -145,10 +148,11 @@ public class FileIO {
 	
 	public void saveBus(ArrayList<Business> businesses){
 		String busName, name, username, password, address, phone, openTime, closeTime, sessionTime;
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 		PrintWriter pwBus = null;
 		try {
-			logger.info("Business has been saved successfully into business.txt");
 			pwBus = new PrintWriter (new BufferedWriter (new FileWriter ("business.txt")));
+			logger.info("Business has been saved successfully into business.txt");
 		} catch (IOException e) {
 			logger.warn("business.txt has been created");
 		}
@@ -172,20 +176,23 @@ public class FileIO {
 		ArrayList<Employee> emps = new ArrayList<Employee>();
 		//Saving employee arraylist for each business
 		try {
-			logger.info("Employees has been successfully saved into 'employees' file");
 	        FileOutputStream outFile = new FileOutputStream("employees");
+	        //TODO
 	        ObjectOutputStream out = new ObjectOutputStream(outFile);
 			out.reset();
 			for(Business busInst : businesses){
 				for(Employee emp : busInst.getEmps()){
 					emps.add(emp);
 				}
+				logger.info(busInst.getBusName()+"'s Employees written to file");
 			}
 	        out.writeObject(emps);
 	        out.close();
 	        outFile.close();
+			logger.info("Employees has been successfully saved into 'employees' file");
 	     }catch(IOException e) {
-	    	 logger.warn("-employees file has been created-");
+	    	 System.out.println(e.getMessage());
+	    	 e.printStackTrace();
 	     }
 	}
 	
@@ -196,12 +203,12 @@ public class FileIO {
 		//part 2 : check against businesses array, init days for new businesses (defunct)
 		ArrayList<Booking> bookings = new ArrayList<Booking>(); //Check for null when called
 		try {
-			logger.info("bookings has been loaded successfully");
 			FileInputStream inFile = new FileInputStream("bookings");
 			ObjectInputStream in = new ObjectInputStream(inFile);
 			bookings = (ArrayList<Booking>) in.readObject();			
 			in.close();
 			inFile.close();
+			logger.info("bookings has been loaded successfully");
 		} catch (Exception e) {
 			logger.info(e.getMessage());
 			logger.warn("-- NO BOOKINGS EXIST --");
@@ -211,15 +218,15 @@ public class FileIO {
 		return bookings;
 	}
 	
-	public void saveBook(ArrayList<Booking> bookings){
+	private void saveBook(ArrayList<Booking> bookings){
 		try {
-			logger.info("Bookings have been saved successfully");
 	        FileOutputStream outFile = new FileOutputStream("bookings");
 	        ObjectOutputStream out = new ObjectOutputStream(outFile);
 			out.reset();
 	        out.writeObject(bookings);
 	        out.close();
 	        outFile.close();
+			logger.info("Bookings have been saved successfully");
 	     }catch(Exception e) {
 	    	 logger.error(e.getMessage());
 	    	 e.printStackTrace();

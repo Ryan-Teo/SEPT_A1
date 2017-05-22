@@ -1,16 +1,23 @@
 package scenes;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
@@ -97,11 +104,7 @@ public class MainMenu extends SceneManager{
         hbRegisterButton.getChildren().add(registerButton);
         grid.add(hbRegisterButton, 1, 0);
         registerButton.setOnAction(e -> {
-//        		Under CONSTRUCTION
-//        	
-//        	custScreen.customerMenu();
-//        	window.setScene(customerMenu);
-//        	
+
         		showRegister();
 	        	window.setScene(registerMenu);
         	});
@@ -236,7 +239,7 @@ public class MainMenu extends SceneManager{
         	String phoneString = phoneText.getText();
         	String addressString = addressNew.getText();
         	
-        	
+        	Boolean checkUserLength = acct.checkLength(newUserNameString, 6, 12);
         	Boolean checkUser = acct.checkCustName(newUserNameString, customers);
         	Boolean checkPassLength = acct.checkLength(newPasswordString, 6, 12);
         	Boolean checkPassword1 = acct.checkPass(newPasswordString, newPasswordString2);
@@ -253,7 +256,7 @@ public class MainMenu extends SceneManager{
         		System.out.println("CheckPass1: " + checkPassword1);
         		System.out.println("CheckPhone: " + checkPhone);
         		
-        		handleFail(window, checkUser, checkPassLength, checkPassword1, checkPhone);
+        		handleFail(window, checkUser, checkUserLength, checkPassLength, checkPassword1, checkPhone);
         	}
         	
         	
@@ -277,7 +280,7 @@ public class MainMenu extends SceneManager{
 	}
 	
 	public void registerOwner() {
-		logger.info("Initializing business sign up page");
+		logger.info("Initialising owner sign up page");
         GridPane grid3 = new GridPane();
     	grid3.setPadding(new Insets(30, 30, 30, 30));
     	grid3.setAlignment(Pos.CENTER);
@@ -287,7 +290,7 @@ public class MainMenu extends SceneManager{
         
         Text registerTitle = new Text("Register Here:");
         registerTitle.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
-        grid3.add(registerTitle, 0, 1, 2, 1);
+        grid3.add(registerTitle, 1, 1, 2, 1);
         
         Label fullName = new Label("Full Name: ");
         grid3.add(fullName, 0, 2);
@@ -317,26 +320,19 @@ public class MainMenu extends SceneManager{
         newPasswordInput2.setPromptText("password");
         grid3.add(newPasswordInput2, 1, 5);
         
-        Label newBusiness = new Label("Business Name:");
-        grid3.add(newBusiness, 0, 6);
-
-        TextField newBusinessInput = new TextField();
-        newBusinessInput.setPromptText("business name");
-        grid3.add(newBusinessInput, 1, 6);
-        
         Label phone = new Label("Contact Number ");
-        grid3.add(phone, 0, 7);
+        grid3.add(phone, 0, 6);
 
         TextField phoneText = new TextField();
         phoneText.setPromptText("phone number");
-        grid3.add(phoneText, 1, 7);
+        grid3.add(phoneText, 1, 6);
         
         Label address = new Label("Address ");
-        grid3.add(address, 0, 8);
+        grid3.add(address, 0, 7);
 
         TextField addressNew = new TextField();
         addressNew.setPromptText("address");
-        grid3.add(addressNew, 1, 8);
+        grid3.add(addressNew, 1, 7);
         
         Button register = new Button("Register!");
         HBox hbRegister = new HBox(10);
@@ -345,9 +341,88 @@ public class MainMenu extends SceneManager{
         register.setMinHeight(40);
         register.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
         hbRegister.getChildren().add(register);
-        grid3.add(hbRegister, 1, 9);
+        grid3.add(hbRegister, 4, 7);
         
+        
+        ArrayList<LocalTime> times = new ArrayList<LocalTime>() ;
+        String start = "00:00";
+        String end = "23:45";
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+        
+        
+        LocalTime startTime = LocalTime.parse(start, dtf);
+        LocalTime endTime = LocalTime.parse(end, dtf);
+        LocalTime checkTime = startTime;
+        
+        int timeInMin = 15;
+        
+        int i = 0;
+        while(checkTime.plusMinutes(i*timeInMin).isBefore(endTime)){
+        	times.add(checkTime.plusMinutes(i*timeInMin));
+        	i++;
+        }
+        
+        ObservableList<LocalTime> timeChoices = FXCollections.observableArrayList(times);
+        
+        System.out.println(timeChoices);
+        
+        
+        Label newBusiness = new Label("Business Name:");
+        grid3.add(newBusiness, 3, 2);
+
+        TextField newBusinessInput = new TextField();
+        newBusinessInput.setPromptText("business name");
+        grid3.add(newBusinessInput, 4, 2);
+        
+        Label busOpen = new Label("Opening Time:");
+        grid3.add(busOpen, 3, 3);
+        
+        ChoiceBox<LocalTime> cbOpen = new ChoiceBox<LocalTime>();
+        cbOpen.setItems(timeChoices);
+        cbOpen.setValue(timeChoices.get(0));
+        cbOpen.setTooltip(new Tooltip("Select Time"));
+        cbOpen.setMaxWidth(200);
+        grid3.add(cbOpen, 4, 3);
+        
+        Label busClose = new Label("Closing Time:");
+        grid3.add(busClose, 3, 4);
+        
+        ChoiceBox<LocalTime> cbClose = new ChoiceBox<LocalTime>();
+        cbClose.setItems(timeChoices);
+        cbClose.setValue(timeChoices.get(0));
+        cbClose.setTooltip(new Tooltip("Select Time"));
+        cbClose.setMaxWidth(200);
+        grid3.add(cbClose, 4, 4);
+        
+        Label busSession = new Label("Session Duration (mins):");
+        grid3.add(busSession, 3, 5);
+        
+        ChoiceBox<Integer> cbLength = new ChoiceBox<Integer>();
+        cbLength.getItems().addAll(15, 45, 60);
+        cbLength.setValue(15);
+        cbLength.setTooltip(new Tooltip("Select Duration"));
+        cbLength.setMaxWidth(200);
+        grid3.add(cbLength, 4, 5);
+        
+      
         register.setOnAction(e -> {
+        	
+        	Boolean openCloseCheck = false;
+        	
+        	
+        	HashMap<String,LocalTime> newTimes = new HashMap<String,LocalTime>();
+    		
+        	
+        	if(cbOpen.getSelectionModel().getSelectedItem().isBefore(cbClose.getSelectionModel().getSelectedItem())){
+        		  
+	    		newTimes.put("monStart", cbOpen.getSelectionModel().getSelectedItem());
+	    		newTimes.put("monEnd", cbClose.getSelectionModel().getSelectedItem());
+	    		System.out.println("THE MONDAY START IS: " + newTimes.get("monStart"));
+	    		openCloseCheck = true;
+        	}
+        	
+        	
+        	
         	String fullNameString = fullNameText.getText();
         	String newUserNameString = newUserNameInput.getText();
         	String newPasswordString = newPasswordInput.getText();
@@ -355,12 +430,18 @@ public class MainMenu extends SceneManager{
         	String busNameString = newBusinessInput.getText();
         	String phoneString = phoneText.getText();
         	String addressString = addressNew.getText();
-
+        	LocalTime openLocalTime = cbOpen.getSelectionModel().getSelectedItem();
+        	LocalTime closeLocalTime = cbClose.getSelectionModel().getSelectedItem();
+        	int sessionLength = cbLength.getSelectionModel().getSelectedItem();
+        	
+        	
+        	
+        	Boolean checkUserLength = acct.checkLength(newUserNameString, 6, 12);
         	Boolean checkUser = acct.checkBusName(newUserNameString, businesses);
         	Boolean checkPassLength = acct.checkLength(newPasswordString, 6, 12);
         	Boolean checkPassword1 = acct.checkPass(newPasswordString, newPasswordString2);
         	Boolean checkPhone = acct.checkPhone(phoneString);
-        	Boolean check = mainRegisterBusiness(businesses, fullNameString, newUserNameString, busNameString, newPasswordString, newPasswordString2, phoneString, addressString);
+        	Boolean check = mainRegisterBusiness(businesses, fullNameString, newUserNameString, busNameString, newPasswordString, newPasswordString2, phoneString, addressString, openLocalTime, closeLocalTime, sessionLength);
         	
         	if (check){
         		handleSuccess(window);
@@ -368,10 +449,9 @@ public class MainMenu extends SceneManager{
             	window.setScene(mainMenu);
         	}
         	else{
-        		handleFail(window, checkUser, checkPassLength, checkPassword1, checkPhone);
+        		handleBusFail(window, checkUser, checkUserLength, checkPassLength, checkPassword1, checkPhone, openCloseCheck);
         	}
        	
-        	
         });
             
         Button back = new Button("Back");
@@ -381,12 +461,12 @@ public class MainMenu extends SceneManager{
         back.setMinHeight(25);
         back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
         hbBack.getChildren().add(back);
-        grid3.add(hbBack, 1, 0);
+        grid3.add(hbBack, 0, 1);
         back.setOnAction(e -> {
         	showMainMenu();
         	window.setScene(registerMenu);
         });
         
-        ownerRegister = new Scene(grid3, 300, 500);
+        ownerRegister = new Scene(grid3, 700, 500);
 	}
 }

@@ -1,5 +1,6 @@
 package scenes;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -90,8 +91,8 @@ public class SceneManager {
 	}
 
 	public boolean mainRegisterBusiness(ArrayList<Business>businesses, String name, String username, 
-			String busName, String password1, String password2, String phone, String address){
-		return acct.registerBusiness(name, username, busName, password1, password2, phone, address, businesses);
+			String busName, String password1, String password2, String phone, String address, LocalTime openTime, LocalTime closeTime, int timeSlotInMins){
+		return acct.registerBusiness(name, username, busName, password1, password2, phone, address, businesses, openTime, closeTime, timeSlotInMins);
 
 	}
 	
@@ -171,7 +172,7 @@ public class SceneManager {
         dialog.setScene(dialogScene);
         dialog.show();
     }
-	public void handleFail(Stage window, Boolean checkUser, Boolean checkPassLength, Boolean checkPassword1, Boolean checkPhone) {
+	public void handleFail(Stage window, Boolean checkUser, Boolean checkUserLength, Boolean checkPassLength, Boolean checkPassword1, Boolean checkPhone) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(window);
@@ -199,14 +200,22 @@ public class SceneManager {
             dialogVbox.add(user, 0, i+=1);
         }
         
-        if (checkPassLength == false){
+        if (checkUserLength == true){
+        	Text passlength = new Text("-  UserName must be between 6-12 characters");
+        	passlength.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	passlength.setTextAlignment(TextAlignment.CENTER);
+        	passlength.setFill(Color.RED);
+            dialogVbox.add(passlength, 0, i+=1);
+        }
+        	
+        if (checkPassLength == true){
         	Text passlength = new Text("-  Password must be between 6-12 characters");
         	passlength.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
         	passlength.setTextAlignment(TextAlignment.CENTER);
         	passlength.setFill(Color.RED);
             dialogVbox.add(passlength, 0, i+=1);
         }
-        else if (checkPassLength == true){
+        else if (checkPassLength == false){
         	if (checkPassword1 == false){
         		Text passCopy = new Text("-  Password doesn't match");
         		passCopy.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
@@ -243,6 +252,94 @@ public class SceneManager {
         dialog.show();
     }
 
+	public void handleBusFail(Stage window, Boolean checkUser, Boolean checkUserLength, Boolean checkPassLength, Boolean checkPassword1, Boolean checkPhone, Boolean checkTime) {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(window);
+        GridPane dialogVbox = new GridPane();
+        
+        dialogVbox.setPadding(new Insets(30, 30, 30, 30));
+        dialogVbox.setHgap(10);
+        dialogVbox.setVgap(5);
+        Text fail = new Text("Incorrect Registration Entry!");
+        Text fail1 = new Text("Please amend the following errors:");
+        fail.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        fail.setTextAlignment(TextAlignment.CENTER);
+        fail1.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        fail1.setTextAlignment(TextAlignment.CENTER);
+        dialogVbox.add(fail, 0, 1);
+        dialogVbox.add(fail1, 0, 2);
+        
+        int i = 2;
+        
+        if (checkUser == true){
+        	Text user = new Text("-  UserName already exists");
+        	user.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	user.setTextAlignment(TextAlignment.CENTER);
+        	user.setFill(Color.RED);
+            dialogVbox.add(user, 0, i+=1);
+        }
+        
+        if (checkUserLength == true){
+        	Text passlength = new Text("-  UserName must be between 6-12 characters");
+        	passlength.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	passlength.setTextAlignment(TextAlignment.CENTER);
+        	passlength.setFill(Color.RED);
+            dialogVbox.add(passlength, 0, i+=1);
+        }
+        	
+        if (checkPassLength == true){
+        	Text passlength = new Text("-  Password must be between 6-12 characters");
+        	passlength.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	passlength.setTextAlignment(TextAlignment.CENTER);
+        	passlength.setFill(Color.RED);
+            dialogVbox.add(passlength, 0, i+=1);
+        }
+        else if (checkPassLength == false){
+        	if (checkPassword1 == false){
+        		Text passCopy = new Text("-  Password doesn't match");
+        		passCopy.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        		passCopy.setTextAlignment(TextAlignment.CENTER);
+        		passCopy.setFill(Color.RED);
+                dialogVbox.add(passCopy, 0, i+=1);
+        	}
+        }
+        
+        if (checkPhone == false){
+        	Text phone = new Text("-  Incorrect phone format");
+        	phone.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	phone.setTextAlignment(TextAlignment.CENTER);
+        	phone.setFill(Color.RED);
+            dialogVbox.add(phone, 0, i+=1);
+        }
+        
+        if (checkTime == false){
+        	Text phone = new Text("-  Incorrect opening and closing hours");
+        	phone.setFont(Font.font("Rockwell", FontWeight.NORMAL, 10));
+        	phone.setTextAlignment(TextAlignment.CENTER);
+        	phone.setFill(Color.RED);
+            dialogVbox.add(phone, 0, i+=1);
+        }
+        
+        Button back = new Button("Return");
+        HBox hbBack = new HBox(15);
+        hbBack.setAlignment(Pos.BASELINE_CENTER);
+        back.setMinWidth(100);
+        back.setMinHeight(20);
+        back.setStyle("-fx-font: 10 verdana; -fx-base: #B7FF6E;");
+        dialogVbox.getChildren().add(hbBack);
+        dialogVbox.add(back, 0, i+=1);
+        back.setOnAction(e -> {
+        	((Node)(e.getSource())).getScene().getWindow().hide();
+        });
+        GridPane.setHalignment(back, HPos.CENTER);
+        dialogVbox.setAlignment(Pos.CENTER);
+        
+        Scene dialogScene = new Scene(dialogVbox, 300, 200);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
+	
 	public void handleWorkTimeFail(Stage window, Boolean monCheck, Boolean tueCheck, Boolean wedCheck, Boolean thuCheck, Boolean friCheck, Boolean satCheck, Boolean sunCheck) {
         Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);

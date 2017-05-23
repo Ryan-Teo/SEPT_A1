@@ -98,7 +98,7 @@ public class Employee implements Serializable {
 		return schedule;
 	}
 	
-	private LocalTime getStartTime(LocalDate date){
+	public LocalTime getStartTime(LocalDate date){
 		LocalTime thisTime = LocalTime.MAX;
 		for(LocalTime myTime : schedule.get(date).keySet()){
 			if(myTime.isBefore(thisTime)){
@@ -108,7 +108,7 @@ public class Employee implements Serializable {
 		return thisTime;
 	}
 	
-	private LocalTime getEndTime(LocalDate date){
+	public LocalTime getEndTime(LocalDate date){
 		LocalTime thisTime = LocalTime.MIN;
 		if(schedule.containsKey(date)){
 			for(LocalTime myTime : schedule.get(date).keySet()){

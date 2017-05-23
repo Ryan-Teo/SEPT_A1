@@ -1,5 +1,6 @@
 package scenes;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -261,7 +262,7 @@ public class BusinessMenu extends SceneManager{
         grid.add(hbAccept, 7, 5);
         accept.setOnAction(e -> {
         	if(empTable.getSelectionModel().getSelectedIndex() != -1){
-        	empAvail(empTable.getSelectionModel().getSelectedItem());
+        	empAvail(empTable.getSelectionModel().getSelectedItem(), DayOfWeek.MONDAY);
         	window.setScene(empAvail);
         	}
         });
@@ -283,7 +284,7 @@ public class BusinessMenu extends SceneManager{
         busShowAvailable = new Scene(grid, 900, 600);
 	}
 	
-	public void empAvail(Employee emp){
+	public void empAvail(Employee emp, DayOfWeek day){
 	//class to show the available time of the individual employee in detail.	
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(30, 30, 30, 30));
@@ -297,24 +298,36 @@ public class BusinessMenu extends SceneManager{
 		
 		TableView<String>timeTable = new TableView<String>();
 		HashMap<LocalDate, HashMap<LocalTime, Boolean>> schedule = emp.getSchedule();
+		HashMap<LocalTime, Boolean> dayTimes = null;
+		LocalDate date = null;
+		
+		for(int i=0; i < 7; i++){
+			if(LocalDate.now().plusDays(i).getDayOfWeek().equals(day)){
+				dayTimes = schedule.get(LocalDate.now().plusDays(i));
+				date = LocalDate.now().plusDays(i);
+			}
+		}
+		
+		//array for the times the person is working on the day.
+		ArrayList<LocalTime>times = new ArrayList<LocalTime>();
+		LocalTime initialTime = emp.getStartTime(date);
+		LocalTime endingTime = emp.getEndTime(date);
+		int i = 0;
+		
+		do{
+			times.add(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()));
+		}while(!initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()).equals(endingTime));
+		
+		ObservableList<LocalTime> timeList = FXCollections.observableArrayList();
+		
+		//timeList.add
 		
 		
+				
 		//time
-		TableColumn time = new TableColumn("Time");
+		//TableColumn time = new TableColumn("Time");
 		
-		//monday
 		
-		//tuesday
-		
-		//wednesday
-		
-		//thursday
-		
-		//friday
-		
-		//saturday
-		
-		//sunday
 		
 
 		empAvail = new Scene(grid, 900, 600);

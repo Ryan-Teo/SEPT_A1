@@ -19,7 +19,6 @@ public class Employee implements Serializable {
 	private Business employer;
 	private HashMap<LocalDate, HashMap<LocalTime, Boolean>> schedule = new HashMap<LocalDate, HashMap<LocalTime, Boolean>>() ; //one month in advance
 	private String monHour, tueHour, wedHour, thurHour, friHour, satHour, sunHour;
-	
 
 	public Employee(String empID, String name, Business employer){
 		this.empID = empID;

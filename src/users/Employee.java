@@ -19,7 +19,6 @@ public class Employee implements Serializable {
 	private Business employer;
 	private HashMap<LocalDate, HashMap<LocalTime, Boolean>> schedule = new HashMap<LocalDate, HashMap<LocalTime, Boolean>>() ; //one month in advance
 	private String monHour, tueHour, wedHour, thurHour, friHour, satHour, sunHour;
-	
 
 	public Employee(String empID, String name, Business employer){
 		this.empID = empID;
@@ -124,7 +123,7 @@ public class Employee implements Serializable {
 	
 	public boolean empFree(LocalDate date, LocalTime startTime, String service){
 		boolean freeCheck = false;
-        int slotsNeeded = employer.getServices().get(service);
+        int slotsNeeded = employer.getService(service).getBlocks();
         int slotsInMins = employer.getSessionTime();
         LocalTime endTime = startTime.plusMinutes(slotsNeeded * slotsInMins);
         HashMap<LocalTime, Boolean> daySchedule = schedule.get(date);
@@ -154,7 +153,7 @@ public class Employee implements Serializable {
 	}
 	
 	public void bookEmp(LocalDate date, LocalTime startTime, String service){
-        int slotsNeeded = employer.getServices().get(service);
+		int slotsNeeded = employer.getService(service).getBlocks();
         int slotsInMins = employer.getSessionTime();
         LocalTime endTime = startTime.plusMinutes(slotsNeeded * slotsInMins);
         HashMap<LocalTime, Boolean> daySchedule = schedule.get(date);
@@ -180,7 +179,7 @@ public class Employee implements Serializable {
 	}
 	
 	public void unbookEmp(LocalDate date, LocalTime startTime, String service){
-        int slotsNeeded = employer.getServices().get(service);
+		int slotsNeeded = employer.getService(service).getBlocks();
         int slotsInMins = employer.getSessionTime();
         LocalTime endTime = startTime.plusMinutes(slotsNeeded * slotsInMins);
         HashMap<LocalTime, Boolean> daySchedule = schedule.get(date);

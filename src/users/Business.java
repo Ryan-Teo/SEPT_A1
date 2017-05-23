@@ -27,6 +27,7 @@ public class Business extends User {
 		this.sessionTime = sessionTime;
 		this.openTime = LocalTime.parse(openTime, dtf);
 		this.closeTime = LocalTime.parse(closeTime, dtf);
+		setSessionTime(Integer.parseInt(sessionTime));
 		services.put("General", 1);
 		System.out.println(busName);
 		System.out.println(this.openTime);
@@ -67,7 +68,6 @@ public class Business extends User {
 	
 	//Get length of each time slot in minutes
 	public int getSessionTime(){
-		sessionTimeLocal = Integer.parseInt(sessionTime);
 		return sessionTimeLocal;
 	}
 	

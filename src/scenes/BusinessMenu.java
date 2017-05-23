@@ -281,6 +281,28 @@ public class BusinessMenu extends SceneManager{
 		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
 		grid.add(header, 0, 1, 2, 1);
 		
+		TableView<String>timeTable = new TableView<String>();
+		HashMap<LocalDate, HashMap<LocalTime, Boolean>> schedule = emp.getSchedule();
+		
+		
+		//time
+		TableColumn time = new TableColumn("Time");
+		
+		//monday
+		
+		//tuesday
+		
+		//wednesday
+		
+		//thursday
+		
+		//friday
+		
+		//saturday
+		
+		//sunday
+		
+		
 		empAvail = new Scene(grid, 600, 500);
 	}
 	

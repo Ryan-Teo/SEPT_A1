@@ -31,7 +31,6 @@ public class Booking implements Serializable{
 	}
 	
 	
-	
 	public String getService(){
 		return service;
 	}

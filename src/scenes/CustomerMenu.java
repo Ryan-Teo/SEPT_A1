@@ -26,6 +26,7 @@ import system.Booking;
 import users.Business;
 import users.Customer;
 import users.Employee;
+import users.Service;
 import users.User;
 
 public class CustomerMenu extends SceneManager{
@@ -96,7 +97,7 @@ public class CustomerMenu extends SceneManager{
         	this.custInst = null;
         	});
         
-        customerMenu = new Scene(grid3, 200, 250);
+        customerMenu = new Scene(grid3, 900, 600);
 	}
 	
 	//Customer Add Booking Stuff
@@ -164,7 +165,7 @@ public class CustomerMenu extends SceneManager{
         	customerMenu(custInst);
         	window.setScene(customerMenu);
         });
-        custSelectBus = new Scene(grid, 600, 500);
+        custSelectBus = new Scene(grid, 900, 600);
 	}
 	
 	public void selectService(Business bus){
@@ -182,8 +183,8 @@ public class CustomerMenu extends SceneManager{
         
         ListView<String> serviceList = new ListView<String>(); 
         ObservableList<String> serviceItems = FXCollections.observableArrayList();
-        for(String myService : bus.getServices().keySet()){
-        	serviceItems.add(myService);
+        for(Service myService : bus.getServiceList()){
+        	serviceItems.add(myService.getServiceName());
         }
         serviceList.setItems(serviceItems);
         
@@ -215,7 +216,7 @@ public class CustomerMenu extends SceneManager{
         	window.setScene(custSelectBus);
         });
 		
-		custSelectService = new Scene(grid, 600, 500);
+		custSelectService = new Scene(grid, 900, 600);
 	}
 	
 	public void selectDate(Business bus, String service){
@@ -279,7 +280,7 @@ public class CustomerMenu extends SceneManager{
         });
         
         
-        custSelectDate = new Scene(grid, 600, 500);
+        custSelectDate = new Scene(grid, 900, 600);
         
 	}
 		
@@ -304,7 +305,7 @@ public class CustomerMenu extends SceneManager{
     	openTime = bus.getOpenTime();
     	closeTime = bus.getCloseTime();
     	timeSlot = bus.getSessionTime();
-    	int noOfTimeSlots = bus.getServices().get(service);
+    	int noOfTimeSlots = bus.getService(service).getBlocks();
     	//uhm, get number of timeslots for each service from business
     	//service needs to be selected before time is shown.
     	
@@ -362,7 +363,7 @@ public class CustomerMenu extends SceneManager{
     		window.setScene(custSelectDate);
         });
         
-        custSelectTime = new Scene(grid,600, 500);
+        custSelectTime = new Scene(grid,900, 600);
         
 	}
 	
@@ -423,7 +424,7 @@ public class CustomerMenu extends SceneManager{
         grid.add(selectButton, 3, 3);
         selectButton.setOnAction(e -> {
         	Employee myEmp = emps.get(cb.getSelectionModel().getSelectedIndex());
-        	int bookingLen = bus.getServices().get(service)*bus.getSessionTime();
+        	int bookingLen = bus.getService(service).getBlocks()*bus.getSessionTime();
         	bookings.add(new Booking(date, startTime, startTime.plusMinutes(bookingLen), custInst ,bus, myEmp, service));
         	myEmp.bookEmp(date, startTime, service);
     		logger.info("Booking made!");
@@ -445,7 +446,7 @@ public class CustomerMenu extends SceneManager{
         	window.setScene(custSelectTime);
         });
         
-        custSelectEmp = new Scene(grid, 600, 500);
+        custSelectEmp = new Scene(grid, 900, 600);
 	}
 	
 	//End Customer Add Booking Stuff
@@ -520,7 +521,6 @@ public class CustomerMenu extends SceneManager{
 				showBookingSummary();
 				window.setScene(customerBookingSummary);
 			}
-
 		});
 		
 		Button backToMenuButton = new Button("Return to Menu");
@@ -538,7 +538,7 @@ public class CustomerMenu extends SceneManager{
 			window.setScene(customerMenu);
 		});
 		
-		customerBookingSummary = new Scene(grid, 600, 500);
+		customerBookingSummary = new Scene(grid, 900, 600);
 
 	}
 }

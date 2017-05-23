@@ -14,20 +14,20 @@ public class Business extends User {
 	private static final long serialVersionUID = 2L;
 
 	private final static Logger logger = Logger.getLogger(Business.class);
-	private String busName, sessionTime;
+	private String busName;
 	private ArrayList<Employee> emps = new ArrayList<Employee>();
 	private LocalTime openTime, closeTime;
-	private int sessionTimeLocal;
-	private HashMap<String, Integer> services = new HashMap<String, Integer>();
+	private int sessionTime;
+	private ArrayList<Service> services = new ArrayList<Service>();
 	
 	public Business(String busName, String ownerName, String address, String phone, String username, String password, String openTime, String closeTime, String sessionTime){
 		super(ownerName,username,password,address,phone);
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 		this.busName = busName;
-		this.sessionTime = sessionTime;
+		this.sessionTime = Integer.parseInt(sessionTime);
 		this.openTime = LocalTime.parse(openTime, dtf);
 		this.closeTime = LocalTime.parse(closeTime, dtf);
-		services.put("General", 1);
+		services.add(new Service("General", 1));
 		System.out.println(busName);
 		System.out.println(this.openTime);
 		System.out.println(this.closeTime);
@@ -67,13 +67,12 @@ public class Business extends User {
 	
 	//Get length of each time slot in minutes
 	public int getSessionTime(){
-		sessionTimeLocal = Integer.parseInt(sessionTime);
-		return sessionTimeLocal;
+		return sessionTime;
 	}
 	
 	//Set length of each time slot in minutes
 	public void setSessionTime(int sessionTimeLocal){
-		sessionTime = Integer.toString(sessionTimeLocal);
+		sessionTime = sessionTimeLocal;
 	}
 	
 	//return list of employees
@@ -82,47 +81,73 @@ public class Business extends User {
 	}
 	
 	//Get HM of Services and how many slots each service will take
-	public HashMap<String, Integer> getServices(){
+	public ArrayList<Service> getServiceList(){
 		return services;
+	}
+	
+	public Service getService(String serviceName){
+		Service thisService = null;
+		for(Service myServe : services){
+			if(myServe.getServiceName().equals(serviceName)){
+				thisService = myServe;
+			}
+		}
+		if(thisService == null){
+			logger.debug("This service does not exist, should not happen");
+		}
+		return thisService;
 	}
 	
 	//Adding a service to a business
 	public void addService(String serviceName, int noOfTimeSlots){
-		if(services.containsKey(serviceName)){
-			logger.error("Add Service : Service already exists");
+		//check service dosent exist
+		//check if time slot is more than 1
+		//if not add service
+		for(Service myServe : services){
+			if(myServe.getServiceName().equals(serviceName)){
+				logger.error("Add Service : Service already exists");
+				return;
+			}
 		}
-		else if(noOfTimeSlots<1){ //Minimum 1 slot
+		
+		if(noOfTimeSlots<1){ //Minimum 1 slot
 			logger.error("Each service has to take up at least one time slot");
+			return;
 		}
-		else{
-			services.put(serviceName, noOfTimeSlots); 
-			logger.info( "'"+ serviceName +"'"+" service has been added to the business");
-		}
+		
+		services.add(new Service(serviceName, noOfTimeSlots));
+		logger.info( "'"+ serviceName +"'"+" service has been added to the business");
 	}
 	
 	//Updating a service a business has
 	public void updateService(String serviceName, int noOfTimeSlots){
-		if(services.containsKey(serviceName)){
-			services.put(serviceName, noOfTimeSlots); //LOG
-			logger.info( "'"+ serviceName +"'"+" service has been added updated");
-		}
-		else if(noOfTimeSlots<1){ //Minimum 1 slot
+		if(noOfTimeSlots<1){ //Minimum 1 slot
 			logger.error("Each service has to take up at least one time slot");
+			return;
 		}
-		else{
-			logger.error("Update Service : Service does not exist");
+		
+		for(Service myServe : services){
+			if(myServe.getServiceName().equals(serviceName)){
+				myServe.setBlocks(noOfTimeSlots);
+				logger.info( "'"+ serviceName +"'"+" service has been updated");
+				return;
+			}
 		}
+		
+		logger.error("Update Service : Service does not exist");
+		
 	}
 	
 	//Removing service from business
 	public void removeService(String serviceName){
-		if(services.containsKey(serviceName)){
-			services.remove(serviceName);
-			logger.info("'"+ serviceName +"'"+" service has been removed successfully"); 
+		for(Service myServe : services){
+			if(myServe.getServiceName().equals(serviceName)){
+				services.remove(myServe);
+				logger.info("'"+ serviceName +"'"+" service has been removed successfully"); 
+				return;
+			}
 		}
-		else{
-			logger.info("Remove Service : Service does not exist");
-		}
+		logger.info("Remove Service : Service does not exist");
 	}
 
 	//View all bookings for a business
@@ -165,7 +190,17 @@ public class Business extends User {
 	@Override
 	public boolean makeBooking(LocalDate date, LocalTime startTime, Customer bookCust, Business bus, Employee myEmp,
 			String service, ArrayList<Booking> bookings) {
-		int bookingLen = bus.getServices().get(service)*bus.getSessionTime();
+		Service serveInst = null;
+		for(Service myServe : services){
+			if(myServe.getServiceName().equals(service)){
+				serveInst = myServe;
+			}
+		}
+		if(serveInst == null){
+			logger.debug("serverInst is NULL, should not happen");
+		}
+		
+		int bookingLen = serveInst.getBlocks()*bus.getSessionTime();
     	bookings.add(new Booking(date, startTime, startTime.plusMinutes(bookingLen), bookCust ,bus, myEmp, service));
     	myEmp.bookEmp(date, startTime, service);
     	logger.info("Make booking successful");

@@ -18,6 +18,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -105,7 +109,7 @@ public class MainMenu extends SceneManager{
         		showRegister();
 	        	window.setScene(registerMenu);
         	});
-        mainMenu = new Scene(grid, 600, 250);
+        mainMenu = new Scene(grid, 900, 600);
 	}
 	
 	public void showRegister(){
@@ -161,7 +165,7 @@ public class MainMenu extends SceneManager{
         	});
         
         
-        registerMenu = new Scene(grid2a, 600, 250);
+        registerMenu = new Scene(grid2a, 900, 600);
 	}
 	
 	public void registerCustomer() {
@@ -273,7 +277,7 @@ public class MainMenu extends SceneManager{
         	window.setScene(registerMenu);
         });
         
-        customerRegister = new Scene(grid2, 300, 500);
+        customerRegister = new Scene(grid2, 900, 600);
 	}
 	
 	public void registerOwner() {
@@ -395,7 +399,7 @@ public class MainMenu extends SceneManager{
         grid3.add(busSession, 3, 5);
         
         ChoiceBox<Integer> cbLength = new ChoiceBox<Integer>();
-        cbLength.getItems().addAll(15, 45, 60);
+        cbLength.getItems().addAll(15, 30, 45, 60);
         cbLength.setValue(15);
         cbLength.setTooltip(new Tooltip("Select Duration"));
         cbLength.setMaxWidth(200);
@@ -403,9 +407,6 @@ public class MainMenu extends SceneManager{
         
       
         register.setOnAction(e -> {
-        	
-        	
-        	
         	
         	String fullNameString = fullNameText.getText();
         	String newUserNameString = newUserNameInput.getText();
@@ -460,6 +461,6 @@ public class MainMenu extends SceneManager{
         	window.setScene(registerMenu);
         });
         
-        ownerRegister = new Scene(grid3, 700, 500);
+        ownerRegister = new Scene(grid3, 900, 600);
 	}
 }

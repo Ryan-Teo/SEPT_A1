@@ -121,7 +121,7 @@ public class BusinessTest {
 	public void testAddNewEmp(){
 		emps.add(emp);
 		
-		assertEquals(emps.get(0).getEmpID(),emp.getEmpID());
+		assertEquals(emps.get(0).getName(),"james");
 	}
 	
 }

@@ -495,7 +495,7 @@ public class BusinessMenu extends SceneManager{
         grid2.add(hbBack, 0, 3);
         
         back.setOnAction(e -> {
-    		businessMenu((Business) userInst);
+    		businessMenu(busInst);
     		window.setScene(businessMenu);
         });
         

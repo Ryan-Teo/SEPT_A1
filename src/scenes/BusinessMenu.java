@@ -5,6 +5,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -16,12 +18,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -29,6 +34,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
+import javafx.util.converter.*;
 import system.Account;
 import system.Booking;
 import users.Business;
@@ -127,6 +135,10 @@ public class BusinessMenu extends SceneManager{
         busShowAvail.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
         hbBusShowAvail.getChildren().add(busShowAvail);
         grid3.add(hbBusShowAvail, 0, 5);
+        busShowAvail.setOnAction(e ->{
+        	busShowAvailability(busInst);
+        	window.setScene(busShowAvailable);
+        });
         
         Button busEditServe = new Button("Edit Services");
         HBox hbBusEditServe = new HBox(10);
@@ -159,6 +171,120 @@ public class BusinessMenu extends SceneManager{
         businessMenu = new Scene(grid3, 200, 400);
 	}
 	
+	public void busShowAvailability(Business bus){
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(30, 30, 30, 30));
+		grid.setAlignment(Pos.CENTER);
+		grid.setHgap(10);
+		grid.setVgap(10);
+		
+		Text header = new Text("Worker Hours");
+		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
+		grid.add(header, 0, 1, 2, 1);
+		
+		TableView<Employee>empTable = new TableView<Employee>();
+		ObservableList<Employee>empList = FXCollections.observableArrayList();
+		ArrayList<Employee>empArray = bus.getEmps();
+		
+		for(int i = 0; i < empArray.size(); i++){
+			empList.add(empArray.get(i));
+		}
+		
+		//Employee names
+		TableColumn<Employee, String> empName = new TableColumn<>("Name");
+		empName.setMinWidth(50);
+		empName.setCellValueFactory(new PropertyValueFactory<>("name"));
+	
+		//Day 1
+		TableColumn<Employee, String> day1 = new TableColumn<>("Monday");
+		day1.setMinWidth(50);
+		day1.setCellValueFactory(new PropertyValueFactory<>("monHour"));
+		
+		//Day 2
+		TableColumn<Employee, String> day2 = new TableColumn<>("Tuesday");
+		day2.setMinWidth(50);
+		day2.setCellValueFactory(new PropertyValueFactory<>("tueHour"));
+		
+		//Day 3
+		TableColumn<Employee, String> day3 = new TableColumn<>("Wednesday");
+		day3.setMinWidth(50);
+		day3.setCellValueFactory(new PropertyValueFactory<>("wedHour"));
+		
+		//Day 4
+		
+		TableColumn<Employee, String> day4 = new TableColumn<>("Thursday");
+		day4.setMinWidth(50);
+		day4.setCellValueFactory(new PropertyValueFactory<>("thurHour"));
+		//Day 5
+		TableColumn<Employee, String> day5 = new TableColumn<>("Friday");
+		day5.setMinWidth(50);
+		day5.setCellValueFactory(new PropertyValueFactory<>("friHour"));
+		
+		//Day 6
+		TableColumn<Employee, String> day6 = new TableColumn<>("Saturday");
+		day6.setMinWidth(50);
+		day6.setCellValueFactory(new PropertyValueFactory<>("satHour"));
+		
+		//Day 7
+		TableColumn<Employee, String> day7 = new TableColumn<>("Sunday");
+		day7.setMinWidth(50);
+		day7.setCellValueFactory(new PropertyValueFactory<>("sunHour"));
+		
+		empTable.setItems(empList);
+		empTable.getColumns().addAll(empName, day1, day2, day3, day4, day5, day6, day7);
+		empTable.setPlaceholder(new Label("There are currently no employees"));
+		
+		grid.add(empTable, 0, 3,6, 1);
+		GridPane.setHalignment(empTable, HPos.CENTER);
+		
+		Button accept = new Button("Select");
+    	HBox hbAccept = new HBox(10);
+    	hbAccept.setAlignment(Pos.BOTTOM_RIGHT);
+    	accept.setMinWidth(70);
+    	accept.setMinHeight(30);
+    	accept.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
+        hbAccept.getChildren().add(accept);
+        grid.add(hbAccept, 6, 5);
+        accept.setOnAction(e -> {
+        	if(empTable.getSelectionModel().getSelectedIndex() != -1){
+        	empAvail(empTable.getSelectionModel().getSelectedItem());
+        	window.setScene(empAvail);
+        	}
+        });
+		
+        Button back = new Button("Back");
+        HBox hbBack = new HBox(10);
+        hbBack.setAlignment(Pos.BOTTOM_LEFT);
+        back.setMinWidth(70);
+        back.setMinHeight(30);
+        back.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
+        hbBack.getChildren().add(back);
+        grid.add(hbBack, 5, 5);
+        
+        back.setOnAction(e -> {
+    		businessMenu(busInst);
+    		window.setScene(businessMenu);
+        });
+		
+        busShowAvailable = new Scene(grid, 600, 500);
+	}
+	
+	public void empAvail(Employee emp){
+	//class to show the available time of the individual employee in detail.	
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(30, 30, 30, 30));
+		grid.setAlignment(Pos.CENTER);
+		grid.setHgap(10);
+		grid.setVgap(10);
+		
+		Text header = new Text(emp.getName() + "'s Availability");
+		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
+		grid.add(header, 0, 1, 2, 1);
+		
+		empAvail = new Scene(grid, 600, 500);
+	}
+	
+	
 	public void busViewSummary(Business bus){
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(30, 30, 30, 30));
@@ -168,7 +294,7 @@ public class BusinessMenu extends SceneManager{
 
 		Text header = new Text("Your Summary:");
 		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
-		grid.add(header, 0, 1,2, 1);
+		grid.add(header, 0, 1, 2, 1);
 		
 		TableView<Booking> table = new TableView<Booking>();
 		ObservableList<Booking> bookItems = bus.viewBookingSummary(bookings);
@@ -201,7 +327,6 @@ public class BusinessMenu extends SceneManager{
 		
 		table.setItems(bookItems);
 		table.getColumns().addAll(customer, bookingDate, sessionStart, sessionEnd, emp);
-		System.out.println("Business: " + customer);
 		table.setPlaceholder(new Label("You Currently Have no Bookings"));
 		
 		grid.add(table, 0, 3,6, 1);
@@ -245,7 +370,6 @@ public class BusinessMenu extends SceneManager{
         LocalTime endingTime = LocalTime.parse(endTime, dtf);
         int i = 0;
         do{
-        	System.out.println(initialTime.plusMinutes(i*15));
         	times.add(initialTime.plusMinutes(i*15));
         	i++;
         }while(!initialTime.plusMinutes(i*15).equals(endingTime));
@@ -762,7 +886,7 @@ public class BusinessMenu extends SceneManager{
     		if(monCheck == true && tueCheck == true && wedCheck == true && thuCheck == true && friCheck == true && satCheck == true && sunCheck == true){
     			String msg = "Working times successfully added.";
         		handleGenericSuccess(window, msg);
-        		FIO.saveBus(businesses);
+            	FIO.save(customers, businesses, bookings);
         		businessMenu(busInst);
         		window.setScene(businessMenu);
     		}
@@ -799,38 +923,50 @@ public class BusinessMenu extends SceneManager{
     	grid.setHgap(20);
     	grid.setVgap(20);
     	
-    	ObservableMap<String, Integer> map = FXCollections.observableHashMap();
     	HashMap<String, Integer> services = busInst.getServices();
-    	for(String service : services.keySet()){
-    		map.put(service, services.get(service));
-    	}
-    	
     	
         Text registerTitle = new Text("Services | "+busInst.getBusName());
         registerTitle.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
-        grid.add(registerTitle, 0, 1,2, 1);
+        grid.add(registerTitle, 1, 0);
         
+        ListView<String> serviceList = new ListView<String>(); 
+        ObservableList<String> serviceItems = FXCollections.observableArrayList();
+        for(String myService : busInst.getServices().keySet()){
+        	serviceItems.add(myService + " | " + busInst.getServices().get(myService));
+        }
+        serviceList.setItems(serviceItems);
+        
+        serviceList.setPrefHeight(300);
+        serviceList.setPrefWidth(300);
+        
+        grid.add(serviceList, 1,1);
+ 
 
-        TableView table = new TableView();
-        TableColumn serviceCol = new TableColumn("Service");
-        TableColumn durationCol = new TableColumn("Duration");
         
-        //!!!!REFER TO Adding Maps of Data to the Table on website
         
-        TableColumn<String,Integer> c1 = new TableColumn<String,Integer>("ServiceASD"); //!!!!look at the actual program and see that there is another column already there
-        //c1.setCellValueFactory(p -> p.getValue().getOwner().firstNameProperty());
-        c1.setCellValueFactory(new MapValueFactory("service")); //!!!!may need to change this value, it needs to be the key? put that key in
-        table.getColumns().add(c1);
-
-        //TableColumn<CarOfPerson,String> c2 = new TableColumn<CarOfPerson,String>("last");
-        //c2.setCellValueFactory(p -> p.getValue().getOwner().lastNameProperty());
-        //c2.setCellValueFactory(new PropertyValueFactory<String, Integer>("")));
-        //table.getColumns().add(c2);
         
-        table.getColumns().addAll(serviceCol, durationCol);
+//        
+//        
+//        TableView table = new TableView();
+//        TableColumn serviceCol = new TableColumn("Service");
+//        TableColumn durationCol = new TableColumn("Duration");
+//        
+//        //!!!!REFER TO Adding Maps of Data to the Table on website
+//        
+//        TableColumn<String,Integer> c1 = new TableColumn<String,Integer>("ServiceASD"); //!!!!look at the actual program and see that there is another column already there
+//        //c1.setCellValueFactory(p -> p.getValue().getOwner().firstNameProperty());
+//        c1.setCellValueFactory(new MapValueFactory("service")); //!!!!may need to change this value, it needs to be the key? put that key in
+//        table.getColumns().add(c1);
+//
+//        //TableColumn<CarOfPerson,String> c2 = new TableColumn<CarOfPerson,String>("last");
+//        //c2.setCellValueFactory(p -> p.getValue().getOwner().lastNameProperty());
+//        //c2.setCellValueFactory(new PropertyValueFactory<String, Integer>("")));
+//        //table.getColumns().add(c2);
+//        
+//        table.getColumns().addAll(serviceCol, durationCol);
  
         
-        grid.add(table, 1, 1);
+//        grid.add(table_view, 1, 1);
 //
 //        ObservableList<String> keys = FXCollections.observableArrayList(services.keySet());
 //
@@ -844,6 +980,30 @@ public class BusinessMenu extends SceneManager{
 //
 //		table.getColumns().setAll(column1, column2);
         
+        Button edit = new Button("Edit");
+        HBox hbEdit = new HBox(10);
+        hbEdit.setAlignment(Pos.BOTTOM_RIGHT);
+        edit.setMinWidth(70);
+        edit.setMinHeight(30);
+        edit.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
+        hbEdit.getChildren().add(edit);
+        grid.add(hbEdit, 2, 2);
+        edit.setOnAction(e -> {
+    		//TODO
+        });
+        
+        Button delete = new Button("Delete");
+        HBox hbDel = new HBox(10);
+        hbDel.setAlignment(Pos.BOTTOM_CENTER);
+        delete.setMinWidth(70);
+        delete.setMinHeight(30);
+        delete.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
+        hbDel.getChildren().add(delete);
+        grid.add(hbDel, 1, 2);
+        delete.setOnAction(e -> {
+    		//TODO
+        });
+        
         
         Button back = new Button("Back");
         HBox hbBack = new HBox(10);
@@ -852,7 +1012,7 @@ public class BusinessMenu extends SceneManager{
         back.setMinHeight(30);
         back.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
         hbBack.getChildren().add(back);
-        grid.add(hbBack, 0, 3);
+        grid.add(hbBack, 0, 2);
         back.setOnAction(e -> {
     		businessMenu(busInst);
     		window.setScene(businessMenu);

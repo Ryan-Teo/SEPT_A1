@@ -11,28 +11,26 @@ import javafx.collections.ObservableList;
 import system.Booking;
 
 public class Business extends User {
+	private static final long serialVersionUID = 2L;
 
 	private final static Logger logger = Logger.getLogger(Business.class);
-	private static final long serialVersionUID = 2L;
-	private String busName, openTime, closeTime, sessionTime;
+	private String busName, sessionTime;
 	private ArrayList<Employee> emps = new ArrayList<Employee>();
-	private LocalTime openTimeLocal, closeTimeLocal; //hardcoded
+	private LocalTime openTime, closeTime;
 	private int sessionTimeLocal;
 	private HashMap<String, Integer> services = new HashMap<String, Integer>();
-	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 	
 	public Business(String busName, String ownerName, String address, String phone, String username, String password, String openTime, String closeTime, String sessionTime){
 		super(ownerName,username,password,address,phone);
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 		this.busName = busName;
-		this.openTime = openTime;
-		this.closeTime = closeTime;
 		this.sessionTime = sessionTime;
-//		String start = "09:00" , end = "17:00"; //HARDCODED REMOVE
-		
-		
-//		openTime = LocalTime.parse(start, dtf);
-//		closeTime = LocalTime.parse(end, dtf);
-//		services.put("General", 1);
+		this.openTime = LocalTime.parse(openTime, dtf);
+		this.closeTime = LocalTime.parse(closeTime, dtf);
+		services.put("General", 1);
+		System.out.println(busName);
+		System.out.println(this.openTime);
+		System.out.println(this.closeTime);
 //		services.put("General 2", 2); //HARDCODED REMOVE
 //		services.put("General 3", 3);
 	}
@@ -49,24 +47,22 @@ public class Business extends User {
 	
 	//Get opening hour
 	public LocalTime getOpenTime(){
-		openTimeLocal = LocalTime.parse(openTime, dtf);
-		return openTimeLocal;
+		return openTime;
 	}
 	
 	//Get closing hour
 	public LocalTime getCloseTime(){
-		closeTimeLocal = LocalTime.parse(closeTime, dtf);
-		return closeTimeLocal;
+		return closeTime;
 	}
 	
 	//Set opening hour
 	public void setOpenTime(LocalTime openTimeLocal){
-		this.openTime = openTimeLocal.toString();
+		this.openTime = openTimeLocal;
 	}
 	
 	//Set closing hour
 	public void setCloseTime(LocalTime closeTimeLocal){
-		this.closeTime = closeTimeLocal.toString();
+		this.closeTime = closeTimeLocal;
 	}
 	
 	//Get length of each time slot in minutes
@@ -165,11 +161,15 @@ public class Business extends User {
 	}
 	
 //	Adding booking on behalf of customer
+//	Need to check make sure it does not break anything
 	@Override
 	public boolean makeBooking(LocalDate date, LocalTime startTime, Customer bookCust, Business bus, Employee myEmp,
 			String service, ArrayList<Booking> bookings) {
-		// TODO Auto-generated method stub
-		return false;
+		int bookingLen = bus.getServices().get(service)*bus.getSessionTime();
+    	bookings.add(new Booking(date, startTime, startTime.plusMinutes(bookingLen), bookCust ,bus, myEmp, service));
+    	myEmp.bookEmp(date, startTime, service);
+    	logger.info("Make booking successful");
+		return true;
 	}
 	
 	public boolean slotExists(LocalDate date){

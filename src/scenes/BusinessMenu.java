@@ -122,15 +122,6 @@ public class BusinessMenu extends SceneManager{
         bookingHeading.setTextAlignment(TextAlignment.CENTER);
         grid3.add(bookingHeading, 1, 1);
         
-        Button busAddBooking = new Button("Add Booking");
-        HBox hbBusAddBooking = new HBox(10);
-        hbBusAddBooking.setAlignment(Pos.CENTER);
-        busAddBooking.setMinWidth(150);
-        busAddBooking.setMinHeight(25);
-        busAddBooking.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
-        hbBusAddBooking.getChildren().add(busAddBooking);
-        grid3.add(hbBusAddBooking, 1, 2);
-        
         Button busViewSum = new Button("View Booking Summary");
         HBox hbBusViewSum = new HBox(10);
         hbBusViewSum.setAlignment(Pos.CENTER);
@@ -138,7 +129,7 @@ public class BusinessMenu extends SceneManager{
         busViewSum.setMinHeight(25);
         busViewSum.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
         hbBusViewSum.getChildren().add(busViewSum);
-        grid3.add(hbBusViewSum, 1, 3); 
+        grid3.add(hbBusViewSum, 1, 2); 
         busViewSum.setOnAction(e -> {
         	busViewSummary(busInst);
         	window.setScene(busViewSummary);
@@ -760,6 +751,8 @@ public class BusinessMenu extends SceneManager{
         int i = 0;
         while(!checkTime.plusMinutes(i*timeInMin).isAfter(bus.getCloseTime())){
         	times.add(checkTime.plusMinutes(i*timeInMin));
+        	System.out.println(timeInMin);
+        	System.out.println(i + " : " + checkTime.plusMinutes(i*timeInMin));
         	i++;
         }
         
@@ -986,7 +979,7 @@ public class BusinessMenu extends SceneManager{
     		if(wedStart.getSelectionModel().getSelectedItem().isBefore(wedEnd.getSelectionModel().getSelectedItem()) && cbWednesday.isSelected()){
 	        	newTimes.put("wedStart", wedStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("wedEnd", wedEnd.getSelectionModel().getSelectedItem());
-
+	    		wedCheck = true;
     		}
     		else if(!cbWednesday.isSelected()){
         		wedCheck =true;
@@ -995,6 +988,7 @@ public class BusinessMenu extends SceneManager{
     		if(thurStart.getSelectionModel().getSelectedItem().isBefore(thurEnd.getSelectionModel().getSelectedItem()) && cbThursday.isSelected()){
 	    		newTimes.put("thurStart", thurStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("thurEnd", thurEnd.getSelectionModel().getSelectedItem());
+        		thuCheck =true;
     		}
     		else if(!cbThursday.isSelected()){
         		thuCheck =true;
@@ -1003,6 +997,7 @@ public class BusinessMenu extends SceneManager{
     		if(friStart.getSelectionModel().getSelectedItem().isBefore(friEnd.getSelectionModel().getSelectedItem()) && cbFriday.isSelected()){
 	    		newTimes.put("friStart", friStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("friEnd", friEnd.getSelectionModel().getSelectedItem());
+        		friCheck =true;
     		}
     		else if(!cbFriday.isSelected()){
         		friCheck =true;
@@ -1011,6 +1006,7 @@ public class BusinessMenu extends SceneManager{
     		if(satStart.getSelectionModel().getSelectedItem().isBefore(satEnd.getSelectionModel().getSelectedItem()) && cbSaturday.isSelected()){
 	    		newTimes.put("satStart", satStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("satEnd", satEnd.getSelectionModel().getSelectedItem());
+        		satCheck =true;
     		}
     		else if(!cbSaturday.isSelected()){
         		satCheck =true;
@@ -1019,7 +1015,7 @@ public class BusinessMenu extends SceneManager{
     		if(sunStart.getSelectionModel().getSelectedItem().isBefore(sunEnd.getSelectionModel().getSelectedItem()) && cbSunday.isSelected()){
 	    		newTimes.put("sunStart", sunStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("sunEnd", sunEnd.getSelectionModel().getSelectedItem());
-	        	
+        		sunCheck =true;
     		}
     		else if(!cbSunday.isSelected()){
         		sunCheck =true;
@@ -1087,15 +1083,16 @@ public class BusinessMenu extends SceneManager{
         
 		//Service Column
 		TableColumn<Service,String> service =  new TableColumn<>("Service");
-		service.setMinWidth(50);
+		service.setMinWidth(150);
 		service.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
 		
 		//Block Column
 		TableColumn<Service,Integer> blocks =  new TableColumn<>("Blocks");
-		blocks.setMinWidth(50);
+		blocks.setMinWidth(150);
 		blocks.setCellValueFactory(new PropertyValueFactory<>("blocks"));
     	
     	table.setItems(serviceItems);
+    	table.setMinWidth(300);
     	table.getColumns().addAll(service, blocks);
         grid.add(table, 0,1, 3, 1);
         

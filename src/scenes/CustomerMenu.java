@@ -521,7 +521,6 @@ public class CustomerMenu extends SceneManager{
 				showBookingSummary();
 				window.setScene(customerBookingSummary);
 			}
-
 		});
 		
 		Button backToMenuButton = new Button("Return to Menu");

@@ -14,20 +14,19 @@ public class Business extends User {
 	private static final long serialVersionUID = 2L;
 
 	private final static Logger logger = Logger.getLogger(Business.class);
-	private String busName, sessionTime;
+	private String busName;
 	private ArrayList<Employee> emps = new ArrayList<Employee>();
 	private LocalTime openTime, closeTime;
-	private int sessionTimeLocal;
+	private int sessionTime;
 	private ArrayList<Service> services = new ArrayList<Service>();
 	
 	public Business(String busName, String ownerName, String address, String phone, String username, String password, String openTime, String closeTime, String sessionTime){
 		super(ownerName,username,password,address,phone);
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 		this.busName = busName;
-		this.sessionTime = sessionTime;
+		this.sessionTime = Integer.parseInt(sessionTime);
 		this.openTime = LocalTime.parse(openTime, dtf);
 		this.closeTime = LocalTime.parse(closeTime, dtf);
-		setSessionTime(Integer.parseInt(sessionTime));
 		services.add(new Service("General", 1));
 		System.out.println(busName);
 		System.out.println(this.openTime);
@@ -68,12 +67,12 @@ public class Business extends User {
 	
 	//Get length of each time slot in minutes
 	public int getSessionTime(){
-		return sessionTimeLocal;
+		return sessionTime;
 	}
 	
 	//Set length of each time slot in minutes
 	public void setSessionTime(int sessionTimeLocal){
-		sessionTime = Integer.toString(sessionTimeLocal);
+		sessionTime = sessionTimeLocal;
 	}
 	
 	//return list of employees

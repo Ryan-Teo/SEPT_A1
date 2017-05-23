@@ -399,7 +399,7 @@ public class MainMenu extends SceneManager{
         grid3.add(busSession, 3, 5);
         
         ChoiceBox<Integer> cbLength = new ChoiceBox<Integer>();
-        cbLength.getItems().addAll(15, 45, 60);
+        cbLength.getItems().addAll(15, 30, 45, 60);
         cbLength.setValue(15);
         cbLength.setTooltip(new Tooltip("Select Duration"));
         cbLength.setMaxWidth(200);
@@ -407,9 +407,6 @@ public class MainMenu extends SceneManager{
         
       
         register.setOnAction(e -> {
-        	
-        	
-        	
         	
         	String fullNameString = fullNameText.getText();
         	String newUserNameString = newUserNameInput.getText();

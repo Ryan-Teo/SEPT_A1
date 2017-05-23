@@ -381,6 +381,7 @@ public class BusinessMenu extends SceneManager{
     	grid2.add(title,  0,  0, 2, 1);
     	
         ArrayList<LocalTime> times = new ArrayList<LocalTime>();
+        ArrayList<Integer> sessions = new ArrayList<Integer>();
         
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
         String initTime = "00:00";
@@ -394,36 +395,56 @@ public class BusinessMenu extends SceneManager{
         	i++;
         }while(!initialTime.plusMinutes(i*15).equals(endingTime));
         
+        sessions.add(15);
+        sessions.add(30);
+        sessions.add(45);
+        sessions.add(60);
+        
         ObservableList<LocalTime> timeItems = FXCollections.observableArrayList(times);
+        ObservableList<Integer> sessionItems = FXCollections.observableArrayList(sessions);
         
         LocalTime currentOpen = bus.getOpenTime();
         LocalTime currentClose = bus.getCloseTime();
+        System.out.println("OOEN TIME: " + currentOpen);
+        System.out.println("CLOSE TIME: " + currentClose);
+        
+        int currentSession = bus.getSessionTime();
         
         LocalTime setOpen = timeItems.get(0);
         LocalTime setClose = timeItems.get(0);
+
+        int setSession = sessionItems.get(0);
         
         
+//        for (int j = 0; j < timeItems.size(); j++){
+//        	if (currentOpen == timeItems.get(j)){
+//        		setOpen = currentOpen;
+//        	}
+//        }
+//        
+//        for (int l = 0; l < timeItems.size(); l++){
+//        	if (currentClose == timeItems.get(l)){
+//        		setClose = currentClose;
+//        	}
+//        }
+//        
+//        for (int k = 0; k < sessionItems.size(); k++){
+//        	if (currentSession == sessionItems.get(k)){
+//        		setSession = currentSession;
+//        	}
+//        }
         
-        for (int j = 0; j < timeItems.size(); j++){
-        	if (currentOpen == timeItems.get(j)){
-        		setOpen = currentOpen;
-        	}
-        	if (currentClose == timeItems.get(j)){
-        		setClose = currentClose;
-        	}
-        }
-        
-        ChoiceBox<LocalTime> cbOpen = new ChoiceBox<LocalTime>();
-        cbOpen.setItems(timeItems);
-        cbOpen.setValue(setOpen);
-        cbOpen.setTooltip(new Tooltip("Select Opening Time"));
-        cbOpen.setMinWidth(150);
-        grid2.add(cbOpen, 1, 1);
-    	
-    	Text openLabel = new Text("Opening Time:");
+        Text openLabel = new Text("Opening Time:");
     	openLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, 15));
     	openLabel.minWidth(150);
     	grid2.add(openLabel, 0, 1);
+    	
+        ChoiceBox<LocalTime> cbOpen = new ChoiceBox<LocalTime>();
+        cbOpen.setItems(timeItems);
+        cbOpen.setValue(currentOpen);
+        cbOpen.setTooltip(new Tooltip("Select Opening Time"));
+        cbOpen.setMinWidth(150);
+        grid2.add(cbOpen, 1, 1);
     	
     	Text closeLabel = new Text("Closing Time:");
     	closeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, 15));
@@ -432,11 +453,23 @@ public class BusinessMenu extends SceneManager{
     	
     	ChoiceBox<LocalTime> cbClose = new ChoiceBox<LocalTime>();
         cbClose.setItems(timeItems);
-        cbClose.setValue(setClose);
+        cbClose.setValue(currentClose);
         cbClose.setTooltip(new Tooltip("Select Closing Time"));
         cbClose.setMinWidth(150);
         grid2.add(cbClose, 1, 2);
     	
+        Text sessionLabel = new Text("Session Length (mins):");
+        sessionLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, 15));
+        sessionLabel.minWidth(150);
+    	grid2.add(sessionLabel, 0, 3);
+    	
+        ChoiceBox<Integer> cbSession = new ChoiceBox<Integer>();
+        cbSession.setItems(sessionItems);
+        cbSession.setValue(currentSession);
+        cbSession.setTooltip(new Tooltip("Select Opening Time"));
+        cbSession.setMinWidth(150);
+        grid2.add(cbSession, 1, 3);
+        
     	Button accept = new Button("Change");
     	HBox hbAccept = new HBox(10);
     	hbAccept.setAlignment(Pos.BOTTOM_RIGHT);
@@ -444,32 +477,68 @@ public class BusinessMenu extends SceneManager{
     	accept.setMinHeight(30);
     	accept.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
         hbAccept.getChildren().add(accept);
-        grid2.add(hbAccept, 1, 3);
+        grid2.add(hbAccept, 1, 4);
         accept.setOnAction(e -> {
-        	if(cbOpen.getValue().isBefore(cbClose.getValue())){
-
-        		
+        	Boolean checkBooking = true;
+    		ObservableList<Booking> bookItems = bus.viewBookingSummary(bookings);
+            LocalTime checkStart = null; //swap for error checking
+            LocalTime checkEnd =  null;
+            
+            System.out.println("Bookings: " + bookItems);
+    		
+    		for(int a = 0; a < bookItems.size(); a++){
+    			if(!cbOpen.getValue().isBefore(bookItems.get(a).getStartTime())){
+    				checkBooking = false;
+    				if (checkStart == null){
+    					checkStart = bookItems.get(a).getStartTime();
+    					checkEnd = bookItems.get(a).getEndTime();
+    				}
+    				else if(bookItems.get(a).getStartTime().isBefore(checkStart)){
+    					checkStart = bookItems.get(a).getStartTime();
+    				}
+    				else if(bookItems.get(a).getEndTime().isAfter(checkEnd)){
+    					checkEnd = bookItems.get(a).getEndTime();
+    				}
+    			}	
+    			if(!cbClose.getValue().isAfter(bookItems.get(a).getEndTime())){
+    				checkBooking = false;
+    				if (checkEnd == null){
+    					checkStart = bookItems.get(a).getStartTime();
+    					checkEnd = bookItems.get(a).getEndTime();
+    				}
+    				if(bookItems.get(a).getEndTime().isAfter(checkEnd)){
+    					checkEnd = bookItems.get(a).getEndTime();
+    				}
+    			}
+    		}
+        	
+        	if(cbOpen.getValue().isBefore(cbClose.getValue()) && checkBooking == true){
         		bus.setOpenTime(cbOpen.getValue());
         		bus.setCloseTime(cbClose.getValue());
+        		bus.setSessionTime(cbSession.getValue());
         		
         		//logger goes here?
         		
         		String msg = "Business Hours Successfully Changed: \n"
         				+ "Opening Hours: " + cbOpen.getValue() + "\n"
-        				+ "Closing Hours: " + cbClose.getValue();
+        				+ "Closing Hours: " + cbClose.getValue() + "\n"
+        				+ "Session Time: " + cbSession.getValue() + " mins";
         		
         		handleGenericSuccess(window, msg);
-        		
+        		FIO.saveBus(businesses);
         		businessMenu(busInst);
         		window.setScene(businessMenu);
-        		
-        		//window saying that times have been successfully changed please!  + New working times.
         		}
+        	else if(checkBooking == false){
+        		String msg = "Unable to change opening hours \n"
+        				+ "due to pre-existing booking time clashes: \n"
+        				+ "Earliest Booking Start: " + checkStart + "\n"
+        				+ "Latest Booking End    : " + checkEnd;
+        		handleGenericFail(window, msg);
+        	}
         	else{
         		String msg = "Invalid hours, please fix.";
         		handleGenericFail(window, msg);
-        		
-        		//error window please!
         	}
         });
     	
@@ -480,7 +549,7 @@ public class BusinessMenu extends SceneManager{
         back.setMinHeight(30);
         back.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
         hbBack.getChildren().add(back);
-        grid2.add(hbBack, 0, 3);
+        grid2.add(hbBack, 0, 4);
         
         back.setOnAction(e -> {
     		businessMenu(busInst);

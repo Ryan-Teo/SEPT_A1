@@ -66,9 +66,10 @@ public class SceneManager {
 	}
 	
 	public void show(){
-        window.setMinHeight(300);
-        window.setMinWidth(600);
+        window.setMinHeight(600);
+        window.setMinWidth(900);
         window.setScene(mainMenu);
+//        window.setFullScreen(true);
         window.show();
 	}
 
@@ -167,7 +168,7 @@ public class SceneManager {
         GridPane.setHalignment(back, HPos.CENTER);
         dialogVbox.setAlignment(Pos.CENTER);
         
-        Scene dialogScene = new Scene(dialogVbox, 300, 100);
+        Scene dialogScene = new Scene(dialogVbox, 300, 200);
         dialog.setScene(dialogScene);
         dialog.show();
     }

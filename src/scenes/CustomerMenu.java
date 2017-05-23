@@ -96,7 +96,7 @@ public class CustomerMenu extends SceneManager{
         	this.custInst = null;
         	});
         
-        customerMenu = new Scene(grid3, 200, 250);
+        customerMenu = new Scene(grid3, 900, 600);
 	}
 	
 	//Customer Add Booking Stuff
@@ -164,7 +164,7 @@ public class CustomerMenu extends SceneManager{
         	customerMenu(custInst);
         	window.setScene(customerMenu);
         });
-        custSelectBus = new Scene(grid, 600, 500);
+        custSelectBus = new Scene(grid, 900, 600);
 	}
 	
 	public void selectService(Business bus){
@@ -215,7 +215,7 @@ public class CustomerMenu extends SceneManager{
         	window.setScene(custSelectBus);
         });
 		
-		custSelectService = new Scene(grid, 600, 500);
+		custSelectService = new Scene(grid, 900, 600);
 	}
 	
 	public void selectDate(Business bus, String service){
@@ -279,7 +279,7 @@ public class CustomerMenu extends SceneManager{
         });
         
         
-        custSelectDate = new Scene(grid, 600, 500);
+        custSelectDate = new Scene(grid, 900, 600);
         
 	}
 		
@@ -362,7 +362,7 @@ public class CustomerMenu extends SceneManager{
     		window.setScene(custSelectDate);
         });
         
-        custSelectTime = new Scene(grid,600, 500);
+        custSelectTime = new Scene(grid,900, 600);
         
 	}
 	
@@ -445,7 +445,7 @@ public class CustomerMenu extends SceneManager{
         	window.setScene(custSelectTime);
         });
         
-        custSelectEmp = new Scene(grid, 600, 500);
+        custSelectEmp = new Scene(grid, 900, 600);
 	}
 	
 	//End Customer Add Booking Stuff
@@ -538,7 +538,7 @@ public class CustomerMenu extends SceneManager{
 			window.setScene(customerMenu);
 		});
 		
-		customerBookingSummary = new Scene(grid, 600, 500);
+		customerBookingSummary = new Scene(grid, 900, 600);
 
 	}
 }

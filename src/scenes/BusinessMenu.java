@@ -33,6 +33,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -58,12 +59,19 @@ public class BusinessMenu extends SceneManager{
         GridPane grid3 = new GridPane();
     	grid3.setPadding(new Insets(30, 30, 30, 30));
     	grid3.setAlignment(Pos.CENTER);
-    	grid3.setHgap(10);
+    	grid3.setHgap(30);
     	grid3.setVgap(10);
         
     	Text busTitle = new Text("Welcome --" + busInst.getName() + "--");
     	busTitle.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
-        grid3.add(busTitle, 0, 0, 1, 1);
+    	busTitle.setTextAlignment(TextAlignment.CENTER);
+        grid3.add(busTitle, 0, 0, 3, 1);
+        
+        Text employeeHeading = new Text("Employee");
+        employeeHeading.setUnderline(true);
+        employeeHeading.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        employeeHeading.setTextAlignment(TextAlignment.CENTER);
+        grid3.add(employeeHeading, 0, 1);
         
         Button busAddEmp = new Button("Add New Employee");
         HBox hbBusAddEmp = new HBox(10);
@@ -72,24 +80,84 @@ public class BusinessMenu extends SceneManager{
         busAddEmp.setMinHeight(25);
         busAddEmp.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
         hbBusAddEmp.getChildren().add(busAddEmp);
-        grid3.add(hbBusAddEmp, 0, 1);
+        grid3.add(hbBusAddEmp, 0, 2);
         busAddEmp.setOnAction(e -> {
         	addEmp(busInst);
         	window.setScene(busAddEmpSc);
         });
         
     
-        Button busWorkingTime = new Button("Add Working Time");
+        Button busWorkingTime = new Button("Add Emp. Working Time");
         HBox hbBusWorkingTime = new HBox(10);
         hbBusWorkingTime.setAlignment(Pos.CENTER);
         busWorkingTime.setMinWidth(150);
         busWorkingTime.setMinHeight(25);
         busWorkingTime.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
         hbBusWorkingTime.getChildren().add(busWorkingTime);
-        grid3.add(hbBusWorkingTime, 0, 2);
+        grid3.add(hbBusWorkingTime, 0, 3);
         busWorkingTime.setOnAction(e -> {
         	busSelectEmp(busInst);
         	window.setScene(busSelectEmp);
+        });
+        
+        Button busShowAvail = new Button("Show Employee Availability");
+        HBox hbBusShowAvail = new HBox(10);
+        hbBusShowAvail.setAlignment(Pos.CENTER);
+        busShowAvail.setMinWidth(150);
+        busShowAvail.setMinHeight(25);
+        busShowAvail.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
+        hbBusShowAvail.getChildren().add(busShowAvail);
+        grid3.add(hbBusShowAvail, 0, 4);
+        busShowAvail.setOnAction(e ->{
+        	busShowAvailability(busInst);
+        	window.setScene(busShowAvailable);
+        });
+        
+        Text bookingHeading = new Text("Bookings");
+        bookingHeading.setUnderline(true);
+        bookingHeading.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        bookingHeading.setTextAlignment(TextAlignment.CENTER);
+        grid3.add(bookingHeading, 1, 1);
+        
+        Button busAddBooking = new Button("Add Booking");
+        HBox hbBusAddBooking = new HBox(10);
+        hbBusAddBooking.setAlignment(Pos.CENTER);
+        busAddBooking.setMinWidth(150);
+        busAddBooking.setMinHeight(25);
+        busAddBooking.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
+        hbBusAddBooking.getChildren().add(busAddBooking);
+        grid3.add(hbBusAddBooking, 1, 2);
+        
+        Button busViewSum = new Button("View Booking Summary");
+        HBox hbBusViewSum = new HBox(10);
+        hbBusViewSum.setAlignment(Pos.CENTER);
+        busViewSum.setMinWidth(150);
+        busViewSum.setMinHeight(25);
+        busViewSum.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
+        hbBusViewSum.getChildren().add(busViewSum);
+        grid3.add(hbBusViewSum, 1, 3); 
+        busViewSum.setOnAction(e -> {
+        	busViewSummary(busInst);
+        	window.setScene(busViewSummary);
+        });
+        
+        Text settingHeading = new Text("Settings");
+        settingHeading.setUnderline(true);
+        settingHeading.setFont(Font.font("Rockwell", FontWeight.NORMAL, 15));
+        settingHeading.setTextAlignment(TextAlignment.CENTER);
+        grid3.add(settingHeading, 2, 1);
+        
+        Button busEditServe = new Button("Edit Services");
+        HBox hbBusEditServe = new HBox(10);
+        hbBusEditServe.setAlignment(Pos.CENTER);
+        busEditServe.setMinWidth(150);
+        busEditServe.setMinHeight(25);
+        busEditServe.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
+        hbBusEditServe.getChildren().add(busEditServe);
+        grid3.add(hbBusEditServe, 2, 2);
+        busEditServe.setOnAction(e -> {
+        	busShowServices();
+        	window.setScene(busShowServices);
         });
         
         Button busChangeWorkTime = new Button("Change Opening Hours");
@@ -99,58 +167,10 @@ public class BusinessMenu extends SceneManager{
         busChangeWorkTime.setMinHeight(25);
         busChangeWorkTime.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
         hbBusChangeWorkTime.getChildren().add(busChangeWorkTime);
-        grid3.add(hbBusChangeWorkTime, 0, 3);
+        grid3.add(hbBusChangeWorkTime, 2, 3);
         busChangeWorkTime.setOnAction(e -> {
         	busChangeHours(busInst);
         	window.setScene(busChangeHours);
-        });
-        
-        Button busViewSum = new Button("View Booking Summary");
-        HBox hbBusViewSum = new HBox(10);
-        hbBusViewSum.setAlignment(Pos.CENTER);
-        busViewSum.setMinWidth(150);
-        busViewSum.setMinHeight(25);
-        busViewSum.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
-        hbBusViewSum.getChildren().add(busViewSum);
-        grid3.add(hbBusViewSum, 0, 9); //PLEASE REPOSITION
-        busViewSum.setOnAction(e -> {
-        	busViewSummary(busInst);
-        	window.setScene(busViewSummary);
-        });
-        
-        Button busAddBooking = new Button("Add Booking");
-        HBox hbBusAddBooking = new HBox(10);
-        hbBusAddBooking.setAlignment(Pos.CENTER);
-        busAddBooking.setMinWidth(150);
-        busAddBooking.setMinHeight(25);
-        busAddBooking.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
-        hbBusAddBooking.getChildren().add(busAddBooking);
-        grid3.add(hbBusAddBooking, 0, 4);
-        
-        Button busShowAvail = new Button("Show Employee Availability");
-        HBox hbBusShowAvail = new HBox(10);
-        hbBusShowAvail.setAlignment(Pos.CENTER);
-        busShowAvail.setMinWidth(150);
-        busShowAvail.setMinHeight(25);
-        busShowAvail.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
-        hbBusShowAvail.getChildren().add(busShowAvail);
-        grid3.add(hbBusShowAvail, 0, 5);
-        busShowAvail.setOnAction(e ->{
-        	busShowAvailability(busInst);
-        	window.setScene(busShowAvailable);
-        });
-        
-        Button busEditServe = new Button("Edit Services");
-        HBox hbBusEditServe = new HBox(10);
-        hbBusEditServe.setAlignment(Pos.CENTER);
-        busEditServe.setMinWidth(150);
-        busEditServe.setMinHeight(25);
-        busEditServe.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
-        hbBusEditServe.getChildren().add(busEditServe);
-        grid3.add(hbBusEditServe, 0, 6);
-        busEditServe.setOnAction(e -> {
-        	busShowServices();
-        	window.setScene(busShowServices);
         });
         
         Button busLogOut = new Button("Logout");
@@ -158,9 +178,9 @@ public class BusinessMenu extends SceneManager{
         hbBusLogOut.setAlignment(Pos.CENTER);
         busLogOut.setMinWidth(150);
         busLogOut.setMinHeight(25);
-        busLogOut.setStyle("-fx-font: 10 verdana; -fx-base: #79B8FF;");
+        busLogOut.setStyle("-fx-font: 10 verdana; -fx-base: #AA3939;");
         hbBusLogOut.getChildren().add(busLogOut);
-        grid3.add(hbBusLogOut, 0, 7);
+        grid3.add(hbBusLogOut, 2, 4);
         busLogOut.setOnAction(e -> {
         	menuScreen.showMainMenu();
         	window.setScene(mainMenu);
@@ -168,7 +188,7 @@ public class BusinessMenu extends SceneManager{
         	this.busInst = null;
         	});
         
-        businessMenu = new Scene(grid3, 200, 400);
+        businessMenu = new Scene(grid3, 900, 600);
 	}
 	
 	public void busShowAvailability(Business bus){
@@ -192,49 +212,49 @@ public class BusinessMenu extends SceneManager{
 		
 		//Employee names
 		TableColumn<Employee, String> empName = new TableColumn<>("Name");
-		empName.setMinWidth(50);
+		empName.setMinWidth(100);
 		empName.setCellValueFactory(new PropertyValueFactory<>("name"));
 	
 		//Day 1
 		TableColumn<Employee, String> day1 = new TableColumn<>("Monday");
-		day1.setMinWidth(50);
+		day1.setMinWidth(100);
 		day1.setCellValueFactory(new PropertyValueFactory<>("monHour"));
 		
 		//Day 2
 		TableColumn<Employee, String> day2 = new TableColumn<>("Tuesday");
-		day2.setMinWidth(50);
+		day2.setMinWidth(100);
 		day2.setCellValueFactory(new PropertyValueFactory<>("tueHour"));
 		
 		//Day 3
 		TableColumn<Employee, String> day3 = new TableColumn<>("Wednesday");
-		day3.setMinWidth(50);
+		day3.setMinWidth(100);
 		day3.setCellValueFactory(new PropertyValueFactory<>("wedHour"));
 		
 		//Day 4
 		
 		TableColumn<Employee, String> day4 = new TableColumn<>("Thursday");
-		day4.setMinWidth(50);
+		day4.setMinWidth(100);
 		day4.setCellValueFactory(new PropertyValueFactory<>("thurHour"));
 		//Day 5
 		TableColumn<Employee, String> day5 = new TableColumn<>("Friday");
-		day5.setMinWidth(50);
+		day5.setMinWidth(100);
 		day5.setCellValueFactory(new PropertyValueFactory<>("friHour"));
 		
 		//Day 6
 		TableColumn<Employee, String> day6 = new TableColumn<>("Saturday");
-		day6.setMinWidth(50);
+		day6.setMinWidth(100);
 		day6.setCellValueFactory(new PropertyValueFactory<>("satHour"));
 		
 		//Day 7
 		TableColumn<Employee, String> day7 = new TableColumn<>("Sunday");
-		day7.setMinWidth(50);
+		day7.setMinWidth(100);
 		day7.setCellValueFactory(new PropertyValueFactory<>("sunHour"));
 		
 		empTable.setItems(empList);
 		empTable.getColumns().addAll(empName, day1, day2, day3, day4, day5, day6, day7);
 		empTable.setPlaceholder(new Label("There are currently no employees"));
 		
-		grid.add(empTable, 0, 3,6, 1);
+		grid.add(empTable, 0, 3,8, 1);
 		GridPane.setHalignment(empTable, HPos.CENTER);
 		
 		Button accept = new Button("Select");
@@ -244,7 +264,7 @@ public class BusinessMenu extends SceneManager{
     	accept.setMinHeight(30);
     	accept.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
         hbAccept.getChildren().add(accept);
-        grid.add(hbAccept, 6, 5);
+        grid.add(hbAccept, 7, 5);
         accept.setOnAction(e -> {
         	if(empTable.getSelectionModel().getSelectedIndex() != -1){
         	empAvail(empTable.getSelectionModel().getSelectedItem());
@@ -259,14 +279,14 @@ public class BusinessMenu extends SceneManager{
         back.setMinHeight(30);
         back.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
         hbBack.getChildren().add(back);
-        grid.add(hbBack, 5, 5);
+        grid.add(hbBack, 1, 5);
         
         back.setOnAction(e -> {
     		businessMenu(busInst);
     		window.setScene(businessMenu);
         });
 		
-        busShowAvailable = new Scene(grid, 600, 500);
+        busShowAvailable = new Scene(grid, 900, 600);
 	}
 	
 	public void empAvail(Employee emp){
@@ -302,9 +322,9 @@ public class BusinessMenu extends SceneManager{
 		
 		//sunday
 		
-		
-		empAvail = new Scene(grid, 600, 500);
-	}
+
+		empAvail = new Scene(grid, 900, 600);
+}
 	
 	
 	public void busViewSummary(Business bus){
@@ -368,19 +388,19 @@ public class BusinessMenu extends SceneManager{
     		window.setScene(businessMenu);
         });
 		
-		busViewSummary = new Scene(grid, 600, 500);
+		busViewSummary = new Scene(grid, 900, 600);
 	}
 	
 	public void busChangeHours(Business bus){
 		GridPane grid2 = new GridPane();
     	grid2.setPadding(new Insets(30, 30, 30, 30));
     	grid2.setAlignment(Pos.CENTER);
-    	grid2.setHgap(20);
+    	grid2.setHgap(100);
     	grid2.setVgap(20);
     	
     	Text title = new Text ("Select working hours");
     	title.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
-    	grid2.add(title,  0,  1, 2, 1);
+    	grid2.add(title,  0,  0, 2, 1);
     	
         ArrayList<LocalTime> times = new ArrayList<LocalTime>();
         
@@ -397,33 +417,56 @@ public class BusinessMenu extends SceneManager{
         }while(!initialTime.plusMinutes(i*15).equals(endingTime));
         
         ObservableList<LocalTime> timeItems = FXCollections.observableArrayList(times);
-           
+        
+        LocalTime currentOpen = bus.getOpenTime();
+        LocalTime currentClose = bus.getCloseTime();
+        
+        LocalTime setOpen = timeItems.get(0);
+        LocalTime setClose = timeItems.get(0);
+        
+        
+        
+        for (int j = 0; j < timeItems.size(); j++){
+        	if (currentOpen == timeItems.get(j)){
+        		setOpen = currentOpen;
+        	}
+        	if (currentClose == timeItems.get(j)){
+        		setClose = currentClose;
+        	}
+        }
+        
         ChoiceBox<LocalTime> cbOpen = new ChoiceBox<LocalTime>();
         cbOpen.setItems(timeItems);
-        cbOpen.setValue(timeItems.get(0));
+        cbOpen.setValue(setOpen);
         cbOpen.setTooltip(new Tooltip("Select Opening Time"));
-        grid2.add(cbOpen, 1, 2);
+        cbOpen.setMinWidth(150);
+        grid2.add(cbOpen, 1, 1);
     	
-    	Label openLabel = new Label("Opening Time:");
-    	grid2.add(openLabel, 0, 2);
+    	Text openLabel = new Text("Opening Time:");
+    	openLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, 15));
+    	openLabel.minWidth(150);
+    	grid2.add(openLabel, 0, 1);
     	
-    	Label closeLabel = new Label("Closing Time:");
-    	grid2.add(closeLabel, 0, 3);
+    	Text closeLabel = new Text("Closing Time:");
+    	closeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, 15));
+    	closeLabel.minWidth(150);
+    	grid2.add(closeLabel, 0, 2);
     	
     	ChoiceBox<LocalTime> cbClose = new ChoiceBox<LocalTime>();
         cbClose.setItems(timeItems);
-        cbClose.setValue(timeItems.get(0));
+        cbClose.setValue(setClose);
         cbClose.setTooltip(new Tooltip("Select Closing Time"));
-        grid2.add(cbClose, 1, 3);
+        cbClose.setMinWidth(150);
+        grid2.add(cbClose, 1, 2);
     	
-    	Button accept = new Button("Change Times");
+    	Button accept = new Button("Change");
     	HBox hbAccept = new HBox(10);
     	hbAccept.setAlignment(Pos.BOTTOM_RIGHT);
     	accept.setMinWidth(70);
     	accept.setMinHeight(30);
-    	accept.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
+    	accept.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
         hbAccept.getChildren().add(accept);
-        grid2.add(hbAccept, 6, 5);
+        grid2.add(hbAccept, 1, 3);
         accept.setOnAction(e -> {
         	if(cbOpen.getValue().isBefore(cbClose.getValue())){
 
@@ -433,12 +476,21 @@ public class BusinessMenu extends SceneManager{
         		
         		//logger goes here?
         		
+        		String msg = "Business Hours Successfully Changed: \n"
+        				+ "Opening Hours: " + cbOpen.getValue() + "\n"
+        				+ "Closing Hours: " + cbClose.getValue();
+        		
+        		handleGenericSuccess(window, msg);
+        		
         		businessMenu(busInst);
         		window.setScene(businessMenu);
         		
         		//window saying that times have been successfully changed please!  + New working times.
         		}
         	else{
+        		String msg = "Invalid hours, please fix.";
+        		handleGenericFail(window, msg);
+        		
         		//error window please!
         	}
         });
@@ -450,14 +502,14 @@ public class BusinessMenu extends SceneManager{
         back.setMinHeight(30);
         back.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
         hbBack.getChildren().add(back);
-        grid2.add(hbBack, 5, 5);
+        grid2.add(hbBack, 0, 3);
         
         back.setOnAction(e -> {
     		businessMenu(busInst);
     		window.setScene(businessMenu);
         });
         
-        busChangeHours = new Scene(grid2, 600, 500);
+        busChangeHours = new Scene(grid2, 900, 600);
 	}
 	
 	public void addEmp(Business bus){
@@ -521,7 +573,7 @@ public class BusinessMenu extends SceneManager{
     		window.setScene(businessMenu);
         });
         
-        busAddEmpSc = new Scene(grid2, 600, 500);
+        busAddEmpSc = new Scene(grid2, 900, 600);
 	}
 	public void busSelectEmp(Business bus){
 		GridPane grid = new GridPane();
@@ -587,7 +639,7 @@ public class BusinessMenu extends SceneManager{
         });
         
         
-        busSelectEmp = new Scene(grid, 600, 500);
+        busSelectEmp = new Scene(grid, 900, 600);
 	}
 	public void addWorkTime(Employee emp, Business bus){
 		//add to employees hm HashMap<LocalDate, HashMap<LocalTime, Boolean>>
@@ -932,7 +984,7 @@ public class BusinessMenu extends SceneManager{
         	window.setScene(busSelectEmp);
         });
         
-        busAddWorkTime = new Scene(grid2, 600, 500);
+        busAddWorkTime = new Scene(grid2,900, 600);
 	}
 	public void addDays(Stage window, int row, String day, GridPane grid){
 		
@@ -961,7 +1013,7 @@ public class BusinessMenu extends SceneManager{
         serviceList.setPrefHeight(300);
         serviceList.setPrefWidth(300);
         
-        grid.add(serviceList, 1,1);
+        grid.add(serviceList, 0,1, 3, 1);
  
 
         
@@ -1041,7 +1093,7 @@ public class BusinessMenu extends SceneManager{
         });
         
         
-        busShowServices = new Scene(grid, 600, 500);
+        busShowServices = new Scene(grid, 900, 600);
 	}
 	
 

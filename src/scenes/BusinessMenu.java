@@ -1121,17 +1121,9 @@ public class BusinessMenu extends SceneManager{
         edit.setOnAction(e -> {
         	if(table.getSelectionModel().getSelectedIndex() != -1){
 				Service serviceInst = table.getSelectionModel().getSelectedItem();
-				//TODO cancel booking
-//				
-//				if((custInst).cancelBooking(bookings, bookInst)){
-//					logger.info("Booking has been succesfully cancelled");
-//					FIO.save(customers, businesses, bookings);
-//				}
-//				logger.info("A booking has been cancelled, summary is updated");
-//
-//				showBookingSummary();
-//				window.setScene(customerBookingSummary);
-			}
+				editService(serviceInst);
+				window.setScene(busEditService);
+        	}	
         });
         
         
@@ -1175,7 +1167,7 @@ public class BusinessMenu extends SceneManager{
         grid2.add(blocks, 0, 3);
 
         ChoiceBox<Integer> cbOpen = new ChoiceBox<Integer>();
-        cbOpen.getItems().addAll(1,2,3,4);
+        cbOpen.getItems().addAll(1,2,3,4,5);
         cbOpen.setValue(1);
         cbOpen.setTooltip(new Tooltip("Select required blocks"));
         cbOpen.setMinWidth(150);
@@ -1228,5 +1220,59 @@ public class BusinessMenu extends SceneManager{
         busAddService = new Scene(grid2, 900, 600);
 	}
 	
+	public void editService(Service thisService){
+		GridPane grid2 = new GridPane();
+		grid2.setPadding(new Insets(30, 30, 30, 30));
+		grid2.setAlignment(Pos.CENTER);
+		grid2.setHgap(20);
+		grid2.setVgap(20);
+	
+    
+		Text registerTitle = new Text("Edit Service | "+ thisService.getServiceName());
+		registerTitle.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
+		grid2.add(registerTitle, 0, 1,2, 1);
+		
+        Label blocks = new Label("Required blocks: ");
+        grid2.add(blocks, 0, 2);
+		
+        ChoiceBox<Integer> cbOpen = new ChoiceBox<Integer>();
+        cbOpen.getItems().addAll(1,2,3,4,5);
+        cbOpen.setValue(1);
+        cbOpen.setTooltip(new Tooltip("Select required blocks"));
+        cbOpen.setMinWidth(150);
+        grid2.add(cbOpen, 1, 2);
+		
+        Button register = new Button("Change");
+        HBox hbRegister = new HBox(10);
+        hbRegister.setAlignment(Pos.BOTTOM_RIGHT);
+        register.setMinWidth(70);
+        register.setMinHeight(30);
+        register.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
+        hbRegister.getChildren().add(register);
+        grid2.add(hbRegister, 1, 3);
+        register.setOnAction(e -> {
+        	int serviceBlock = cbOpen.getSelectionModel().getSelectedItem();
+        	busInst.updateService(thisService.getServiceName(), serviceBlock);
+        	FIO.saveBus(businesses);
+    		busShowServices();
+    		window.setScene(busShowServices);
+        });
+        
+        Button back = new Button("Back");
+        HBox hbBack = new HBox(10);
+        hbBack.setAlignment(Pos.BOTTOM_LEFT);
+        back.setMinWidth(70);
+        back.setMinHeight(30);
+        back.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
+        hbBack.getChildren().add(back);
+        grid2.add(hbBack, 0, 3);
+        
+        back.setOnAction(e -> {
+    		busShowServices();
+    		window.setScene(busShowServices);
+        });
+        
+		busEditService = new Scene(grid2, 900, 600);
+	}
 
 }

@@ -26,6 +26,7 @@ import system.Booking;
 import users.Business;
 import users.Customer;
 import users.Employee;
+import users.Service;
 import users.User;
 
 public class CustomerMenu extends SceneManager{
@@ -182,8 +183,8 @@ public class CustomerMenu extends SceneManager{
         
         ListView<String> serviceList = new ListView<String>(); 
         ObservableList<String> serviceItems = FXCollections.observableArrayList();
-        for(String myService : bus.getServices().keySet()){
-        	serviceItems.add(myService);
+        for(Service myService : bus.getServiceList()){
+        	serviceItems.add(myService.getServiceName());
         }
         serviceList.setItems(serviceItems);
         
@@ -304,7 +305,7 @@ public class CustomerMenu extends SceneManager{
     	openTime = bus.getOpenTime();
     	closeTime = bus.getCloseTime();
     	timeSlot = bus.getSessionTime();
-    	int noOfTimeSlots = bus.getServices().get(service);
+    	int noOfTimeSlots = bus.getService(service).getBlocks();
     	//uhm, get number of timeslots for each service from business
     	//service needs to be selected before time is shown.
     	
@@ -423,7 +424,7 @@ public class CustomerMenu extends SceneManager{
         grid.add(selectButton, 3, 3);
         selectButton.setOnAction(e -> {
         	Employee myEmp = emps.get(cb.getSelectionModel().getSelectedIndex());
-        	int bookingLen = bus.getServices().get(service)*bus.getSessionTime();
+        	int bookingLen = bus.getService(service).getBlocks()*bus.getSessionTime();
         	bookings.add(new Booking(date, startTime, startTime.plusMinutes(bookingLen), custInst ,bus, myEmp, service));
         	myEmp.bookEmp(date, startTime, service);
     		logger.info("Booking made!");

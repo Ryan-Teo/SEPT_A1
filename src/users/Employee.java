@@ -123,7 +123,7 @@ public class Employee implements Serializable {
 	
 	public boolean empFree(LocalDate date, LocalTime startTime, String service){
 		boolean freeCheck = false;
-        int slotsNeeded = employer.getServices().get(service);
+        int slotsNeeded = employer.getService(service).getBlocks();
         int slotsInMins = employer.getSessionTime();
         LocalTime endTime = startTime.plusMinutes(slotsNeeded * slotsInMins);
         HashMap<LocalTime, Boolean> daySchedule = schedule.get(date);
@@ -153,7 +153,7 @@ public class Employee implements Serializable {
 	}
 	
 	public void bookEmp(LocalDate date, LocalTime startTime, String service){
-        int slotsNeeded = employer.getServices().get(service);
+		int slotsNeeded = employer.getService(service).getBlocks();
         int slotsInMins = employer.getSessionTime();
         LocalTime endTime = startTime.plusMinutes(slotsNeeded * slotsInMins);
         HashMap<LocalTime, Boolean> daySchedule = schedule.get(date);
@@ -179,7 +179,7 @@ public class Employee implements Serializable {
 	}
 	
 	public void unbookEmp(LocalDate date, LocalTime startTime, String service){
-        int slotsNeeded = employer.getServices().get(service);
+		int slotsNeeded = employer.getService(service).getBlocks();
         int slotsInMins = employer.getSessionTime();
         LocalTime endTime = startTime.plusMinutes(slotsNeeded * slotsInMins);
         HashMap<LocalTime, Boolean> daySchedule = schedule.get(date);

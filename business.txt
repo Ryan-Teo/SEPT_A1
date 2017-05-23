@@ -1,6 +1,6 @@
 Sal's Hair Salon|Harry|1 Alumbra St|0400000000|harryOwner|password|09:00|15:00|0
 East Medical Centre|Ryan|10 Car St|0411111111|ryanOwner|password|09:00|15:00|0
-Manny's Manicures|Anton|100 Leianne St|0422222222|antonOwner|password|04:15|06:45|0
+Manny's Manicures|Anton|100 Leianne St|0422222222|antonOwner|password|09:00|15:00|0
 Don't Shop, Adopt|Julia|3 Puppy St|0433333333|juliaOwner|password|09:00|15:00|0
 Doctor Approved|Sally|35 Novia St|0444444444|sallyOwner|password|09:00|15:00|0
 Netherlands|Nathan|40 Oak St|0455555555|nathanOwner|password|09:00|15:00|0

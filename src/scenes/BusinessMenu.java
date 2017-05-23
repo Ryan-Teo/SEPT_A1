@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -43,6 +45,7 @@ import system.Booking;
 import users.Business;
 import users.Customer;
 import users.Employee;
+import users.Service;
 
 public class BusinessMenu extends SceneManager{
 	String empNamePattern = "^[a-zA-Z ]*$";
@@ -997,85 +1000,72 @@ public class BusinessMenu extends SceneManager{
     	grid.setHgap(20);
     	grid.setVgap(20);
     	
-    	HashMap<String, Integer> services = busInst.getServices();
-    	
         Text registerTitle = new Text("Services | "+busInst.getBusName());
         registerTitle.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
         grid.add(registerTitle, 1, 0);
+    	
+    	ArrayList<Service> services = busInst.getServiceList();
+    	
+    	Text header = new Text("Services:");
+		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
+		grid.add(header, 0, 1,2, 1);
+		
+		TableView<Service> table = new TableView<Service>();
+		ObservableList<Service> serviceItems = FXCollections.observableArrayList();
+		for(Service myServe : services){
+			serviceItems.add(myServe);
+		}
         
-        ListView<String> serviceList = new ListView<String>(); 
-        ObservableList<String> serviceItems = FXCollections.observableArrayList();
-        for(String myService : busInst.getServices().keySet()){
-        	serviceItems.add(myService + " | " + busInst.getServices().get(myService));
-        }
-        serviceList.setItems(serviceItems);
+		//Service Column
+		TableColumn<Service,String> service =  new TableColumn<>("Service");
+		service.setMinWidth(50);
+		service.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
+		
+		//Block Column
+		TableColumn<Service,Integer> blocks =  new TableColumn<>("Blocks");
+		blocks.setMinWidth(50);
+		blocks.setCellValueFactory(new PropertyValueFactory<>("blocks"));
+    	
+    	table.setItems(serviceItems);
+    	table.getColumns().addAll(service, blocks);
+        grid.add(table, 0,1, 3, 1);
         
-        serviceList.setPrefHeight(300);
-        serviceList.setPrefWidth(300);
-        
-        grid.add(serviceList, 0,1, 3, 1);
- 
-
-        
-        
-        
-//        
-//        
-//        TableView table = new TableView();
-//        TableColumn serviceCol = new TableColumn("Service");
-//        TableColumn durationCol = new TableColumn("Duration");
-//        
-//        //!!!!REFER TO Adding Maps of Data to the Table on website
-//        
-//        TableColumn<String,Integer> c1 = new TableColumn<String,Integer>("ServiceASD"); //!!!!look at the actual program and see that there is another column already there
-//        //c1.setCellValueFactory(p -> p.getValue().getOwner().firstNameProperty());
-//        c1.setCellValueFactory(new MapValueFactory("service")); //!!!!may need to change this value, it needs to be the key? put that key in
-//        table.getColumns().add(c1);
-//
-//        //TableColumn<CarOfPerson,String> c2 = new TableColumn<CarOfPerson,String>("last");
-//        //c2.setCellValueFactory(p -> p.getValue().getOwner().lastNameProperty());
-//        //c2.setCellValueFactory(new PropertyValueFactory<String, Integer>("")));
-//        //table.getColumns().add(c2);
-//        
-//        table.getColumns().addAll(serviceCol, durationCol);
- 
-        
-//        grid.add(table_view, 1, 1);
-//
-//        ObservableList<String> keys = FXCollections.observableArrayList(services.keySet());
-//
-//		final TableView<String> table = new TableView<>(keys);
-//		TableColumn<String, Integer> column1 = new TableColumn<>("Key");
-//		// display item value (= constant)
-//		column1.setCellValueFactory(cd -> Bindings.createIntegerBinding(() -> cd.getValue()));
-//		
-//		TableColumn<String, Integer> column2 = new TableColumn<>("Value");
-//		column2.setCellValueFactory(cd -> Bindings.valueAt(services, cd.getValue()));
-//
-//		table.getColumns().setAll(column1, column2);
+        Button add = new Button("Add New");
+        HBox hbAdd = new HBox(10);
+        hbAdd.setAlignment(Pos.BOTTOM_RIGHT);
+        add.setMinWidth(70);
+        add.setMinHeight(30);
+        add.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
+        hbAdd.getChildren().add(add);
+        grid.add(hbAdd, 2, 2);
+        add.setOnAction(e -> {
+        	addService();
+    		window.setScene(busAddService);
+        	//TODO
+        });
         
         Button edit = new Button("Edit");
         HBox hbEdit = new HBox(10);
-        hbEdit.setAlignment(Pos.BOTTOM_RIGHT);
+        hbEdit.setAlignment(Pos.BOTTOM_CENTER);
         edit.setMinWidth(70);
         edit.setMinHeight(30);
         edit.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
         hbEdit.getChildren().add(edit);
-        grid.add(hbEdit, 2, 2);
+        grid.add(hbEdit, 1, 2);
         edit.setOnAction(e -> {
-    		//TODO
-        });
-        
-        Button delete = new Button("Delete");
-        HBox hbDel = new HBox(10);
-        hbDel.setAlignment(Pos.BOTTOM_CENTER);
-        delete.setMinWidth(70);
-        delete.setMinHeight(30);
-        delete.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
-        hbDel.getChildren().add(delete);
-        grid.add(hbDel, 1, 2);
-        delete.setOnAction(e -> {
-    		//TODO
+        	if(table.getSelectionModel().getSelectedIndex() != -1){
+				Service serviceInst = table.getSelectionModel().getSelectedItem();
+				//TODO cancel booking
+//				
+//				if((custInst).cancelBooking(bookings, bookInst)){
+//					logger.info("Booking has been succesfully cancelled");
+//					FIO.save(customers, businesses, bookings);
+//				}
+//				logger.info("A booking has been cancelled, summary is updated");
+//
+//				showBookingSummary();
+//				window.setScene(customerBookingSummary);
+			}
         });
         
         
@@ -1094,6 +1084,82 @@ public class BusinessMenu extends SceneManager{
         
         
         busShowServices = new Scene(grid, 900, 600);
+	}
+	
+	public void addService(){
+        GridPane grid2 = new GridPane();
+    	grid2.setPadding(new Insets(30, 30, 30, 30));
+    	grid2.setAlignment(Pos.CENTER);
+    	grid2.setHgap(20);
+    	grid2.setVgap(20);
+    	
+        
+        Text registerTitle = new Text("Add new Service:");
+        registerTitle.setFont(Font.font("Rockwell", FontWeight.NORMAL, 35));
+        grid2.add(registerTitle, 0, 1,2, 1);
+        
+        Label serviceName = new Label("Service Name: ");
+        grid2.add(serviceName, 0, 2);
+
+        TextField serviceText = new TextField();
+        serviceText.setPromptText("service name");
+        grid2.add(serviceText, 1, 2);
+        
+        Label blocks = new Label("Required blocks: ");
+        grid2.add(blocks, 0, 3);
+
+        ChoiceBox<Integer> cbOpen = new ChoiceBox<Integer>();
+        cbOpen.getItems().addAll(1,2,3,4);
+        cbOpen.setValue(1);
+        cbOpen.setTooltip(new Tooltip("Select required blocks"));
+        cbOpen.setMinWidth(150);
+        grid2.add(cbOpen, 1, 3);
+            
+        Button register = new Button("Add");
+        HBox hbRegister = new HBox(10);
+        hbRegister.setAlignment(Pos.BOTTOM_RIGHT);
+        register.setMinWidth(70);
+        register.setMinHeight(30);
+        register.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
+        hbRegister.getChildren().add(register);
+        grid2.add(hbRegister, 1, 4);
+        register.setOnAction(e -> {
+        	String serviceString = serviceText.getText();
+        	int serviceBlock = cbOpen.getSelectionModel().getSelectedItem();
+        	System.out.println("service name : "+serviceString);
+        	//TODO
+        	//check if empNameString is empty and valid?
+        	if(serviceString.trim().length() > 0 && serviceBlock>=1 && serviceBlock<5){
+//	        	bus.addNewEmp(empNameString);
+        		busInst.addService(serviceString, serviceBlock);
+	        	FIO.saveBus(businesses);
+	    		busShowServices();
+	    		window.setScene(busShowServices);
+        	}
+        	
+        	else{
+        		String msg = "Service name has to be entered\n & \nblock has to be between 1 to 4";
+        		handleGenericFail(window, msg);
+//        		addEmp(bus);
+        		window.setScene(busAddEmpSc);
+        	}
+        });
+            
+        Button back = new Button("Back");
+        HBox hbBack = new HBox(10);
+        hbBack.setAlignment(Pos.BOTTOM_LEFT);
+        back.setMinWidth(70);
+        back.setMinHeight(30);
+        back.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
+        hbBack.getChildren().add(back);
+        grid2.add(hbBack, 0, 4);
+        
+        back.setOnAction(e -> {
+    		busShowServices();
+    		window.setScene(busShowServices);
+        });
+        
+        busAddService = new Scene(grid2, 900, 600);
 	}
 	
 

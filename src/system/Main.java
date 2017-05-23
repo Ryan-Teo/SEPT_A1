@@ -2,6 +2,8 @@ package system;
 import java.io.IOException;
 import java.util.*;
 
+import org.apache.log4j.BasicConfigurator;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import scenes.SceneManager;
@@ -18,7 +20,7 @@ public class Main extends Application{
 	ArrayList<Booking> bookings = FIO.loadBook();
 	
 	public static void main(String args[]) throws IOException{ //Handle exceptions
-	
+		BasicConfigurator.configure();
 		launch(args);
 	}
 	

@@ -138,7 +138,6 @@ public class Account {
 			logger.info("Business registration is successful");
 			businesses.add(new Business(busName, name, address, phone, username, password1, openTimeLocal.toString(), closeTimeLocal.toString(), Integer.toBinaryString(sessionTimeLocal)));
 			FIO.saveBus(businesses);
-			FIO.saveBus(businesses);
 			return true;
 		}
 	}

@@ -15,7 +15,6 @@ import org.junit.Test;
 
 import system.Booking;
 import system.FileIO;
-import system.Helper;
 import users.Business;
 import users.Customer;
 import users.Employee;
@@ -34,7 +33,7 @@ import users.Employee;
 public class CustomerTest {
 	FileIO FIO = new FileIO();
 	Customer customer = new Customer("Bob", "Bobber", "Bobby123", "Bob@bob.com", "999999999");
-	Business myBusiness = new Business("Sal's Hair Salon","Harry","Alumbra St","0120103004","harryOwner","password");
+	Business myBusiness = new Business("Sal's Hair Salon","Harry","Alumbra St","0120103004","harryOwner","password", null, null, null);
 	ArrayList<Business> businesses = new ArrayList<Business>();
 	Employee emp = new Employee("james","james",myBusiness);
 	LinkedHashMap<LocalDate,Booking[]> linkedHm = new LinkedHashMap<LocalDate, Booking[]>();
@@ -44,6 +43,7 @@ public class CustomerTest {
 	LocalDate myDate = LocalDate.now();
 	LocalTime myTime = LocalTime.parse("09:00", timeformat);
 	Scanner scan = new Scanner(System.in);
+	ArrayList<Booking> myBooking = new ArrayList<Booking>();
 	
 	
 	@Test
@@ -100,65 +100,40 @@ public class CustomerTest {
 		
 	}
 	
-	@Test
-	public void testBookSession(){
-		Booking [] myBookings;
-		Booking newBooking = null;
-		linkedHm = initHashMapDummy();
-		for(LocalDate date : linkedHm.keySet()){
-			if (date.equals(myDate)){
-				myBookings = linkedHm.get(date);
-				for(int i=0; i<linkedHm.get(date).length; i++){
-					if(myBookings[i].getStartTime().equals(myTime) && myBookings[i].getBookStat() != true){
-						myBookings[i].booked();
-						newBooking = new Booking(myDate,myTime,myBookings[i].getEndTime(),customer,myBusiness,emp);
-					}
-				}
+
+	
+	@Test 
+	public void testMakeBooking(){
+		Boolean value = false;
+		value = customer.makeBooking(myDate, myTime, customer, myBusiness, emp, "male hair cut", myBooking);
+	
+		if(value == true){
+			for(Booking custBooking : myBooking){
+				Assert.assertEquals(custBooking.getBookCust(),customer);
+				Assert.assertEquals(custBooking.getBookDate(), myDate);
+				Assert.assertEquals(custBooking.getStartTime(), myTime);
+				Assert.assertEquals(custBooking.getStrBus(), myBusiness.getBusName());
+				Assert.assertEquals(custBooking.getService(), "male hair cut");
+				Assert.assertEquals(custBooking.getBookEmp(), emp);
 			}
+		
 		}
-			Assert.assertEquals(newBooking.getBookCust(),customer);
-			Assert.assertEquals(newBooking.getBookDate(), myDate);
-			Assert.assertEquals(newBooking.getStartTime(), myTime);
-			Assert.assertEquals(newBooking.getBookStat(), false);
+			
 	}
+
+	@Test
+	public void testViewSummaryBooking(){
+		assert (customer.viewBookingSummary(myBooking) != null);
+		
+	}
+
 	
 	@Test
-	public void testViewSession(){
-		businesses.add(myBusiness);
-		customer.viewSession(businesslinkedHm, businesses, scan);
-		for(Business bus : businesslinkedHm.keySet()){
-			linkedHm = businesslinkedHm.get(bus);
-			for(LocalDate myDate : linkedHm.keySet() ){
-				for(int i =0; i<linkedHm.get(myDate).length ; i++){
-					System.out.println(linkedHm.get(myDate)[i].toString());
-				}
-			}
-		}
-	}
-	
-	
-//	public void cancelBooking(){
-//		Booking [] myBookings;
-//		Booking currentBooking = null;
-//		linkedHm = initHashMapDummy();
-//		for(LocalDate date : linkedHm.keySet()){
-//			if (date.equals(myDate)){
-//				myBookings = linkedHm.get(date);
-//				for(int i=0; i<linkedHm.get(date).length; i++){
-//					if(myBookings[i].getStartTime().equals(myTime) && myBookings[i].getBookStat() == true){
-//						myBookings[i].unbooked();
-//						myBookings[i].setCust(null);
-//						currentBooking = myBookings[i];
-//						currentBooking.unbooked();
-//					}
-//				}
-//			}
-//		}
-//	}
-	
-	@Test
-	public void testBookingSummary(){
-//		customer.viewBookingSummary(businesslinkedHm);
+	public void testCancelBooking(){
+		Boolean value = false;
+		value = customer.makeBooking(myDate, myTime, customer, myBusiness, emp, "male hair cut", myBooking);
+		value = customer.cancelBooking(myBooking, myBooking.get(0));
+		assertEquals(value, true);
 	}
 
 }

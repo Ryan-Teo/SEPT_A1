@@ -1249,7 +1249,7 @@ public class BusinessMenu extends SceneManager{
         register.setMinHeight(30);
         register.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
         hbRegister.getChildren().add(register);
-        grid2.add(hbRegister, 1, 3);
+        grid2.add(hbRegister, 2, 3);
         register.setOnAction(e -> {
         	int serviceBlock = cbOpen.getSelectionModel().getSelectedItem();
         	busInst.updateService(thisService.getServiceName(), serviceBlock);
@@ -1257,6 +1257,25 @@ public class BusinessMenu extends SceneManager{
     		busShowServices();
     		window.setScene(busShowServices);
         });
+        
+		
+        Button delete = new Button("Remove");
+        HBox hbDelete = new HBox(10);
+        hbDelete.setAlignment(Pos.BOTTOM_RIGHT);
+        delete.setMinWidth(70);
+        delete.setMinHeight(30);
+        delete.setStyle("-fx-font: 15 verdana; -fx-base: #79B8FF;");
+        hbDelete.getChildren().add(delete);
+        grid2.add(hbDelete, 1, 3);
+        delete.setOnAction(e -> {
+        	int serviceBlock = cbOpen.getSelectionModel().getSelectedItem();
+        	busInst.removeService(thisService.getServiceName());
+        	FIO.saveBus(businesses);
+    		busShowServices();
+    		window.setScene(busShowServices);
+        });
+        
+        
         
         Button back = new Button("Back");
         HBox hbBack = new HBox(10);

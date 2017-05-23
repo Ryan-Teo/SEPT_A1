@@ -39,10 +39,9 @@
           <target>1.8</target>
           <archive>
           <manifest>
-          <addClassPath>true</addClassPath>
-          <mainClass>
-          	com.system.Main
-          </mainClass>
+            <addClasspath>true</addClasspath>
+            <classpathPrefix>lib/</classpathPrefix>
+            <mainClass>system.Main</mainClass>
           </manifest>
           
           </archive>

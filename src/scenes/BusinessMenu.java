@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.event.ChangeEvent;
@@ -37,6 +38,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -67,6 +69,7 @@ import users.Service;
 public class BusinessMenu extends SceneManager{
 	String empNamePattern = "^[a-zA-Z ]*$";
 	Business busInst;
+	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 	
 	public BusinessMenu(ArrayList<Customer> customers, ArrayList<Business> businesses, Account account,
 			ArrayList<Booking> bookings, Stage primaryStage) {
@@ -245,6 +248,10 @@ public class BusinessMenu extends SceneManager{
 //        	}
 //        });
 		
+		LocalTime busOpen = busInst.getOpenTime();
+		LocalTime busClose = busInst.getCloseTime();
+		int sessionTime = busInst.getSessionTime();
+		
 		ObservableList<Employee>empList = FXCollections.observableArrayList();
 		ArrayList<Employee>empArray = bus.getEmps();
 		
@@ -257,54 +264,95 @@ public class BusinessMenu extends SceneManager{
 	    TabPane tabPane = new TabPane();
 	    BorderPane borderPane = new BorderPane();
 	    for (int i = 0; i < 7; i++) {
-
-			TableView<Employee>empTable = new TableView<Employee>();
+			TableView<String>empTable = new TableView<String>();
 	    	Tab tab = new Tab();
 	    	tab.setText(today.plusDays(i).getDayOfWeek().toString());
 	    	//add things to hbox
-			
-			//Employee names
-			TableColumn<Employee, String> empName = new TableColumn<>("Name");
-			empName.setMinWidth(100);
-			empName.setCellValueFactory(new PropertyValueFactory<>("name"));
-		
-			//Day 1
-			TableColumn<Employee, String> day1 = new TableColumn<>("Monday");
-			day1.setMinWidth(100);
-			day1.setCellValueFactory(new PropertyValueFactory<>("monHour"));
-			
-			//Day 2
-			TableColumn<Employee, String> day2 = new TableColumn<>("Tuesday");
-			day2.setMinWidth(100);
-			day2.setCellValueFactory(new PropertyValueFactory<>("tueHour"));
-			
-			//Day 3
-			TableColumn<Employee, String> day3 = new TableColumn<>("Wednesday");
-			day3.setMinWidth(100);
-			day3.setCellValueFactory(new PropertyValueFactory<>("wedHour"));
-			
-			//Day 4
-			
-			TableColumn<Employee, String> day4 = new TableColumn<>("Thursday");
-			day4.setMinWidth(100);
-			day4.setCellValueFactory(new PropertyValueFactory<>("thurHour"));
-			//Day 5
-			TableColumn<Employee, String> day5 = new TableColumn<>("Friday");
-			day5.setMinWidth(100);
-			day5.setCellValueFactory(new PropertyValueFactory<>("friHour"));
-			
-			//Day 6
-			TableColumn<Employee, String> day6 = new TableColumn<>("Saturday");
-			day6.setMinWidth(100);
-			day6.setCellValueFactory(new PropertyValueFactory<>("satHour"));
-			
-			//Day 7
-			TableColumn<Employee, String> day7 = new TableColumn<>("Sunday");
-			day7.setMinWidth(100);
-			day7.setCellValueFactory(new PropertyValueFactory<>("sunHour"));
-			
-			empTable.setItems(empList);
-			empTable.getColumns().addAll(empName, day1, day2, day3, day4, day5, day6, day7);
+
+	        List<String> columns = new ArrayList<String>();
+	        List<String> rows = new ArrayList<String>();
+	    	
+	    	for(Employee empInst: empList){
+	    		rows.add(empInst.getName());
+	    	}
+    		columns.add("Emp. ID");
+    		int x = 0;
+    		while(busOpen.plusMinutes(sessionTime*x).isBefore(busClose)){
+    			columns.add(busOpen.plusMinutes(sessionTime*x).format(dtf));
+    			x++;
+    		}
+	    	TableRow [] tableRows = new TableRow[rows.size()];
+	    	TableColumn [] tableColumns = new TableColumn[columns.size()];
+	    	
+	    	for(int j=0 ; j<columns.size(); j++){
+//	            final int j = i;
+	            TableColumn col = new TableColumn(columns.get(j));
+//	            col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){                   
+//	               public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {                                                                                             
+//	                    return new SimpleStringProperty(param.getValue().get(j).toString());                       
+//	                }                   
+//	            });
+	            empTable.getColumns().addAll(col);
+	    	}
+	    	for(int j=0 ; j<rows.size(); j++){
+	            empTable.getItems().add(rows.get(j));
+//	            final int j = i;
+//	            TableColumn col = new TableColumn(rows.get(j));
+//	            col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){                   
+//	               public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {                                                                                             
+//	                    return new SimpleStringProperty(param.getValue().get(j).toString());                       
+//	                }                   
+//	            });
+//	            empTable.getRows().addAll();
+	    	}
+//	    	rows.add("d1");
+//    	    rows.add("d11");
+//    	    empTable.getItems().add(rows);
+	    	
+	    	
+	    	
+//			//Employee names
+//			TableColumn<Employee, String> empName = new TableColumn<>("Name");
+//			empName.setMinWidth(100);
+//			empName.setCellValueFactory(new PropertyValueFactory<>("name"));
+//		
+//			//Day 1
+//			TableColumn<Employee, String> day1 = new TableColumn<>("Monday");
+//			day1.setMinWidth(100);
+//			day1.setCellValueFactory(new PropertyValueFactory<>("monHour"));
+//			
+//			//Day 2
+//			TableColumn<Employee, String> day2 = new TableColumn<>("Tuesday");
+//			day2.setMinWidth(100);
+//			day2.setCellValueFactory(new PropertyValueFactory<>("tueHour"));
+//			
+//			//Day 3
+//			TableColumn<Employee, String> day3 = new TableColumn<>("Wednesday");
+//			day3.setMinWidth(100);
+//			day3.setCellValueFactory(new PropertyValueFactory<>("wedHour"));
+//			
+//			//Day 4
+//			
+//			TableColumn<Employee, String> day4 = new TableColumn<>("Thursday");
+//			day4.setMinWidth(100);
+//			day4.setCellValueFactory(new PropertyValueFactory<>("thurHour"));
+//			//Day 5
+//			TableColumn<Employee, String> day5 = new TableColumn<>("Friday");
+//			day5.setMinWidth(100);
+//			day5.setCellValueFactory(new PropertyValueFactory<>("friHour"));
+//			
+//			//Day 6
+//			TableColumn<Employee, String> day6 = new TableColumn<>("Saturday");
+//			day6.setMinWidth(100);
+//			day6.setCellValueFactory(new PropertyValueFactory<>("satHour"));
+//			
+//			//Day 7
+//			TableColumn<Employee, String> day7 = new TableColumn<>("Sunday");
+//			day7.setMinWidth(100);
+//			day7.setCellValueFactory(new PropertyValueFactory<>("sunHour"));
+//			
+//			empTable.setItems(empList);
+//			empTable.getColumns().addAll(empName, day1, day2, day3, day4, day5, day6, day7);
 			empTable.setPlaceholder(new Label("There are currently no employees"));
 			empTable.setMinSize(scene.getWidth(), scene.getHeight());
 			GridPane.setHalignment(empTable, HPos.CENTER);

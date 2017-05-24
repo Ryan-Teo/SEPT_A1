@@ -29,7 +29,7 @@ public class SceneManager {
 	static Stage window;
 	static Scene mainMenu, customerRegister, ownerRegister, registerMenu, customerMenu, custSelectService, busAddEmpSc, busAddWorkTime,
 			custSelectBus, custSelectDate, custSelectTime, custSelectEmp, businessMenu, scene4, customerBookingSummary,
-			busSelectEmp, busShowServices, busChangeHours, busViewSummary;
+			busSelectEmp, busShowServices, busChangeHours, busViewSummary, busShowAvailable, empAvail, busAddService, busEditService;
 	ArrayList<Customer> customers;
 	ArrayList<Business> businesses;
 	ArrayList<Booking> bookings;
@@ -66,9 +66,10 @@ public class SceneManager {
 	}
 	
 	public void show(){
-        window.setMinHeight(300);
-        window.setMinWidth(600);
+        window.setMinHeight(600);
+        window.setMinWidth(900);
         window.setScene(mainMenu);
+//        window.setFullScreen(true);
         window.show();
 	}
 
@@ -167,7 +168,7 @@ public class SceneManager {
         GridPane.setHalignment(back, HPos.CENTER);
         dialogVbox.setAlignment(Pos.CENTER);
         
-        Scene dialogScene = new Scene(dialogVbox, 300, 100);
+        Scene dialogScene = new Scene(dialogVbox, 300, 200);
         dialog.setScene(dialogScene);
         dialog.show();
     }

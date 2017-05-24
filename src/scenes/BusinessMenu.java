@@ -245,7 +245,6 @@ public class BusinessMenu extends SceneManager{
 //        	}
 //        });
 		
-		TableView<Employee>empTable = new TableView<Employee>();
 		ObservableList<Employee>empList = FXCollections.observableArrayList();
 		ArrayList<Employee>empArray = bus.getEmps();
 		
@@ -258,6 +257,8 @@ public class BusinessMenu extends SceneManager{
 	    TabPane tabPane = new TabPane();
 	    BorderPane borderPane = new BorderPane();
 	    for (int i = 0; i < 7; i++) {
+
+			TableView<Employee>empTable = new TableView<Employee>();
 	    	Tab tab = new Tab();
 	    	tab.setText(today.plusDays(i).getDayOfWeek().toString());
 	    	//add things to hbox

@@ -408,7 +408,6 @@ public class MainMenu extends SceneManager{
         	LocalTime closeLocalTime = cbClose.getSelectionModel().getSelectedItem();
         	int sessionLength = cbLength.getSelectionModel().getSelectedItem();
         	
-        	
         	Boolean checkUserLength = acct.checkLength(newUserNameString, 6, 12);
         	Boolean checkUser = acct.checkBusName(newUserNameString, businesses);
         	Boolean checkPassLength = acct.checkLength(newPasswordString, 6, 12);

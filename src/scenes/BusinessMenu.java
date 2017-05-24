@@ -1,39 +1,27 @@
 package scenes;
 
 
-import java.time.DayOfWeek;
-
-import java.io.IOException;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.swing.event.ChangeEvent;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
@@ -42,23 +30,17 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
-import javafx.util.converter.*;
 import system.Account;
 import system.Booking;
 import users.Business;
@@ -138,14 +120,6 @@ public class BusinessMenu extends SceneManager{
     	   }
         });
         
-
-//        busShowAvail.setOnAction(e ->{
-//        	busShowAvailability(busInst);
-//        	window.setScene(busShowAvailable);
-//        });
-        
-        
-        
         
         Text bookingHeading = new Text("Bookings");
         bookingHeading.setUnderline(true);
@@ -216,6 +190,7 @@ public class BusinessMenu extends SceneManager{
         businessMenu = new Scene(grid3, 900, 600);
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	public void busShowAvailability(Stage primaryStage, Business bus){
 	    primaryStage.setTitle("Employee Availability");
 	    GridPane grid = new GridPane();
@@ -232,21 +207,6 @@ public class BusinessMenu extends SceneManager{
 		dateStringBox.setAlignment(Pos.TOP_LEFT);
 		grid.add(dateStringBox, 0, 0);
 
-		
-//		Button accept = new Button("Select");
-//    	HBox hbAccept = new HBox(10);
-//    	hbAccept.setAlignment(Pos.BOTTOM_RIGHT);
-//    	accept.setMinWidth(70);
-//    	accept.setMinHeight(30);
-//    	accept.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
-//        hbAccept.getChildren().add(accept);
-//        grid.add(hbAccept, 7, 5);
-//        accept.setOnAction(e -> {
-//        	if(empTable.getSelectionModel().getSelectedIndex() != -1){
-//        	empAvail(empTable.getSelectionModel().getSelectedItem(), DayOfWeek.MONDAY);
-//        	window.setScene(empAvail);
-//        	}
-//        });
 		
 		LocalTime busOpen = busInst.getOpenTime();
 		LocalTime busClose = busInst.getCloseTime();
@@ -266,7 +226,8 @@ public class BusinessMenu extends SceneManager{
 	    for (int i = 0; i < 7; i++) {
 			TableView<Employee>empTable = new TableView<Employee>();
 	    	Tab tab = new Tab();
-	    	tab.setText(today.plusDays(i).getDayOfWeek().toString());
+	    	LocalDate thisDate = today.plusDays(i);
+	    	tab.setText(thisDate.getDayOfWeek().toString());
 	    	//add things to hbox
 
 	        List<String> columns = new ArrayList<String>();
@@ -283,13 +244,11 @@ public class BusinessMenu extends SceneManager{
     			columns.add(busOpen.plusMinutes(sessionTime*x).format(dtf));
     			x++;
     		}
-	    	TableRow [] tableRows = new TableRow[rows.size()];
-	    	TableColumn [] tableColumns = new TableColumn[columns.size()];
+			TableRow [] tableRows = new TableRow[rows.size()];
+			TableColumn [] tableColumns = new TableColumn[columns.size()];
 	    	
 	    	for(int j=0 ; j<columns.size(); j++){
-//	            final int j = i;
 	            TableColumn col = new TableColumn(columns.get(j));
-//	        
 	            if(j==0){
 		            col.setCellValueFactory(new PropertyValueFactory<>("name"));
 	            }
@@ -297,32 +256,33 @@ public class BusinessMenu extends SceneManager{
 	            	col.setCellValueFactory(new PropertyValueFactory<>("empID"));
 	            }
 	            if(j>1){
+	            	final int v = j;
 	            	col.setCellFactory(column -> {
 	            		return new TableCell<Employee, String>() {
-	            			
 		            		@Override
 		            		protected void updateItem(String item, boolean empty) {
-                                setStyle("-fx-background-color: yellow");
+		            			if(getIndex()>=0 && getIndex()<rows.size()){
+			            			Employee empInst = getTableView().getItems().get(getIndex());
+			            			try{
+				            			if(empInst.empFree(thisDate, LocalTime.parse(columns.get(v)))){
+			                                setStyle("-fx-background-color: green");
+				            			}
+				            			else{
+			                                setStyle("-fx-background-color: orange");
+				            			}
+			            			}catch(NullPointerException nullE){
+		                                setStyle("-fx-background-color: red");
+			            			}
+		            			}
 		            		}
 	                    };
 	            	});
-//	                col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){                   
-//	 	               public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {                                                                                             
-//	 	                    return new SimpleStringProperty(param.getValue().get(j).toString());                       
-//	 	                }                   
-//	 	            });
-	            	System.out.println("Column : "+j+" : "+columns.get(j));
 	            }
 	            empTable.getColumns().addAll(col);
 	    	}
 	    	for(int j=0 ; j<rows.size(); j++){
 	            empTable.getItems().add(rows.get(j));
 	    	}
-
-//			TableColumn<Employee, String> empName = new TableColumn<>("Name");
-//			empName.setMinWidth(100);
-//			empName.setCellValueFactory(new PropertyValueFactory<>("name"));
-	    	
 			empTable.setPlaceholder(new Label("There are currently no employees"));
 			empTable.setMinSize(scene.getWidth(), scene.getHeight());
 			GridPane.setHalignment(empTable, HPos.CENTER);
@@ -356,220 +316,9 @@ public class BusinessMenu extends SceneManager{
 	    primaryStage.setScene(scene);
 	    primaryStage.show();
 	}
-	
 
-	public void empAvail(Employee emp, DayOfWeek day){
-	//class to show the available time of the individual employee in detail.	
-		GridPane grid = new GridPane();
-		grid.setPadding(new Insets(30, 30, 30, 30));
-		grid.setAlignment(Pos.CENTER);
-		grid.setHgap(10);
-		grid.setVgap(10);
-		
-		Text header = new Text(emp.getName() + "'s Availability");
-		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
-		grid.add(header, 0, 1, 2, 1);
-		
-		ListView<String>timeTable = new ListView<String>();
-		ObservableList<String> timeList = FXCollections.observableArrayList();
-		HashMap<LocalDate, HashMap<LocalTime, Boolean>> schedule = emp.getSchedule();
-		HashMap<LocalTime, Boolean> dayTimes = null;
-		LocalDate date = null;
-		
-		for(int i=0; i < 7; i++){
-			if(LocalDate.now().plusDays(i).getDayOfWeek().equals(day)){
-				dayTimes = schedule.get(LocalDate.now().plusDays(i));
-				date = LocalDate.now().plusDays(i);
-			}
-		}
-		
-		//array for the times the person is working on the day.
 
-		LocalTime initialTime = emp.getStartTime(date);
-		LocalTime endingTime = emp.getEndTime(date);
-		int i = 0;
-		
-		do{
-			if(!dayTimes.get(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()))){
-				System.out.println(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()) + " - Available");
-				timeList.add(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()) + " - Available");	
-			}
-			
-			else{
-				System.out.println(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()) + " - Booked");
-				timeList.add(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()) + " - Booked");
-			}
-			i++;
-		}while(!initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()).equals(endingTime));
-			
-				
-		//time
-	
-		timeTable.setItems(timeList);
-		
-        timeTable.setPrefHeight(300);
-        timeTable.setPrefWidth(300);
-        
-        grid.add(timeTable, 2,2);
-        
-		empAvail = new Scene(grid, 900, 600);
-}
-
-//	public void busShowAvailability(Business bus){
-//		GridPane grid = new GridPane();
-//		grid.setPadding(new Insets(30, 30, 30, 30));
-//		grid.setAlignment(Pos.CENTER);
-//		grid.setHgap(10);
-//		grid.setVgap(10);
-//		
-//		Text header = new Text("Worker Hours");
-//		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
-//		grid.add(header, 0, 1, 2, 1);
-//		
-//		TableView<Employee>empTable = new TableView<Employee>();
-//		ObservableList<Employee>empList = FXCollections.observableArrayList();
-//		ArrayList<Employee>empArray = bus.getEmps();
-//		
-//		for(int i = 0; i < empArray.size(); i++){
-//			empList.add(empArray.get(i));
-//		}
-//		
-//		//Employee names
-//		TableColumn<Employee, String> empName = new TableColumn<>("Name");
-//		empName.setMinWidth(100);
-//		empName.setCellValueFactory(new PropertyValueFactory<>("name"));
-//	
-//		//Day 1
-//		TableColumn<Employee, String> day1 = new TableColumn<>("Monday");
-//		day1.setMinWidth(100);
-//		day1.setCellValueFactory(new PropertyValueFactory<>("monHour"));
-//		
-//		//Day 2
-//		TableColumn<Employee, String> day2 = new TableColumn<>("Tuesday");
-//		day2.setMinWidth(100);
-//		day2.setCellValueFactory(new PropertyValueFactory<>("tueHour"));
-//		
-//		//Day 3
-//		TableColumn<Employee, String> day3 = new TableColumn<>("Wednesday");
-//		day3.setMinWidth(100);
-//		day3.setCellValueFactory(new PropertyValueFactory<>("wedHour"));
-//		
-//		//Day 4
-//		
-//		TableColumn<Employee, String> day4 = new TableColumn<>("Thursday");
-//		day4.setMinWidth(100);
-//		day4.setCellValueFactory(new PropertyValueFactory<>("thurHour"));
-//		//Day 5
-//		TableColumn<Employee, String> day5 = new TableColumn<>("Friday");
-//		day5.setMinWidth(100);
-//		day5.setCellValueFactory(new PropertyValueFactory<>("friHour"));
-//		
-//		//Day 6
-//		TableColumn<Employee, String> day6 = new TableColumn<>("Saturday");
-//		day6.setMinWidth(100);
-//		day6.setCellValueFactory(new PropertyValueFactory<>("satHour"));
-//		
-//		//Day 7
-//		TableColumn<Employee, String> day7 = new TableColumn<>("Sunday");
-//		day7.setMinWidth(100);
-//		day7.setCellValueFactory(new PropertyValueFactory<>("sunHour"));
-//		
-//		empTable.setItems(empList);
-//		empTable.getColumns().addAll(empName, day1, day2, day3, day4, day5, day6, day7);
-//		empTable.setPlaceholder(new Label("There are currently no employees"));
-//		
-//		grid.add(empTable, 0, 3,8, 1);
-//		GridPane.setHalignment(empTable, HPos.CENTER);
-//		
-//		Button accept = new Button("Select");
-//    	HBox hbAccept = new HBox(10);
-//    	hbAccept.setAlignment(Pos.BOTTOM_RIGHT);
-//    	accept.setMinWidth(70);
-//    	accept.setMinHeight(30);
-//    	accept.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
-//        hbAccept.getChildren().add(accept);
-//        grid.add(hbAccept, 7, 5);
-//        accept.setOnAction(e -> {
-//        	if(empTable.getSelectionModel().getSelectedIndex() != -1){
-//        	empAvail(empTable.getSelectionModel().getSelectedItem(), DayOfWeek.MONDAY);
-//        	window.setScene(empAvail);
-//        	}
-//        });
-//		
-//        Button back = new Button("Back");
-//        HBox hbBack = new HBox(10);
-//        hbBack.setAlignment(Pos.BOTTOM_LEFT);
-//        back.setMinWidth(70);
-//        back.setMinHeight(30);
-//        back.setStyle("-fx-font: 15 verdana; -fx-base: #B7FF6E;");
-//        hbBack.getChildren().add(back);
-//        grid.add(hbBack, 1, 5);
-//        
-//        back.setOnAction(e -> {
-//    		businessMenu(busInst);
-//    		window.setScene(businessMenu);
-//        });
-//		
-//        busShowAvailable = new Scene(grid, 900, 600);
-//	}
-	
-//	public void empAvail(Employee emp, DayOfWeek day){
-//	//class to show the available time of the individual employee in detail.	
-//		GridPane grid = new GridPane();
-//		grid.setPadding(new Insets(30, 30, 30, 30));
-//		grid.setAlignment(Pos.CENTER);
-//		grid.setHgap(10);
-//		grid.setVgap(10);
-//		
-//		Text header = new Text(emp.getName() + "'s Availability");
-//		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
-//		grid.add(header, 0, 1, 2, 1);
-//		
-//		ListView<String>timeTable = new ListView<String>();
-//		ObservableList<String> timeList = FXCollections.observableArrayList();
-//		HashMap<LocalDate, HashMap<LocalTime, Boolean>> schedule = emp.getSchedule();
-//		HashMap<LocalTime, Boolean> dayTimes = null;
-//		LocalDate date = null;
-//		
-//		for(int i=0; i < 7; i++){
-//			if(LocalDate.now().plusDays(i).getDayOfWeek().equals(day)){
-//				dayTimes = schedule.get(LocalDate.now().plusDays(i));
-//				date = LocalDate.now().plusDays(i);
-//			}
-//		}
-//		
-//		//array for the times the person is working on the day.
-//
-//		LocalTime initialTime = emp.getStartTime(date);
-//		LocalTime endingTime = emp.getEndTime(date);
-//		int i = 0;
-//		
-//		do{
-//			if(!dayTimes.get(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()))){
-//				System.out.println(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()) + " - Available");
-//				timeList.add(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()) + " - Available");	
-//			}
-//		
-//			else{
-//				System.out.println(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()) + " - Booked");
-//				timeList.add(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()) + " - Booked");
-//			}
-//			i++;
-//		}while(!initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()).equals(endingTime));
-//			
-//				
-//		//time
-//	
-//		timeTable.setItems(timeList);
-//		
-//        timeTable.setPrefHeight(300);
-//        timeTable.setPrefWidth(300);
-//        
-//        grid.add(timeTable, 2,2);
-//        
-//		empAvail = new Scene(grid, 900, 600);
-//}
-
+	@SuppressWarnings("unchecked")
 	public void busViewSummary(Business bus){
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(30, 30, 30, 30));
@@ -634,6 +383,7 @@ public class BusinessMenu extends SceneManager{
 		busViewSummary = new Scene(grid, 900, 600);
 	}
 	
+	@SuppressWarnings("unused")
 	public void busChangeHours(Business bus){
 		GridPane grid2 = new GridPane();
     	grid2.setPadding(new Insets(30, 30, 30, 30));
@@ -670,8 +420,6 @@ public class BusinessMenu extends SceneManager{
         
         LocalTime currentOpen = bus.getOpenTime();
         LocalTime currentClose = bus.getCloseTime();
-        System.out.println("OOEN TIME: " + currentOpen);
-        System.out.println("CLOSE TIME: " + currentClose);
         
         int currentSession = bus.getSessionTime();
         
@@ -679,25 +427,6 @@ public class BusinessMenu extends SceneManager{
         LocalTime setClose = timeItems.get(0);
 
         int setSession = sessionItems.get(0);
-        
-        
-//        for (int j = 0; j < timeItems.size(); j++){
-//        	if (currentOpen == timeItems.get(j)){
-//        		setOpen = currentOpen;
-//        	}
-//        }
-//        
-//        for (int l = 0; l < timeItems.size(); l++){
-//        	if (currentClose == timeItems.get(l)){
-//        		setClose = currentClose;
-//        	}
-//        }
-//        
-//        for (int k = 0; k < sessionItems.size(); k++){
-//        	if (currentSession == sessionItems.get(k)){
-//        		setSession = currentSession;
-//        	}
-//        }
         
         Text openLabel = new Text("Opening Time:");
     	openLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, 15));
@@ -748,8 +477,6 @@ public class BusinessMenu extends SceneManager{
     		ObservableList<Booking> bookItems = bus.viewBookingSummary(bookings);
             LocalTime checkStart = null; //swap for error checking
             LocalTime checkEnd =  null;
-            
-            System.out.println("Bookings: " + bookItems);
     		
     		for(int a = 0; a < bookItems.size(); a++){
     			if(!cbOpen.getValue().isBefore(bookItems.get(a).getStartTime())){
@@ -781,8 +508,6 @@ public class BusinessMenu extends SceneManager{
         		bus.setOpenTime(cbOpen.getValue());
         		bus.setCloseTime(cbClose.getValue());
         		bus.setSessionTime(cbSession.getValue());
-        		
-        		//logger goes here?
         		
         		String msg = "Business Hours Successfully Changed: \n"
         				+ "Opening Hours: " + cbOpen.getValue() + "\n"
@@ -853,9 +578,6 @@ public class BusinessMenu extends SceneManager{
         grid2.add(hbRegister, 1, 3);
         register.setOnAction(e -> {
         	String empNameString = empNameText.getText();
-        	System.out.println("emp name : "+empNameString);
-        	//TODO
-        	//check if empNameString is empty and valid?
         	if(empNameString.trim().length() > 0 && empNameString.matches(empNamePattern)){
 	        	bus.addNewEmp(empNameString);
 	        	FIO.saveBus(businesses);
@@ -893,7 +615,6 @@ public class BusinessMenu extends SceneManager{
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
-        System.out.println(bus);
         if(bus.getEmps().isEmpty()){
         	String msg = "There are no current employees";
         	handleGenericFail(window, msg);
@@ -1000,8 +721,6 @@ public class BusinessMenu extends SceneManager{
         int i = 0;
         while(!checkTime.plusMinutes(i*timeInMin).isAfter(bus.getCloseTime())){
         	times.add(checkTime.plusMinutes(i*timeInMin));
-        	System.out.println(timeInMin);
-        	System.out.println(i + " : " + checkTime.plusMinutes(i*timeInMin));
         	i++;
         }
         
@@ -1210,7 +929,6 @@ public class BusinessMenu extends SceneManager{
         	if(monStart.getSelectionModel().getSelectedItem().isBefore(monEnd.getSelectionModel().getSelectedItem()) && cbMonday.isSelected()){
 	    		newTimes.put("monStart", monStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("monEnd", monEnd.getSelectionModel().getSelectedItem());
-	    		System.out.println("THE MONDAY START IS: " + newTimes.get("monStart"));
 	    		monCheck = true;
         	}
         	else if(!cbMonday.isSelected()){
@@ -1219,7 +937,6 @@ public class BusinessMenu extends SceneManager{
         	if(tueStart.getSelectionModel().getSelectedItem().isBefore(tueEnd.getSelectionModel().getSelectedItem()) && cbTuesday.isSelected()){
 	    		newTimes.put("tueStart", tueStart.getSelectionModel().getSelectedItem());
 	    		newTimes.put("tueEnd", tueEnd.getSelectionModel().getSelectedItem());
-	    		System.out.println("THE TUESDAY START IS: " + newTimes.get("tueStart"));
 	    		tueCheck = true;
         	}
         	else if(!cbTuesday.isSelected()){
@@ -1271,9 +988,6 @@ public class BusinessMenu extends SceneManager{
         	}
     		
     		emp.updateSchedule(newTimes);
-        	
-        	//TODO
-    		//CHECK INPUTS FOR WRONG/EMPTY strings	
     		if(monCheck == true && tueCheck == true && wedCheck == true && thuCheck == true && friCheck == true && satCheck == true && sunCheck == true){
     			String msg = "Working times successfully added.";
         		handleGenericSuccess(window, msg);
@@ -1307,6 +1021,7 @@ public class BusinessMenu extends SceneManager{
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void busShowServices(){
 		GridPane grid = new GridPane();
     	grid.setPadding(new Insets(30, 30, 30, 30));
@@ -1356,7 +1071,6 @@ public class BusinessMenu extends SceneManager{
         add.setOnAction(e -> {
         	addService();
     		window.setScene(busAddService);
-        	//TODO
         });
         
         Button edit = new Button("Edit");
@@ -1433,11 +1147,8 @@ public class BusinessMenu extends SceneManager{
         register.setOnAction(e -> {
         	String serviceString = serviceText.getText();
         	int serviceBlock = cbOpen.getSelectionModel().getSelectedItem();
-        	System.out.println("service name : "+serviceString);
-        	//TODO
-        	//check if empNameString is empty and valid?
+        	//check if empNameString is empty and valid
         	if(serviceString.trim().length() > 0 && serviceBlock>=1 && serviceBlock<5){
-//	        	bus.addNewEmp(empNameString);
         		busInst.addService(serviceString, serviceBlock);
 	        	FIO.saveBus(businesses);
 	    		busShowServices();
@@ -1447,7 +1158,6 @@ public class BusinessMenu extends SceneManager{
         	else{
         		String msg = "Service name has to be entered\n & \nblock has to be between 1 to 4";
         		handleGenericFail(window, msg);
-//        		addEmp(bus);
         		window.setScene(busAddEmpSc);
         	}
         });
@@ -1469,6 +1179,7 @@ public class BusinessMenu extends SceneManager{
         busAddService = new Scene(grid2, 900, 600);
 	}
 	
+	@SuppressWarnings("unused")
 	public void editService(Service thisService){
 		GridPane grid2 = new GridPane();
 		grid2.setPadding(new Insets(30, 30, 30, 30));

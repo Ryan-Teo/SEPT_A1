@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
@@ -47,8 +45,8 @@ public class FileIO {
 			}
 			sc.close();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			System.out.println("-- POPULATING CUSTOMERS --");
+			logger.error(e.getMessage());
+			logger.info("-- POPULATING CUSTOMERS --");
 			customers.add(new Customer("Harry", "harryCust", "password", "utomorulz@sept.com", "0400000000"));
 			customers.add(new Customer("Ryan", "ryanCust", "password", "ryan@sept.com", "0411111111"));
 			customers.add(new Customer("Anton", "antonCust", "password", "anton@sept.com", "0422222222"));
@@ -148,7 +146,6 @@ public class FileIO {
 	
 	public void saveBus(ArrayList<Business> businesses){
 		String busName, name, username, password, address, phone, openTime, closeTime, sessionTime;
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 		PrintWriter pwBus = null;
 		try {
 			pwBus = new PrintWriter (new BufferedWriter (new FileWriter ("business.txt")));
@@ -177,7 +174,6 @@ public class FileIO {
 		//Saving employee arraylist for each business
 		try {
 	        FileOutputStream outFile = new FileOutputStream("employees");
-	        //TODO
 	        ObjectOutputStream out = new ObjectOutputStream(outFile);
 			out.reset();
 			for(Business busInst : businesses){
@@ -191,7 +187,7 @@ public class FileIO {
 	        outFile.close();
 			logger.info("Employees has been successfully saved into 'employees' file");
 	     }catch(IOException e) {
-	    	 System.out.println(e.getMessage());
+	    	 logger.error(e.getMessage());
 	    	 e.printStackTrace();
 	     }
 	}

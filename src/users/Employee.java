@@ -121,6 +121,27 @@ public class Employee implements Serializable {
 		return thisTime;
 	}
 	
+	public boolean empFree(LocalDate date, LocalTime time){
+		boolean freeCheck = false;
+		HashMap<LocalTime, Boolean> daySchedule = schedule.get(date);
+	        if(time.isAfter(getEndTime(date)) || time.isBefore(getStartTime(date)) || time.equals(getEndTime(date)) ){
+	        	throw new NullPointerException();
+	        }
+	        for(LocalTime thisTime : daySchedule.keySet()){
+	        	if(time.equals(thisTime)){
+	        		if(daySchedule.get(thisTime).equals(true)){
+	        			logger.info(name + " is NOT free at " + time);
+	        			return false;
+	        		}
+	        		else{
+	        			logger.info(name + " is free at " + time);
+	        			freeCheck = true;
+	        		}
+	        	}
+	        }
+		return freeCheck;
+	}
+	
 	public boolean empFree(LocalDate date, LocalTime startTime, String service){
 		boolean freeCheck = false;
         int slotsNeeded = employer.getService(service).getBlocks();
@@ -266,7 +287,6 @@ public class Employee implements Serializable {
 		    		//TRUE == BOOKED
 		    		j++;
 		    	}while(startTime.plusMinutes(j*slotsInMins).isBefore(endTime));
-		    	System.out.println(thisDate);
 		    	schedule.put(thisDate,daySchedule);
 			}
 			

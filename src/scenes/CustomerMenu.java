@@ -27,7 +27,6 @@ import users.Business;
 import users.Customer;
 import users.Employee;
 import users.Service;
-import users.User;
 
 public class CustomerMenu extends SceneManager{
 		
@@ -246,7 +245,6 @@ public class CustomerMenu extends SceneManager{
                             setDisable(true);
                             setStyle("-fx-background-color: #ffc0cb;");
                         }
-                        //TODO
                         //Disable day is there are no available times
                     }
                 };
@@ -370,7 +368,6 @@ public class CustomerMenu extends SceneManager{
 	public void selectEmployee(Business bus, String service, LocalDate date, LocalTime startTime){ //add interval needed for specific whatever... services? sure
 		//Check bus employee list
 		//Check their availability for the slots needed, use the no of slots for each service too
-		//TODO
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(30, 30, 30, 30));
         grid.setAlignment(Pos.CENTER);
@@ -395,10 +392,6 @@ public class CustomerMenu extends SceneManager{
         	selectBusiness();
         	window.setScene(custSelectBus);
     	}
-        else{
-        	
-        	//TODO
-        }
         
         
         Label empName = new Label("Employee Name: ");
@@ -428,12 +421,9 @@ public class CustomerMenu extends SceneManager{
         	bookings.add(new Booking(date, startTime, startTime.plusMinutes(bookingLen), custInst ,bus, myEmp, service));
         	myEmp.bookEmp(date, startTime, service);
     		logger.info("Booking made!");
-    		System.out.println(bookings);
         	FIO.save(customers, businesses, bookings);
     		customerMenu(custInst);
     		window.setScene(customerMenu);
-    		//TODO
-    		//Success or fail alerts?
         });
         
         Button returnButton = new Button("Back");
@@ -495,7 +485,6 @@ public class CustomerMenu extends SceneManager{
 		
 		table.setItems(bookItems);
 		table.getColumns().addAll(business, bookingDate, sessionStart, sessionEnd, emp);
-		System.out.println("Business: " + business);
 		table.setPlaceholder(new Label("You Currently Have no Bookings"));
 		
 		grid.add(table, 0, 3,6, 1);
@@ -510,8 +499,7 @@ public class CustomerMenu extends SceneManager{
 			
 			if(table.getSelectionModel().getSelectedIndex() != -1){
 				Booking bookInst = table.getSelectionModel().getSelectedItem();
-				//TODO cancel booking
-				
+				//cancel booking
 				if((custInst).cancelBooking(bookings, bookInst)){
 					logger.info("Booking has been succesfully cancelled");
 					FIO.save(customers, businesses, bookings);

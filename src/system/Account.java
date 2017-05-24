@@ -1,6 +1,7 @@
 package system;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,7 +13,7 @@ import users.Customer;
 import users.User;
 
 public class Account {
-	
+	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 	Logger logger = Logger.getLogger(Account.class);
 	
 	FileIO FIO = new FileIO();
@@ -136,7 +137,7 @@ public class Account {
 		}
 		else{
 			logger.info("Business registration is successful");
-			businesses.add(new Business(busName, name, address, phone, username, password1, openTimeLocal.toString(), closeTimeLocal.toString(), Integer.toBinaryString(sessionTimeLocal)));
+			businesses.add(new Business(busName, name, address, phone, username, password1, openTimeLocal.toString(), closeTimeLocal.toString(), Integer.toString(sessionTimeLocal)));
 			FIO.saveBus(businesses);
 			return true;
 		}

@@ -410,7 +410,7 @@ public class BusinessMenu extends SceneManager{
 				System.out.println(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()) + " - Available");
 				timeList.add(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()) + " - Available");	
 			}
-			
+		
 			else{
 				System.out.println(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()) + " - Booked");
 				timeList.add(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()) + " - Booked");

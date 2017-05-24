@@ -18,10 +18,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -252,11 +248,6 @@ public class MainMenu extends SceneManager{
             	window.setScene(mainMenu);
         	}
         	else{
-        		System.out.println("CheckUser: " + checkUser);
-        		System.out.println("CheckPassLength: " + checkPassLength);
-        		System.out.println("CheckPass1: " + checkPassword1);
-        		System.out.println("CheckPhone: " + checkPhone);
-        		
         		handleFail(window, checkUser, checkUserLength, checkPassLength, checkPassword1, checkPhone);
         	}
         	
@@ -365,8 +356,6 @@ public class MainMenu extends SceneManager{
         
         ObservableList<LocalTime> timeChoices = FXCollections.observableArrayList(times);
         
-        System.out.println(timeChoices);
-        
         
         Label newBusiness = new Label("Business Name:");
         grid3.add(newBusiness, 3, 2);
@@ -427,13 +416,7 @@ public class MainMenu extends SceneManager{
         	Boolean checkPhone = acct.checkPhone(phoneString);
         	Boolean check = mainRegisterBusiness(businesses, fullNameString, newUserNameString, busNameString, newPasswordString, newPasswordString2, phoneString, addressString, openLocalTime, closeLocalTime, sessionLength);
         	Boolean openCloseCheck = false;
-        	System.out.println("OPENING IS:" + cbOpen.getSelectionModel().getSelectedItem() );
-        	System.out.println("CLOSING IS: " + cbClose.getSelectionModel().getSelectedItem());
-//        	HashMap<String,LocalTime> newTimes = new HashMap<String,LocalTime>();
         	if(cbOpen.getSelectionModel().getSelectedItem().isBefore(cbClose.getSelectionModel().getSelectedItem())){
-//	    		newTimes.put("monStart", cbOpen.getSelectionModel().getSelectedItem());
-//	    		newTimes.put("monEnd", cbClose.getSelectionModel().getSelectedItem());
-//	    		System.out.println("THE MONDAY START IS: " + newTimes.get("monStart"));
 	    		openCloseCheck = true;
         	}
         	

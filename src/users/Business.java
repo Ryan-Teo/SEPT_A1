@@ -28,11 +28,6 @@ public class Business extends User {
 		this.openTime = LocalTime.parse(openTime, dtf);
 		this.closeTime = LocalTime.parse(closeTime, dtf);
 		services.add(new Service("General", 1));
-		System.out.println(busName);
-		System.out.println(this.openTime);
-		System.out.println(this.closeTime);
-//		services.put("General 2", 2); //HARDCODED REMOVE
-//		services.put("General 3", 3);
 	}
 	
 	//return business name
@@ -162,7 +157,6 @@ public class Business extends User {
 		return bookingsToBeViewed;
 	}
 	
-	//TODO
 	public void showWorkerAvailability(){
 		//display all employees
 		//choose employees from the given options

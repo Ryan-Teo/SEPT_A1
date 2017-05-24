@@ -98,7 +98,7 @@ public class Employee implements Serializable {
 		return schedule;
 	}
 	
-	private LocalTime getStartTime(LocalDate date){
+	public LocalTime getStartTime(LocalDate date){
 		LocalTime thisTime = LocalTime.MAX;
 		for(LocalTime myTime : schedule.get(date).keySet()){
 			if(myTime.isBefore(thisTime)){
@@ -108,7 +108,7 @@ public class Employee implements Serializable {
 		return thisTime;
 	}
 	
-	private LocalTime getEndTime(LocalDate date){
+	public LocalTime getEndTime(LocalDate date){
 		LocalTime thisTime = LocalTime.MIN;
 		if(schedule.containsKey(date)){
 			for(LocalTime myTime : schedule.get(date).keySet()){
@@ -119,6 +119,27 @@ public class Employee implements Serializable {
 			return thisTime.plusMinutes(employer.getSessionTime());
 		}
 		return thisTime;
+	}
+	
+	public boolean empFree(LocalDate date, LocalTime time){
+		boolean freeCheck = false;
+		HashMap<LocalTime, Boolean> daySchedule = schedule.get(date);
+	        if(time.isAfter(getEndTime(date)) || time.isBefore(getStartTime(date)) || time.equals(getEndTime(date)) ){
+	        	throw new NullPointerException();
+	        }
+	        for(LocalTime thisTime : daySchedule.keySet()){
+	        	if(time.equals(thisTime)){
+	        		if(daySchedule.get(thisTime).equals(true)){
+	        			logger.info(name + " is NOT free at " + time);
+	        			return false;
+	        		}
+	        		else{
+	        			logger.info(name + " is free at " + time);
+	        			freeCheck = true;
+	        		}
+	        	}
+	        }
+		return freeCheck;
 	}
 	
 	public boolean empFree(LocalDate date, LocalTime startTime, String service){
@@ -266,7 +287,6 @@ public class Employee implements Serializable {
 		    		//TRUE == BOOKED
 		    		j++;
 		    	}while(startTime.plusMinutes(j*slotsInMins).isBefore(endTime));
-		    	System.out.println(thisDate);
 		    	schedule.put(thisDate,daySchedule);
 			}
 			

@@ -48,7 +48,7 @@ public class Account {
 			try{
 				Thread.sleep(1500);
 			}catch(Exception e){
-				System.out.println(e.getMessage());
+				logger.error(e.getMessage());
 			}
 		}
 

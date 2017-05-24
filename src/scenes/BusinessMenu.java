@@ -494,7 +494,7 @@ public class BusinessMenu extends SceneManager{
 //        busShowAvailable = new Scene(grid, 900, 600);
 //	}
 	
-//	public void empAvail(Employee emp){
+//	public void empAvail(Employee emp, DayOfWeek day){
 //	//class to show the available time of the individual employee in detail.	
 //		GridPane grid = new GridPane();
 //		grid.setPadding(new Insets(30, 30, 30, 30));
@@ -506,28 +506,48 @@ public class BusinessMenu extends SceneManager{
 //		header.setFont(Font.font("Rockwell", FontWeight.NORMAL, 40));
 //		grid.add(header, 0, 1, 2, 1);
 //		
-//		TableView<String>timeTable = new TableView<String>();
+//		ListView<String>timeTable = new ListView<String>();
+//		ObservableList<String> timeList = FXCollections.observableArrayList();
 //		HashMap<LocalDate, HashMap<LocalTime, Boolean>> schedule = emp.getSchedule();
+//		HashMap<LocalTime, Boolean> dayTimes = null;
+//		LocalDate date = null;
 //		
+//		for(int i=0; i < 7; i++){
+//			if(LocalDate.now().plusDays(i).getDayOfWeek().equals(day)){
+//				dayTimes = schedule.get(LocalDate.now().plusDays(i));
+//				date = LocalDate.now().plusDays(i);
+//			}
+//		}
 //		
-//		//time
-//		TableColumn time = new TableColumn("Time");
-//		
-//		//monday
-//		
-//		//tuesday
-//		
-//		//wednesday
-//		
-//		//thursday
-//		
-//		//friday
-//		
-//		//saturday
-//		
-//		//sunday
-//		
+//		//array for the times the person is working on the day.
 //
+//		LocalTime initialTime = emp.getStartTime(date);
+//		LocalTime endingTime = emp.getEndTime(date);
+//		int i = 0;
+//		
+//		do{
+//			if(!dayTimes.get(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()))){
+//				System.out.println(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()) + " - Available");
+//				timeList.add(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()) + " - Available");	
+//			}
+//		
+//			else{
+//				System.out.println(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()) + " - Booked");
+//				timeList.add(initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()) + " - Booked");
+//			}
+//			i++;
+//		}while(!initialTime.plusMinutes(i*emp.getEmployer().getSessionTime()).equals(endingTime));
+//			
+//				
+//		//time
+//	
+//		timeTable.setItems(timeList);
+//		
+//        timeTable.setPrefHeight(300);
+//        timeTable.setPrefWidth(300);
+//        
+//        grid.add(timeTable, 2,2);
+//        
 //		empAvail = new Scene(grid, 900, 600);
 //}
 

@@ -22,17 +22,9 @@ public class AccountTest {
 	Customer customer4 = new Customer("Julia", "Seig", "opensesame", "13 Terror Crt", "0423468265");
 
 	@Test
-	public int testRegister(InputStream input,PrintStream output) {
-		Scanner in = new Scanner(input);
-	    output.println("Give a number between 1 and 10");
-	    int input1 = in.nextInt();
+	public void testRegister() {
+	    //Only checking input validation, should there be test cases?
 
-	    while (input1 < 1 || input1 > 10) {
-	        output.println("Wrong number, try again.");
-	        input1 = in.nextInt();
-	    }
-
-	    return input1;
 	}
 
 }

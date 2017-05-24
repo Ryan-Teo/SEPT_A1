@@ -188,23 +188,9 @@ public class Business extends User {
 //	Adding booking on behalf of customer
 //	Need to check make sure it does not break anything
 	@Override
-	public boolean makeBooking(LocalDate date, LocalTime startTime, Customer bookCust, Business bus, Employee myEmp,
-			String service, ArrayList<Booking> bookings) {
-		Service serveInst = null;
-		for(Service myServe : services){
-			if(myServe.getServiceName().equals(service)){
-				serveInst = myServe;
-			}
-		}
-		if(serveInst == null){
-			logger.debug("serverInst is NULL, should not happen");
-		}
-		
-		int bookingLen = serveInst.getBlocks()*bus.getSessionTime();
-    	bookings.add(new Booking(date, startTime, startTime.plusMinutes(bookingLen), bookCust ,bus, myEmp, service));
-    	myEmp.bookEmp(date, startTime, service);
-    	logger.info("Make booking successful");
-		return true;
+	public boolean makeBooking(LocalDate date, LocalTime startTime, Customer bookCust, Business bus, 
+			Employee myEmp, String service, ArrayList<Booking> bookings){
+		return false;
 	}
 	
 	public boolean slotExists(LocalDate date){

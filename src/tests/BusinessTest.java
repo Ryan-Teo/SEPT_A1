@@ -22,6 +22,7 @@ import system.Booking;
 import users.Business;
 import users.Customer;
 import users.Employee;
+import users.Service;
 
 public class BusinessTest {
 
@@ -37,7 +38,7 @@ public class BusinessTest {
 	private ArrayList<Employee> emps = new ArrayList<Employee>();
 
 	Customer customer = new Customer("Bob", "Bobber", "Bobby123", "Bob@bob.com", "999999999");
-	Business myBusiness = new Business("Sal's Hair Salon","Harry","Alumbra St","0120103004","harryOwner","password", null, null, null);
+	Business myBusiness = new Business("Sal's Hair Salon","Harry","Alumbra St","0120103004","harryOwner","password", "09:00", "18:00","30");
 	DateTimeFormatter daytimeformat = DateTimeFormatter.ofPattern("EE");
 	DateTimeFormatter timeformat = DateTimeFormatter.ofPattern("HH:mm");
 	LocalDate myDate = LocalDate.now();
@@ -45,6 +46,7 @@ public class BusinessTest {
 	Employee emp = new Employee("james","james",myBusiness);
 	ArrayList<Booking> myBooking = new ArrayList<Booking>();
 	private HashMap<String, Integer> services = new HashMap<String, Integer>();
+	Service serveInst = new Service("male hair cut", 30);
 	
 	@Test
 	public void testPrint(){
@@ -57,8 +59,8 @@ public class BusinessTest {
 		try{
 			int serviceDuration;
 			myBusiness.addService("male hair cut", 30);
-			serviceDuration = services.get("male hair cut");
-			assertEquals(serviceDuration, 50);
+			serviceDuration = myBusiness.getService("male hair cut").getBlocks();
+			assertEquals(serviceDuration, 30);
 		}catch(Exception e){
 			fail("adding service failed");
 		}
@@ -69,9 +71,9 @@ public class BusinessTest {
 	public void testUpdateService(){
 		int serviceDuration;
 		myBusiness.addService("male hair cut", 30);
-		serviceDuration = services.get("male hair cut");
-		myBusiness.updateService("male hair cut", 50);
-		assertEquals(serviceDuration, 50);
+		serviceDuration = myBusiness.getService("male hair cut").getBlocks();
+		myBusiness.updateService("male hair cut", 30);
+		assertEquals(serviceDuration, 30);
 		
 	}
 	
@@ -87,34 +89,10 @@ public class BusinessTest {
 	}
 	
 	@Test
-	public void testShowWorkerAvailabilities(){
-		//TODO
-	}
-	
-	@Test
 	public void testViewBookingSummary(){
 		myBusiness.makeBooking(myDate, myTime, customer, myBusiness, emp, "male hair cut", myBooking);
 		myBusiness.viewBookingSummary(myBooking);
 		assert(myBooking != null);
-	}
-	
-	@Test
-	public void testMakeBooking(){
-		Boolean value = false;
-		value = myBusiness.makeBooking(myDate, myTime, customer, myBusiness, emp, "male hair cut", myBooking);
-	
-		if(value == true){
-			for(Booking custBooking : myBooking){
-				Assert.assertEquals(custBooking.getBookCust(),customer);
-				Assert.assertEquals(custBooking.getBookDate(), myDate);
-				Assert.assertEquals(custBooking.getStartTime(), myTime);
-				Assert.assertEquals(custBooking.getStrBus(), myBusiness.getBusName());
-				Assert.assertEquals(custBooking.getService(), "male hair cut");
-				Assert.assertEquals(custBooking.getBookEmp(), emp);
-			}
-		
-		}
-			
 	}
 	
 	@Test

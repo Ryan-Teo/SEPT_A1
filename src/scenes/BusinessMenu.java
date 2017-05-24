@@ -289,16 +289,29 @@ public class BusinessMenu extends SceneManager{
 	    	for(int j=0 ; j<columns.size(); j++){
 //	            final int j = i;
 	            TableColumn col = new TableColumn(columns.get(j));
-//	            col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){                   
-//	               public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {                                                                                             
-//	                    return new SimpleStringProperty(param.getValue().get(j).toString());                       
-//	                }                   
-//	            });
+//	        
 	            if(j==0){
 		            col.setCellValueFactory(new PropertyValueFactory<>("name"));
 	            }
 	            if(j==1){
 	            	col.setCellValueFactory(new PropertyValueFactory<>("empID"));
+	            }
+	            if(j>1){
+	            	col.setCellFactory(column -> {
+	            		return new TableCell<Employee, String>() {
+	            			
+		            		@Override
+		            		protected void updateItem(String item, boolean empty) {
+                                setStyle("-fx-background-color: yellow");
+		            		}
+	                    };
+	            	});
+//	                col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){                   
+//	 	               public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {                                                                                             
+//	 	                    return new SimpleStringProperty(param.getValue().get(j).toString());                       
+//	 	                }                   
+//	 	            });
+	            	System.out.println("Column : "+j+" : "+columns.get(j));
 	            }
 	            empTable.getColumns().addAll(col);
 	    	}
